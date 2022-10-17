@@ -3,5 +3,9 @@ export interface DonViModel {
   code?: string,
   name?: string,
   orgParentId?: number,
+  orgParent?: {
+    name?: string,
+    orgParent?: {}
+  }
   orgAddress?: string
 }
