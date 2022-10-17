@@ -1,0 +1,64 @@
+.frame-menu {
+  background: #141ed2;
+  height: 48px;
+  padding-left: 16px
+}
+
+.text-main-menu {
+  cursor: pointer;
+  color: #eae6e6;
+  font-size: 15px;
+  font-weight: bold;
+  padding-right: 28px;
+}
+
+.text-menu {
+  cursor: pointer;
+  color: #b6d0e7;
+}
+
+.router-menu {
+  display: inline;
+  font-size: 12px;
+}
+
+.link-menu li {
+  color: #b6d0e7;
+  cursor: pointer;
+  display: inline;
+}
+
+i {
+  font-size: 12px;
+}
+
+.sub-menu-child {
+  display: none;
+  position: absolute;
+  background-color: #141ed2;
+  color: #b6d0e7;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.sub-menu-child li {
+  color: #b6d0e7;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: 10px;
+}
+
+.sub-menu-child li a {
+  width: 100%;
+  color: #b6d0e7;
+}
+
+.sub-menu-child li a:hover {
+  background: red;
+}
+
+.sub-menu:hover .sub-menu-child {
+  display: block;
+}

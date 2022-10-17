@@ -1,0 +1,13 @@
+<div *ngIf="isVanthu == false">
+  <p-fieldset legend="Nhân viên" [style]="{overflow: 'auto', height:'87vh'}">
+        <h1 class="red-text">404 error ! Not found ! </h1>
+  </p-fieldset>
+</div>
+
+
+<div *ngIf="isVanthu == true">
+  <p-fieldset legend="Văn Thư" [style]="{overflow: 'auto', height:'87vh'}">
+    <app-import-thu-di-van-thu></app-import-thu-di-van-thu>
+  </p-fieldset>
+</div>
+

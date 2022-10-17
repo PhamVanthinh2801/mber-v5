@@ -1,0 +1,383 @@
+<p-toast></p-toast>
+<div class="button-header fix-but">
+  <button pButton type="button" (click)="showThuMauDialog()" label="Chọn thư mẫu">
+    <i class="fa fa-envelope mr-2"></i>
+  </button>
+</div>
+<p-fieldset legend="Văn thư" [style]="{overflow: 'auto', height:'87vh'}">
+  <p-fieldset legend="Thông tin người nhập">
+    <div class="form-body">
+      <div class="grid">
+        <div class="col-4 grid">
+          <div class="col-4"><label for="fullName">Họ và tên <span class="red-text">*</span></label></div>
+          <div class="col-8">
+            <input class="w-full"
+                   id="fullName"
+                   [disabled]="true"
+                   [(ngModel)]="user.displayName"
+                   pInputText type="text"></div>
+        </div>
+        <div class="col-4 grid">
+          <div class="col-4"><label for="ChucDanh">Chức danh</label></div>
+          <div class="col-8">
+            <input [disabled]="true"
+                   id="ChucDanh"
+                   [(ngModel)]="user.positionName"
+                   class="w-full" pInputText type="text"></div>
+        </div>
+        <div class="col-4 grid">
+          <div class="col-4"><label>Đơn vị</label></div>
+          <div class="col-8">
+            <input [disabled]="true"
+                   [(ngModel)]="user.organization.name" class="w-full" pInputText type="text"></div>
+        </div>
+        <div class="col-8 grid">
+          <div class="col-12 grid">
+            <div class="col-2"><label>Đơn vị trực thuộc</label></div>
+            <div class="col-10">
+              <input [disabled]="true"
+                     [(ngModel)]="user.organization.orgParent.name" class="w-full" pInputText
+                     type="text">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="grid">
+      </div>
+    </div>
+  </p-fieldset>
+
+  <p-fieldset legend="Thông tin thư đi">
+    <div class="form-body">
+      <div class="grid">
+        <div class="col-4 grid">
+          <div class="col-4"><label>Phân loại thư <span class="red-text">*</span></label></div>
+          <div class="col-8 flex flex-row justify-content-around">
+            <div *ngFor="let category of listTypeLetters" class="p-field-checkbox">
+              <p-radioButton
+                [inputId]="category.key"
+                name="category"
+                [value]="category"
+                [(ngModel)]="checkboxTypeLetter"
+                (onClick)="typeLetterAction()"
+              ></p-radioButton>
+              <label class="pl-2" [for]="category.key">{{ category.name }}</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-4 grid">
+          <div class="col-4"><label>Sổ thư đi <span class="red-text">*</span></label></div>
+          <div class="col-8">
+            <p-dropdown [options]="letterCode" [showClear]="true" placeholder="---Vui lòng chọn---"
+                        [(ngModel)]="selectedLetterFrom" optionLabel="name"></p-dropdown>
+          </div>
+        </div>
+        <div class="col-4 grid">
+          <div class="disable-div"></div>
+          <div class="col-4"><label>Mã thư đi</label></div>
+          <div class="col-8"><input [(ngModel)]="codeLetterFrom"
+                                    [disabled]="true" class="w-full" pInputText type="text">
+          </div>
+        </div>
+        <div class="col-4 grid">
+          <div class="col-4"><label>Ngày nhập</label></div>
+          <div class="col-8">
+            <p-calendar [disabled]="true" [(ngModel)]="inputDate"
+                        styleClass="w-full"
+                        [monthNavigator]="true"
+                        [yearNavigator]="true"
+                        yearRange="2000:2030"
+                        appendTo="body"
+                        [showIcon]="true"
+                        dateFormat="dd/mm/yy"
+                        [showTime]="true"
+                        inputId="time"></p-calendar>
+          </div>
+        </div>
+
+        <div class="col-4 grid">
+          <div class="col-4"><label>Ngày gửi</label></div>
+          <div class="col-8">
+            <p-calendar [(ngModel)]="sendDate"
+                        styleClass="w-full"
+                        [monthNavigator]="true" R
+                        [yearNavigator]="true"
+                        yearRange="2000:2030"
+                        appendTo="body"
+                        [showIcon]="true"
+                        dateFormat="dd/mm/yy"></p-calendar>
+          </div>
+        </div>
+
+        <div class="col-4 grid">
+          <div class="col-4"><label>Đơn vị gửi</label></div>
+          <div class="col-8"><input [disabled]="true" [(ngModel)]="user.organization.name" class="w-full" pInputText
+                                    type="text"></div>
+        </div>
+
+        <div class="col-4 grid">
+          <div class="col-4"><label>Đơn vị trực thuộc gửi</label></div>
+          <div class="col-8">
+            <p-dropdown [options]="listDonViTrucThuocGui"
+                        (onChange)="loadNhanVienTheoBoPhan()" [showClear]="true"
+                        placeholder="---Vui lòng chọn---" [(ngModel)]="selectedAffiliatedSendUnit"
+                        optionLabel="name"></p-dropdown>
+          </div>
+        </div>
+
+        <div class="col-4 grid">
+          <div class="col-4"><label>Người gửi</label></div>
+          <div class="col-8">
+            <p-dropdown [options]="listNguoiGui"
+                        [showClear]="true" placeholder="---Vui lòng chọn---"
+                        [(ngModel)]="selectedSender" optionLabel="fullName"></p-dropdown>
+          </div>
+        </div>
+        <div class="col-4 grid">
+          <div class="col-4"><label>Số hiệu văn bản</label></div>
+          <div class="col-8"><input [(ngModel)]="textCode"
+                                    class="w-full" pInputText type="text"></div>
+        </div>
+        <div class="col-4 grid">
+          <div class="col-4"><label>Trích yếu</label></div>
+          <div class="col-8"><input [(ngModel)]="summary"
+                                    class="w-full" pInputText type="text"></div>
+        </div>
+
+        <div class="col-4 grid">
+          <div class="col-4"><label>Độ mật <span class="red-text">*</span></label></div>
+          <div class="col-8">
+            <p-dropdown [options]="security" [showClear]="true" placeholder="---Vui lòng chọn---"
+                        [(ngModel)]="selectedSecurity" optionLabel="name"></p-dropdown>
+          </div>
+        </div>
+        <div class="col-4 grid">
+          <div class="col-4"><label>Độ khẩn <span class="red-text">*</span></label></div>
+          <div class="col-8">
+            <p-dropdown [options]="urgency" [showClear]="true" placeholder="---Vui lòng chọn---"
+                        [(ngModel)]="selectedUrgency" optionLabel="name"></p-dropdown>
+          </div>
+        </div>
+        <div class="col-4 grid" *ngIf="checkboxTypeLetter.key =='1'">
+          <div class="col-4"><label>Nơi nhận <span class="red-text">*</span></label></div>
+          <div class="col-8">
+            <p-dropdown [options]="organizations" [showClear]="true"
+                        (onChange)="loadDonViNhan()"
+                        placeholder="---Vui lòng chọn---" [(ngModel)]="selectedReceivePlace"
+                        optionLabel="name"></p-dropdown>
+          </div>
+        </div>
+        <div class="col-4 grid" *ngIf="checkboxTypeLetter.key =='1'">
+          <div class="col-4"><label>Đơn vị nhận <span class="red-text">*</span></label></div>
+          <div class="col-8">
+            <p-dropdown (onChange)="loadDonViTrucThuocNhan()" [options]="listReceiveUnit" [showClear]="true"
+                        placeholder="---Vui lòng chọn---" [(ngModel)]="selectedReceiveUnit"
+                        optionLabel="name"></p-dropdown>
+          </div>
+        </div>
+        <div class="col-4 grid" *ngIf="checkboxTypeLetter.key =='1'">
+          <div class="col-4"><label>Đơn vị trực thuộc nhận</label></div>
+          <div class="col-8">
+            <p-dropdown (onChange)="loadNguoiNhan()" [options]="listDonViTrucThuocNhan" [showClear]="true"
+                        placeholder="---Vui lòng chọn---" [(ngModel)]="selectedAffiliatedReceiveUnit"
+                        optionLabel="name"></p-dropdown>
+          </div>
+        </div>
+        <div class="col-4 grid" *ngIf="checkboxTypeLetter.key=='1'">
+          <div class="col-4"><label>Người nhận</label></div>
+          <div class="col-8">
+            <p-dropdown [options]="listNguoiNhan" [showClear]="true" placeholder="---Vui lòng chọn---"
+                        [(ngModel)]="selectedRecipient" optionLabel="fullName"></p-dropdown>
+          </div>
+        </div>
+        <div class="col-4 grid" *ngIf="checkboxTypeLetter.key =='2'">
+          <div class="col-4"><label>Nơi nhận bên ngoài</label></div>
+          <div class="col-8 flex flex-row">
+            <div class="ng-autocomplete">
+              <ng-autocomplete
+                [data]="noiNhanBenNgoai"
+                [searchKeyword]="keyword"
+                placeholder="--Vui lòng chọn--"
+                (selected)='selectEvent($event)'
+                (inputChanged)='onChangeSearch($event)'
+                (inputFocused)='onFocused($event)'
+                historyIdentifier="countries"
+                [itemTemplate]="itemTemplate"
+                [notFoundTemplate]="notFoundTemplate">
+              </ng-autocomplete>
+              <ng-template #itemTemplate let-item>
+                <a [innerHTML]="item.contactName"></a>
+              </ng-template>
+              <ng-template #notFoundTemplate let-notFound>
+                <div [innerHTML]="notFound"></div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <div class="col-4 grid">
+          <div class="col-4"><label>Địa chỉ nhận <span class="red-text">*</span></label></div>
+          <div class="col-8"><input class="w-full"
+                                    [(ngModel)]='receiveAddress' pInputText type="text"></div>
+        </div>
+        <div class="col-4 grid">
+          <div class="col-4"><label>Đơn vị chuyển phát</label></div>
+          <div class="col-8">
+            <p-dropdown [options]="listDonViChuyenPhat" [showClear]="true" placeholder="---Vui lòng chọn---"
+                        [(ngModel)]="selectionDonViChuyenPhat" optionLabel="name"></p-dropdown>
+          </div>
+        </div>
+
+        <div class="col-4 grid">
+          <div class="col-4"><label>Số vận đơn</label></div>
+          <div class="col-8">
+            <input [disabled]="true" [(ngModel)]="soVanDon" class="w-full" pInputText type="text">
+          </div>
+        </div>
+
+        <div class="col-4 grid">
+          <div class="col-4"><label>Chi phí</label></div>
+          <div class="col-8">
+            <p-inputNumber styleClass="w-full" class="w-full" [(ngModel)]="chiPhi" mode="decimal"></p-inputNumber>
+          </div>
+        </div>
+
+        <div class="col-4 grid">
+          <div class="col-4"><label for="1">Tình trạng</label></div>
+          <div class="col-8"><input id="1" [disabled]="true" [(ngModel)]="checkStatus.name" class="w-full"
+                                    placeholder="Đang soạn"
+                                    pInputText type="text"></div>
+        </div>
+      </div>
+
+      <div class="flex flex-row  justify-content-end" style="padding-top:20px; padding-bottom:20px ;width:97%">
+        <div style="margin-right:15px">
+          <p-checkbox label="Lưu thư mẫu" name="groupname" (onChange)="onIsSample()" value="val3" [binary]="true"
+                      [(ngModel)]="isSample"></p-checkbox>
+        </div>
+        <div style="margin-right:50px">
+          <p-checkbox label="Gửi mail cho người nhận" name="groupname" value="val2"
+                      [(ngModel)]="sendByMail"></p-checkbox>
+        </div>
+        <button (click)="saveLetterParterm()" class="tool" icon="pi pi-save" pButton type="button" label="Lưu">
+        </button>
+        <button class="tool" pButton icon="pi pi-send" type="button" label="Gửi"
+                (click)="addLetterFromNoneHead()"></button>
+        <button class="tool" icon="pi pi-times" (click)="onEventClose()" pButton type="button" label="Đóng"></button>
+      </div>
+    </div>
+  </p-fieldset>
+</p-fieldset>
+
+<p-dialog header="Thư mẫu" [(visible)]="showThuMau" [style]="{width:'90vw', height:'90vh'}">
+  <p-fieldset legend="Thông tin">
+    <div class="grid">
+      <div class="col-4 grid">
+        <div class="col-4"><label>Cơ quan</label></div>
+        <div class="col-8">
+          <p-dropdown [options]="listUnitInPopup"
+                      [(ngModel)]="selectedUnitInPopup"
+                      [showClear]="true" placeholder="---Vui lòng chọn---"
+                       optionLabel="name"></p-dropdown>
+        </div>
+      </div>
+      <div class="col-4 grid">
+        <div class="col-4"><label>Năm</label></div>
+        <div class="col-8">
+          <p-dropdown
+            [options]="years"
+            [(ngModel)]="selectionYear"
+            [showClear]="true" placeholder="---Vui lòng chọn---"
+                       optionLabel="year"></p-dropdown>
+        </div>
+      </div>
+      <div class="col-4 grid">
+        <div class="col-4"><label>Người yêu cầu</label></div>
+        <div class="col-8">
+          <input class="w-full" [(ngModel)]="searchText" placeholder="Nhập nội dung tìm kiếm"
+                 pInputText type="text">
+        </div>
+      </div>
+      <div class="col-4 grid"></div>
+      <div class="col-4 grid"></div>
+      <div class="col-4 grid">
+        <div class="col-4"></div>
+        <div class="col-8">
+          <button class="tool" icon="pi pi-search"
+                  (click)="onSearchSampleLetterPopup()"
+                  pButton type="button" label="Tìm kiếm"></button>
+        </div>
+      </div>
+    </div>
+  </p-fieldset>
+  <div class="grid">
+    <div class="col-12">
+      <p-table #dt2 [value]="listSampleLetter"
+               selectionMode="single"
+               [(selection)]="selectedRowSampleLetter"
+               (onRowSelect)="onRowSelect($event)"
+               [paginator]="true"
+               [rows]="10"
+               [globalFilterFields]="['receiveAddress','receiveUnit.name','code','textCode']"
+               [metaKeySelection]="true" dataKey="code"
+               [resizableColumns]="true" columnResizeMode="expand"
+               styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+          <div class="grid">
+            <div class="col-8 grid">
+              <div class="col-4 flex justify-content-start">
+                <label style="font-size:13px; font-weight: bold">Tổng số dữ liệu:
+                  <span>{{listSampleLetter ? listSampleLetter.length : 0}}</span></label>
+              </div>
+              <div class="col-8 flex justify-content-end align-content-end">
+                <label><span class="red-text">*</span>PS: Nhấn kích đúp dòng trên bảng để lấy dữ liệu.</label>
+              </div>
+            </div>
+            <div class="col-4 flex justify-content-end">
+              <button class="tool" icon="pi pi-trash"
+                      pButton type="button" (click)="deletedLetterFrom()" label="Xóa"></button>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Phân Loại Thư</th>
+            <th>Sổ thư đi</th>
+            <th>Đơn vị trực thuộc gửi</th>
+            <th>Người gửi</th>
+            <th>Số hiệu văn bản</th>
+            <th>Trích yếu</th>
+            <th>Độ mật</th>
+            <th>Độ khẩn</th>
+            <th>Nơi nhận</th>
+            <th>Đơn vị nhận</th>
+            <th>Đơn vị trực thuộc nhận</th>
+            <th>Người nhận</th>
+            <th>Địa chỉ nhận</th>
+
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+          <tr [pSelectableRow]="row" (dblclick)="dbClickGetSampleLetter(row)" [pSelectableRowIndex]="rowIndex">
+            <td>{{checkTypeLetter(row.type)}}</td>
+            <td>{{row.letterCode?.name}}</td>
+            <td>{{row.affiliatedSendUnit?.name}}</td>
+            <td>{{row.sender?.fullName}}</td>
+            <td>{{row.textCode}}</td>
+            <td>{{row.summary}}</td>
+            <td>{{row.securityLevel?.name}}</td>
+            <td>{{row.urgencyLevel?.name}}</td>
+            <td>{{row.receivePlace?.name}}</td>
+            <td>{{row.receiveUnit?.name}}</td>
+            <td>{{row.affiliatedReceiveUnit?.name}}</td>
+            <td>{{row.recipient?.fullName}}</td>
+            <td>{{row.receiveAddress}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</p-dialog>
+
+
+
+

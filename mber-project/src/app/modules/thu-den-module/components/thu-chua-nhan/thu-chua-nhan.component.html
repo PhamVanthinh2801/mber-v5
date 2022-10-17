@@ -1,0 +1,224 @@
+<p-toast></p-toast>
+<div>
+  <p-fieldset legend="Thư chưa nhận" [style]="{overflow: 'auto', height:'87vh'}">
+    <div class="button-header fix-but">
+      <button class="tool" pButton icon="fa fa-envelope" type="button" (click)="payLoadNhanThu('nhanhothu')"
+              label="Nhận hộ thư"></button>
+      <button class="tool" pButton icon="pi pi-check" (click)="showConfirmation('accepted')" type="button"
+              label="Xác nhận"></button>
+      <button class="tool" pButton icon="pi pi-trash" (click)="showConfirmation('onDelete')" type="button"
+              label="Xóa"></button>
+    </div>
+    <p-fieldset legend="Thông tin">
+      <div class="grid">
+        <div class="col-4 grid">
+          <div class="col-4"><label>Cơ quan <span class="red-text">*</span></label></div>
+          <div class="col-8">
+            <p-dropdown [showClear]="true"
+                        placeholder="---Vui lòng chọn---"
+                        optionLabel="name"></p-dropdown>
+          </div>
+        </div>
+        <div class="col-4 grid">
+          <div class="col-4"><label>Năm</label></div>
+          <div class="col-8">
+            <p-dropdown [showClear]="true"
+                        placeholder="---Vui lòng chọn---"
+                        optionLabel="name"></p-dropdown>
+          </div>
+        </div>
+        <div class="col-4 grid">
+          <div class="col-4"><label>Đơn vị</label></div>
+          <div class="col-8">
+            <p-dropdown [showClear]="true"
+                        placeholder="---Vui lòng chọn---"
+                        optionLabel="name"></p-dropdown>
+          </div>
+        </div>
+        <div class="col-8 grid">
+          <div class="col-12 grid">
+            <div class="col-2"><label>Người yêu cầu</label></div>
+            <div class="col-10">
+              <input type="text" pInputText placeholder="Nhập tên người yêu cầu..."/>
+            </div>
+          </div>
+        </div>
+        <div class="col-4 grid">
+          <div class="col-4"></div>
+          <div class="col-8">
+            <button pButton icon="pi pi-search" type="button" label="Tìm kiếm"></button>
+          </div>
+        </div>
+      </div>
+    </p-fieldset>
+
+    <p-fieldset legend="Dữ liệu bảng">
+      <div class="grid">
+        <div class="col-12">
+          <p-table [value]="listThuChuaNhan"
+                   selectionMode="single"
+                   [(selection)]="selectedThuChuaNhan"
+                   (onRowSelect)="onRowSelect($event)"
+                   [paginator]="true"
+                   [rows]="10"
+                   [metaKeySelection]="true"
+                   [resizableColumns]="true"
+                   [style]="{width:'92vw'}"
+                   columnResizeMode="expand"
+                   styleClass="p-datatable-gridlines"
+                   responsiveLayout="scroll">
+            <ng-template pTemplate="caption">
+              <div class="grid">
+                <div class="col-6">
+                  Tổng số dữ liệu:<label>{{listThuChuaNhan ? listThuChuaNhan.length : 0}}</label>
+                </div>
+                <div class="col-6">
+                </div>
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Phân loại thư</th>
+                <th>Sổ thư đi</th>
+                <th>Sổ vận đơn</th>
+                <th>Trích yếu</th>
+                <th>Số hiệu văn bản</th>
+                <th>Độ mật</th>
+                <th>Độ khẩn</th>
+                <th>Nơi gửi</th>
+                <th>Đơn vị trực thuộc nhận</th>
+                <th>Người nhận</th>
+                <th>Tình trạng</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row>
+              <tr [pSelectableRow]="row">
+                <td style="text-align:center">{{row.type | TypeLetter}}</td>
+                <td>{{row.letterCode?.name}}</td>
+                <td>{{row.itemCode}}</td>
+                <td>{{row.note}}</td>
+                <td>{{row.documentCode}}</td>
+                <td>{{row.securityLevel?.name}}</td>
+                <td>{{row.urgencyLevel?.name}}</td>
+                <td>{{row.sendPlace?.name}}</td>
+                <td>{{row.affiliatedReceiveUnit?.name}}</td>
+                <td>{{row.recipient?.displayName}}</td>
+                <td>{{row.status | StatusLetterTo}}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </div>
+    </p-fieldset>
+  </p-fieldset>
+</div>
+
+<p-dialog #mes [draggable]="false" [style]="{width:'350px'}" header="Thông báo" [(visible)]="showConfirm">
+  <div style="display:flex; flex-direction: column">
+    <div style=" width:100%">
+      <label>Xác nhận xóa dữ liệu <i class="mr-2 pi pi-question-circle"></i></label>
+    </div>
+    <div class="flex flex-row justify-content-center mt-2">
+      <button class="m-1" pButton type="button" (click)="onDelete('yes')" label="Yes"></button>
+      <button class="m-1" pButton type="button" (click)="onDelete('no')" label="No"></button>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog [draggable]="false" [style]="{width:'350px'}" header="Thông báo" [(visible)]="showConfirmAccept">
+  <div style="display:flex; flex-direction: column">
+    <div style=" width:100%">
+      <label>Xác nhận nhân thư <i class="mr-2 pi pi-question-circle"></i></label>
+    </div>
+    <div class="flex flex-row justify-content-center mt-2">
+      <button class="m-1" pButton type="button" (click)="acceptLetter('yes')" label="Yes"></button>
+      <button class="m-1" pButton type="button" (click)="acceptLetter('no')" label="No"></button>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog [draggable]="false" [style]="{width:'65vw', height:'50vh'}" header="Thông tin người xác nhận thư"
+          [(visible)]="showDialogNhanThu">
+  <div class="grid">
+    <div class="col-6 grid">
+      <div class="col-4"><label>Họ và tên <span class="red-text">*</span></label></div>
+      <div class="col-8">
+        <input class="w-full"
+               [disabled]="true"
+               [(ngModel)]="user.displayName"
+               pInputText type="text"></div>
+    </div>
+    <div class="col-6 grid">
+      <div class="col-4"><label>Chức danh</label></div>
+      <div class="col-8">
+        <input [disabled]="true"
+               [(ngModel)]="user.positionName"
+               class="w-full" pInputText type="text"></div>
+    </div>
+    <div class="col-6 grid">
+      <div class="col-4"><label>Đơn vị</label></div>
+      <div class="col-8">
+        <input [disabled]="true"
+               [(ngModel)]="user.organization.name" class="w-full" pInputText type="text"></div>
+    </div>
+    <div class="col-6 grid">
+      <div class="col-4"><label>Đơn vị trực thuộc</label></div>
+      <div class="col-8">
+        <input [disabled]="true"
+               [(ngModel)]="user.organization.orgParent.name" class="w-full" pInputText
+               type="text">
+      </div>
+    </div>
+  </div>
+  <div class="w-full flex flex-row justify-content-center">
+    <button class="m-1" pButton type="button" icon="pi pi-arrow-circle-left" (click)="payLoadNhanThu('nhanthu')"
+            label="Nhận thư"></button>
+    <button class="m-1" pButton type="button" icon="pi pi-arrow-circle-right" (click)="payLoadNhanThu('nhanhothu')"
+            label="Nhận hộ thư"></button>
+  </div>
+</p-dialog>
+
+
+<p-dialog [draggable]="false" [style]="{width:'65vw', height:'50vh'}" header="Thông tin người nhận hộ"
+          [(visible)]="showDialogNhanHoThu">
+  <div class="grid">
+    <div class="col-6 grid">
+      <div class="col-4"><label>Đơn vị nhận <span class="red-text">*</span></label></div>
+      <div class="col-8">
+        <p-dropdown
+          [options]="listDonViNhanHo"
+          [(ngModel)]="selectedDonViNhanHo"
+          (onChange)="getNguoiNhanHo(selectedDonViNhanHo)"
+          [showClear]="true"
+          placeholder="---Vui lòng chọn---"
+          optionLabel="name"></p-dropdown>
+      </div>
+    </div>
+    <div class="col-6 grid">
+      <div class="col-4"><label>Người nhận</label></div>
+      <div class="col-8">
+        <p-dropdown
+          [showClear]="true"
+          [options]="listNguoiNhanHo"
+          [(ngModel)]="selectedNguoiNhanHo"
+          placeholder="---Vui lòng chọn---"
+          optionLabel="fullName"></p-dropdown>
+      </div>
+    </div>
+  </div>
+  <div class="w-full flex flex-row justify-content-center">
+    <button class="m-1" pButton type="button" icon="pi pi-arrow-circle-left" (click)="payloadNhanHoThu()"
+            label="Nhận thư"></button>
+  </div>
+</p-dialog>
+
+
+
+
+
+
+
+
+
+
+

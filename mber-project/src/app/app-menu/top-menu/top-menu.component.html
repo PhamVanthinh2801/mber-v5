@@ -1,0 +1,85 @@
+<div class="grid">
+  <div class="col-12 flex align-content-center align-items-center frame-menu">
+    <h4 class="text-main-menu">
+<!--      <img src="{{imagePath}}" alt="" style="width:100px;height:100px" />-->
+        <label>Mber v3</label>
+    </h4>
+    <div class="text-menu pi pi-align-justify"></div>
+    <div class="router-menu">
+      <ul class="link-menu">
+        <li class="sub-menu">Thư đến <i class="pi pi-angle-down"></i>
+          <ul class="sub-menu-child">
+            <li *ngFor="let item of childMenuThuDen; let i = index;">
+              <a [routerLink]="[item.link]">
+                {{item.name}}
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="router-menu">
+      <ul class="link-menu">
+        <li class="sub-menu">Thư đi <i class="pi pi-angle-down"></i>
+          <ul class="sub-menu-child">
+            <li *ngFor="let item of childMenuThuDi; let i = index;">
+              <a [routerLink]="[item.link]">
+                {{item.name}}
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="router-menu">
+      <ul class="link-menu">
+        <li class="sub-menu">Báo cáo <i class="pi pi-angle-down"></i>
+          <ul class="sub-menu-child">
+            <li *ngFor="let item of listMenuBaoCao; let i = index;">
+              <a [routerLink]="[item.link]">
+                {{item.name}}
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+
+    <div *ngIf="isLogin" class="router-menu">
+      <ul class="link-menu">
+        <li class="sub-menu">{{user.displayName}} <i class="pi pi-angle-down"></i>
+          <ul class="sub-menu-child">
+            <li style="color:#ffffff">Đơn vị: <label style="color: darkorange; text-transform: uppercase;"> {{user.organization.name}}</label></li>
+            <li style="color:#ffffff">Phân quyền: <label style="color: darkorange; text-transform: uppercase;"> {{user.roles}}</label></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div *ngIf="isLogin" class="router-menu">
+      <ul class="link-menu">
+        <li class="sub-menu" (click)="todoCheckVanThu()">Văn Thư <i class="pi pi-user"></i>
+        </li>
+      </ul>
+    </div>
+
+    <div *ngIf="isLogin" class="router-menu">
+      <ul class="link-menu">
+        <li class="sub-menu" (click)="todoCheckNhanVien()">Nhân viên <i class="pi pi-user"></i>
+        </li>
+      </ul>
+    </div>
+
+    <div *ngIf="isLogin" class="router-menu">
+      <ul class="link-menu">
+        <li class="sub-menu" (click)="logout()">Logout <i class="pi pi-arrow-circle-right"></i>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

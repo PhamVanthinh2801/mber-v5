@@ -1,0 +1,121 @@
+<p-toast></p-toast>
+<div class="button-header fix-but">
+  <button class="tool" pButton icon="pi pi-refresh" (click)="refresh()" type="button" label="Làm mới"></button>
+</div>
+
+<p-fieldset legend="Thư thư gửi">
+  <div class="grid">
+    <div class="col-12 md:col-4 grid">
+      <div class="col-4">
+        <label>Cơ quan</label>
+      </div>
+      <div class="col-12 md:col-8">
+        <p-dropdown [options]="listCoQuan"
+                    [showClear]="true"
+                    (onChange)="onEventCheckCoQuan($event)"
+                    placeholder="---Vui lòng chọn---"
+                    [(ngModel)]="selectedCoQuan"
+                    optionLabel="name"></p-dropdown>
+      </div>
+    </div>
+    <div class="col-12 md:col-4 grid">
+      <div class="col-4"><label>Năm</label></div>
+      <div class="col-12 md:col-8">
+        <p-dropdown [options]="listYear"
+                    [(ngModel)]="selectedYear"
+                    [showClear]="true"
+                    (onChange)="onEventCheckCoQuan($event)"
+                    placeholder="---Vui lòng chọn---"
+                    optionLabel="year"></p-dropdown>
+      </div>
+    </div>
+    <div class="col-12 md:col-4 grid">
+      <div class="col-4"><label>Người yêu cầu</label></div>
+      <div class="col-12 md:col-8">
+        <input [(ngModel)]="keyword" class="w-full" placeholder="Nội dung tìm kiếm"
+               pInputText type="text">
+      </div>
+    </div>
+    <div class="col-4 grid"></div>
+    <div class="col-4 grid"></div>
+    <div class="col-4 grid">
+      <div class="col-4"></div>
+      <div class="col-8">
+        <button pButton type="button" (click)="onSearch()" icon="pi pi-search" label="Tìm kiếm">
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="col-12">
+      <p-table [value]="listThuDaGui"
+               selectionMode="single"
+               [(selection)]="selectedThuDaGui"
+               (onRowSelect)="onRowSelect($event)"
+               [paginator]="true"
+               [rows]="10"
+               [metaKeySelection]="true"
+               dataKey="code"
+               [style]="{width: '92vw'}"
+               [resizableColumns]="true"
+               columnResizeMode="expand"
+               styleClass="p-datatable-gridlines"
+               responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+          <div class="grid">
+            <div class="col-2">
+            </div>
+            <div class="col-10 grid">
+              <div class="col-12 flex justify-content-end">
+                <label style="font-size:13px; font-weight: bold">Tổng số dữ liệu:
+                  <span>{{listThuDaGui ? listThuDaGui.length : 0}}</span></label>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Phân loại thư</th>
+            <th>Sổ thư đi</th>
+            <th>Mã thư đi</th>
+            <th>Ngày nhập</th>
+            <th>Đơn vị gửi</th>
+            <th>Đơn vị trực thuộc gửi</th>
+            <th>Người gửi</th>
+            <th>Số hiệu văn bản</th>
+            <th>Độ mật</th>
+            <th>Độ khẩn</th>
+            <th>Nơi nhận</th>
+            <th>Đơn vị nhận</th>
+            <th>Đơn vị trực thuộc nhận</th>
+            <th>Người nhận</th>
+            <th>Địa chỉ nhận</th>
+            <th>Tình trạng</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr [pSelectableRow]="row">
+            <td style="text-align:center">{{row.type | TypeLetter}}</td>
+            <td>{{row.letterCode?.name}}</td>
+            <td>{{row.code}}</td>
+            <td>{{row.inputDate}}</td>
+            <td>{{row.sendDate}}</td>
+            <td>{{row.affiliatedSendUnit?.name}}</td>
+            <td>{{row.sender?.fullName}}</td>
+            <td>{{row.textCode}}</td>
+            <td>{{row.securityLevel?.name}}</td>
+            <td>{{row.urgencyLevel?.name}}</td>
+            <td>{{row.receivePlace?.name}}</td>
+            <td>{{row.receiveUnit?.name}}</td>
+            <td>{{row.affiliatedReceiveUnit?.name}}</td>
+            <td>{{row.recipient?.fullName}}</td>
+            <td>{{row.receiveAddress}}</td>
+            <td>{{row.status | StatusLetterFromPipe}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+
+</p-fieldset>

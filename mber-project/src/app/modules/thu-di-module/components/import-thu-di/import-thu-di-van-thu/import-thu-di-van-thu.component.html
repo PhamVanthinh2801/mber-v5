@@ -1,0 +1,68 @@
+<p-toast></p-toast>
+<div class="button-header fix-but">
+  <button class="tool" pButton icon="pi pi-sort-alt" type="button" label="Import thư đi"></button>
+  <button class="tool" pButton icon="pi pi-download"  type="button" label="Tải mẫu file"></button>
+  <button class="tool" pButton icon="pi pi-trash"  type="button" label="Xóa"></button>
+  <button class="tool" pButton icon="pi pi-refresh" (click)="refresh()" type="button" label="Làm mới"></button>
+</div>
+<p-fieldset legend="Import thư đi">
+  <div class="grid">
+    <div class="col-12">
+      <p-table [value]="listImport"
+               selectionMode="single"
+               [(selection)]="selectedImport"
+               (onRowSelect)="onRowSelect($event)"
+               [paginator]="true"
+               [rows]="10"
+               [metaKeySelection]="true"
+               dataKey="code"
+               [style]="{width: '92vw'}"
+               [resizableColumns]="true"
+               columnResizeMode="expand"
+               styleClass="p-datatable-gridlines"
+               responsiveLayout="scroll">
+        <ng-template pTemplate="caption">
+          <div class="grid">
+            <div class="col-2">
+            </div>
+            <div class="col-10 grid">
+              <div class="col-12 flex justify-content-end">
+                <label style="font-size:13px; font-weight: bold">Tổng số dữ liệu:
+                  <span>{{listImport ? listImport.length : 0}}</span></label>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Ngày cập nhật</th>
+            <th>Ngày kết thúc</th>
+            <th>Hành động</th>
+            <th>Tình trạng</th>
+            <th>Nội dung</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr [pSelectableRow]="row">
+            <td style="text-align:center">{{row.type | TypeLetter}}</td>
+            <td>{{row.letterCode?.name}}</td>
+            <td>{{row.code}}</td>
+            <td>{{row.inputDate}}</td>
+            <td>{{row.sendDate}}</td>
+            <td>{{row.affiliatedSendUnit?.name}}</td>
+            <td>{{row.sender?.fullName}}</td>
+            <td>{{row.textCode}}</td>
+            <td>{{row.securityLevel?.name}}</td>
+            <td>{{row.urgencyLevel?.name}}</td>
+            <td>{{row.receivePlace?.name}}</td>
+            <td>{{row.receiveUnit?.name}}</td>
+            <td>{{row.affiliatedReceiveUnit?.name}}</td>
+            <td>{{row.recipient?.fullName}}</td>
+            <td>{{row.receiveAddress}}</td>
+            <td>{{row.status | StatusLetterFromPipe}}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</p-fieldset>

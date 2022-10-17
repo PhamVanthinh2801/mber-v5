@@ -1,0 +1,32 @@
+<div class="grid">
+  <div class="col-4 grid">
+    <div class="col-4 text-spacing"><label>Cơ quan</label></div>
+    <div class="col-8">
+      <p-dropdown [options]="listUnit"
+                  placeholder="---Vui lòng chọn---"
+                  [(ngModel)]="selectedUnit" optionLabel="name"></p-dropdown>
+    </div>
+  </div>
+  <div class="col-4 grid">
+    <div class="col-4 text-spacing"><label>Năm</label></div>
+    <div class="col-8">
+      <p-dropdown [options]="years" placeholder="---Vui lòng chọn---"
+                  [(ngModel)]="selectionYear" optionLabel="year"></p-dropdown>
+    </div>
+  </div>
+  <div class="col-4 grid">
+    <div class="col-4 text-spacing"><label>Người yêu cầu</label></div>
+    <div class="col-8">
+      <input [(ngModel)]="keyword" class="w-full" placeholder="Nội dung tìm kiếm"
+             pInputText type="text">
+    </div>
+  </div>
+  <div class="col-4 grid"></div>
+  <div class="col-4 grid"></div>
+  <div class="col-4 grid">
+    <div class="col-4"></div>
+    <div class="col-8">
+      <button pButton icon="pi pi-search" (click)="onSearch()" type="button" label="Tìm kiếm"></button>
+    </div>
+  </div>
+</div>
