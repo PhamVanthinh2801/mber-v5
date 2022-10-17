@@ -77,7 +77,7 @@ export class VanThuComponent extends iComponentBase implements OnInit {
   summary: any;
   soVanDon: any // số vận đơn
   listDonViNhan: any // danh sách đơn vị nhận được lấy từ parent là nơi nhận
-  listDonViTrucThuocNhan: any // danh sách đơn vị trực thuộc nhạn được lấy từ selected đơn vị nhận
+  listDonViTrucThuocNhan: DonViModel[] // danh sách đơn vị trực thuộc nhạn được lấy từ selected đơn vị nhận
   listNguoiNhan: any; // danh sách người nhận
   soDienThoai: any; // só điện thoại của người nhận dùng cho bên ngoài
   nguoiNhanBenNgoai = '' // người nhận bên ngoài
@@ -95,6 +95,7 @@ export class VanThuComponent extends iComponentBase implements OnInit {
   selectedUnitInPopup: DonViModel
   years = [{year: 2017}, {year: 2018}, {year: 2019}, {year: 2020}, {year: 2021}, {year: 2022}]
   selectionYear: any;
+
 
   constructor(private nhapMoiService: NhapMoiService,
               private vanThuService: VanThuService,
@@ -179,14 +180,23 @@ export class VanThuComponent extends iComponentBase implements OnInit {
     })
     this.getAutoCode();
     this.getAutoCodeSoVanDon();
+    this.getAllNguoiNhanInit();
   }
 
-  getAutoCodeSoVanDon(){
+  getAllNguoiNhanInit() {
+    this.sharedAPI.getAllNhanVien().subscribe((data: any) => {
+      this.listNguoiNhan = data.result.items;
+    })
+  }
+
+
+  getAutoCodeSoVanDon() {
     this.sharedAPI.getAutoGenCode().subscribe((data: any) => {
       this.soVanDon = data.result;
     })
   }
-  getAutoCode(){
+
+  getAutoCode() {
     this.sharedAPI.getAutoGenCode().subscribe((data: any) => {
       this.codeLetterFrom = data.result; // mã tự gen
     })
@@ -231,20 +241,47 @@ export class VanThuComponent extends iComponentBase implements OnInit {
     if (this.selectedAffiliatedSendUnit == undefined) {
       this.listNguoiGui = [];
     } else
-      this.nhapMoiService.getPersonByParentOganization(this.selectedAffiliatedSendUnit.sysOrganizationId).subscribe((data: any) => {
+      this.nhapMoiService.getPersonByParentOganization(this.selectedAffiliatedSendUnit?.sysOrganizationId).subscribe((data: any) => {
         this.listNguoiGui = data.result.items;
       })
+  }
+
+  checkRightLeftData(data: any) {
+    if (data) {
+      this.loadNguoiNhan();
+    } else {
+      this.insertDataFromRecipient();
+    }
+  }
+
+  insertDataFromRecipient() {
+    this.listDonViTrucThuocNhan = [this.selectedRecipient?.organization];
+    this.listReceiveUnit = [this.selectedRecipient?.organization.orgParent];
+    // get don vị
+    this.sharedAPI.getAllDonVi().subscribe(data => {
+      this.organizations = data.result.items;
+    })
+    setTimeout(() => {
+      this.afterData();
+    }, 500)
+
+  }
+
+  afterData() {
+    this.selectedAffiliatedReceiveUnit = this.selectedRecipient?.organization;
+    this.selectedReceiveUnit = this.selectedRecipient?.organization.orgParent;
+    this.selectedReceivePlace = this.selectedRecipient?.organization.orgParent;
   }
 
   loadNguoiNhan() {
     // get người nhận theo đơn vị trực thuộc nhận
     if (this.selectedAffiliatedReceiveUnit == undefined) {
-      this.listNguoiNhan = [];
-    } else
-      console.log(this.selectedAffiliatedReceiveUnit.sysOrganizationId)
-    this.nhapMoiService.getPersonByParentOganization(this.selectedAffiliatedReceiveUnit.sysOrganizationId).subscribe((data: any) => {
-      this.listNguoiNhan = data.result.items;
-    })
+      return;
+    } else {
+      this.nhapMoiService.getPersonByParentOganization(this.selectedAffiliatedReceiveUnit?.sysOrganizationId).subscribe((data: any) => {
+        this.listNguoiNhan = data.result.items;
+      })
+    }
   }
 
   // action chọn loại thư nội bộ hoặc bên ngoài để xử lý vấn đề gì đấy
@@ -419,7 +456,7 @@ export class VanThuComponent extends iComponentBase implements OnInit {
 
   dbClickGetSampleLetter(row: any) {
     try {
-      this.checkboxTypeLetter = this.listTypeLetters[row.type -1];
+      this.checkboxTypeLetter = this.listTypeLetters[row.type - 1];
       this.showThuMau = false;
       this.selectedLetterFrom = row.letterCode;
       this.selectedAffiliatedSendUnit = row.affiliatedSendUnit;
@@ -437,8 +474,7 @@ export class VanThuComponent extends iComponentBase implements OnInit {
       this.chiPhi = this.selectedRowSampleLetter.cost;
       this.getAutoCode();
       this.getAutoCodeSoVanDon();
-    }
-    catch (e) {
+    } catch (e) {
       console.log('lỗi insert thư mẫu')
     }
   }
@@ -472,7 +508,7 @@ export class VanThuComponent extends iComponentBase implements OnInit {
     }
   }
 
-  onSearchSampleLetterPopup(){
+  onSearchSampleLetterPopup() {
     console.log('click me');
     try {
       const param = {
@@ -486,7 +522,7 @@ export class VanThuComponent extends iComponentBase implements OnInit {
       this.nhapMoiService.getLetterPattern(param).subscribe((data: any) => {
         this.listSampleLetter = data.result.content;
         console.log('aaaaaaaaaaaa', this.listSampleLetter)
-      },(error: ErrorModel)=>{
+      }, (error: ErrorModel) => {
         this.showMessage(mType.info, 'Thông báo', 'Không tìm thấy dữ liệu');
       })
     } catch (e) {
