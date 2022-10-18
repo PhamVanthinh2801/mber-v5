@@ -167,6 +167,41 @@ export class NhanVienComponent extends iComponentBase implements OnInit {
     this.nhapMoiService.getAllUrgency().subscribe(data => {
       this.urgency = data.result.items;
     })
+    // init người nhận
+    this.getAllNguoiNhanInit();
+  }
+
+  getAllNguoiNhanInit() {
+    this.sharedAPI.getAllNhanVien().subscribe((data: any) => {
+      this.listNguoiNhan = data.result.items;
+    })
+  }
+  checkRightLeftData(data: any) {
+    if (data) {
+      this.loadNguoiNhan();
+    } else {
+      this.insertDataFromRecipient();
+    }
+  }
+
+  insertDataFromRecipient() {
+    console.log('xxxx', this.selectedRecipient)
+    this.listDonViTrucThuocNhan = [this.selectedRecipient?.organization];
+    this.listDonViNhan = [this.selectedRecipient?.organization.orgParent];
+    // get don vị
+    this.sharedAPI.getAllDonVi().subscribe(data => {
+      this.organizations = data.result.items;
+    })
+    setTimeout(() => {
+      this.afterData();
+    }, 500)
+
+  }
+
+  afterData() {
+    this.selectedAffiliatedReceiveUnit = this.selectedRecipient?.organization;
+    this.selectedReceiveUnit = this.selectedRecipient?.organization.orgParent;
+    this.selectedReceivePlace = this.selectedRecipient?.organization.orgParent;
   }
 
   getNoiNhanBenNgoai() {
@@ -198,6 +233,8 @@ export class NhanVienComponent extends iComponentBase implements OnInit {
     // get đơn vị nhận theo nơi nhận
     if (this.selectedReceivePlace == undefined) {
       this.listDonViNhan = [];
+      this.listDonViTrucThuocNhan = [];
+      this.listNguoiNhan = [];
     } else
       this.nhapMoiService.getParentOrganizations(this.selectedReceivePlace.sysOrganizationId).subscribe((data: any) => {
         this.listDonViNhan = data.result.items;
@@ -263,7 +300,7 @@ export class NhanVienComponent extends iComponentBase implements OnInit {
           summary: this.summary,  // Trích yếu
           securityLevelId: this.selectedSecurity?.id,  // Độ mật *
           urgencyLevelId: this.selectedUrgency?.id,  // Độ khẩn *
-          receivePlaceId: this.selectedReceivePlace?.sysOrganizationId,  // Nơi nhận
+          receivePlaceId: this.checkboxTypeLetter.key == 1 ? this.selectedReceivePlace?.sysOrganizationId: null,  // Nơi nhận
           receiveUnitId: this.selectedReceiveUnit?.sysOrganizationId,  // Đơn vị nhận
           outSiteReceive: this.checkboxTypeLetter.key == 2 ? {
             name: this.receiveAddress,

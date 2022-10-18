@@ -6,7 +6,7 @@ import {MessageService} from "primeng/api";
 import {LocalStorageService} from "../../../../system-module/functions/store/local-storage.service";
 import {VanThuSoanThuService} from "./van-thu-soan-thu.service";
 import {SharedApi} from "../../../../base-module/service/api.shared.services";
-import {DonViModel} from "../../../../base-module/models";
+import {DonViChuyenPhatModel, DonViModel, NoiNhanBenNgoaiModel, ThuDiModel} from "../../../../base-module/models";
 import {ErrorModel} from "../../../../base-module/models/error/error.model";
 
 
@@ -61,7 +61,8 @@ export class VanThuSoanThuComponent extends iComponentBase implements OnInit {
   checkStatus: any;
   listStatusLetter: any;
   soDienThoai: any;
-  noiNhanBenNgoai: any;
+  noiNhanBenNgoai: NoiNhanBenNgoaiModel[];
+  selectedNoiNhanBenNgoai: any;
   keyword = 'contactName';
   nguoiNhanBenNgoai: any;
   person: any;
@@ -72,6 +73,9 @@ export class VanThuSoanThuComponent extends iComponentBase implements OnInit {
   selectionYear: any;
   searchText: string;
   listUnit: DonViModel[];
+  thuDi: ThuDiModel;
+  listUnitDelivery: DonViChuyenPhatModel[];
+  selectedDelivery: DonViChuyenPhatModel;
 
 
   constructor(public title: Title,
@@ -112,6 +116,8 @@ export class VanThuSoanThuComponent extends iComponentBase implements OnInit {
   }
 
   ngOnInit(): void {
+    this.thuDi = {};
+    this.selectedNoiNhanBenNgoai = {};
     this.getNoiNhanBenNgoai();
     this.listTypeLetters = [{name: 'Nội bộ', key: '1'}, {name: 'Bên ngoài', key: '2'}];  // selection loại thư bên trong và bên ngoài
     this.checkboxTypeLetter = this.listTypeLetters[0];
@@ -129,6 +135,7 @@ export class VanThuSoanThuComponent extends iComponentBase implements OnInit {
       this.listUnitInPopup = data.result.items;
       this.listUnit = data.result.items;
     })
+
     // get đơn vị trực thuộc gửi
     this.vanThuSoanThuService.getParentOrganizations(this.user.organization.orgParentId).subscribe(data => {
       this.listDonViTrucThuocGui = data.result.items;
@@ -148,7 +155,28 @@ export class VanThuSoanThuComponent extends iComponentBase implements OnInit {
     this.vanThuSoanThuService.getAllUrgency().subscribe(data => {
       this.urgency = data.result.items;
     })
+    // get don Vi Chuyen phat
+    this.getDonViChuyenPhat();
+    // auto gen code sổ vận dơn
+    this.autoGenSoVanDon();
+  }
 
+  clearEventAddresss(){
+    if(!this.selectedNoiNhanBenNgoai){
+      this.selectedNoiNhanBenNgoai = {}
+    }
+  }
+
+  autoGenSoVanDon() {
+    this.sharedAPI.getAutoGenCode().subscribe((data: any) => {
+      this.thuDi.itemCode = data.result;
+    })
+  }
+
+  getDonViChuyenPhat() {
+    this.sharedAPI.getDonViChuyenPhat().subscribe((data: any) => {
+      this.listUnitDelivery = data.result.items;
+    })
   }
 
   loadNhanVienTheoBoPhan() {
@@ -165,6 +193,8 @@ export class VanThuSoanThuComponent extends iComponentBase implements OnInit {
     // get đơn vị nhận theo nơi nhận
     if (this.selectedreceivePlace == undefined) {
       this.listDonViNhan = [];
+      this.listDonViTrucThuocNhan = [];
+      this.listRecipient = [];
     } else
       this.vanThuSoanThuService.getParentOrganizations(this.selectedreceivePlace.sysOrganizationId).subscribe((data: any) => {
         this.listDonViNhan = data.result.items;
@@ -195,14 +225,16 @@ export class VanThuSoanThuComponent extends iComponentBase implements OnInit {
     // phần này lấy dữ liệu thả vào chỗ search đơn vị nhận bên ngoài
     this.noiNhanBenNgoai = []
     this.vanThuSoanThuService.getNoiNhanBenNgoai().subscribe((data: any) => {
-      for (const item of data.result.items) {
-        this.noiNhanBenNgoai.push({
-          contactName: item.contactName,
-          address: item.address,
-          phone: item.phone,
-          name: item.name
-        });
-      }
+      console.log('Noi nhân bên ngoài', data)
+      this.noiNhanBenNgoai = data.result.items;
+      // for (const item of data.result.items) {
+      //   this.noiNhanBenNgoai.push({
+      //     contactName: item.contactName,
+      //     address: item.address,
+      //     phone: item.phone,
+      //     name: item.name
+      //   });
+      // }
     })
   }
 
@@ -212,6 +244,7 @@ export class VanThuSoanThuComponent extends iComponentBase implements OnInit {
       this.letterCode = data.result.items;
     })
   }
+
   // action chọn loại thư nội bộ hoặc bên ngoài để xử lý vấn đề gì đấy
   typeLetterAction() {
     console.log('xxxx', this.checkboxTypeLetter);
@@ -292,6 +325,7 @@ export class VanThuSoanThuComponent extends iComponentBase implements OnInit {
   onUpdateThuDangSoan() {
     try {
       if (this.selectedThuDangSoan) {
+        this.checkboxTypeLetter = this.listTypeLetters[this.selectedThuDangSoan.type - 1];
         this.showThuDangSoan = true;
         this.selectedLetterFrom = this.selectedThuDangSoan.letterCode;
         this.codeLetterFrom = this.selectedThuDangSoan.code;
@@ -355,18 +389,19 @@ export class VanThuSoanThuComponent extends iComponentBase implements OnInit {
     } catch (e) {
       this.showMessage(mType.error, 'lỗi khởi tạo dữ liệu', e);
     }
+
+    console.log('soạn thư params', param)
+    return param;
   }
 
   onClickGuiDauMoi() {
     try {
-      this.checkStatus.status = 3;
+      this.checkStatus.status = 5;
       const param = this.createParams();
       this.vanThuSoanThuService.updateLetter(this.selectedThuDangSoan.id, param).subscribe((data: any) => {
         if (data) {
           this.showMessage(mType.success, 'Thông báo', 'Gửi đi thành công');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500)
+          this.freshPage();
         }
       })
     } catch (e) {
@@ -391,19 +426,19 @@ export class VanThuSoanThuComponent extends iComponentBase implements OnInit {
     }
   }
 
-  onEmitKeyWord(ev: any): string{
-    return  '';
+  onEmitKeyWord(ev: any): string {
+    return '';
   }
 
-  onSearchSampleLetterPopup(){
+  onSearchSampleLetterPopup() {
     console.log(this.selectedUnitInPopup)
     try {
-      if(this.selectedUnitInPopup == null && this.selectionYear == null && this.searchText == null){
+      if (this.selectedUnitInPopup == null && this.selectionYear == null && this.searchText == null) {
         this.showMessage(mType.info, 'Thông báo', 'Vui lòng nhập thông tin cần tìm kiếm');
         return;
-      }else {
+      } else {
         const param = {
-          status:2,
+          status: 2,
           pageIndex: 1,
           pageSize: 100,
           organizationId: this.selectedUnitInPopup?.sysOrganizationId,
@@ -412,10 +447,10 @@ export class VanThuSoanThuComponent extends iComponentBase implements OnInit {
         }
         this.vanThuSoanThuService.getLetterPattern(param).subscribe((data: any) => {
           this.listThuDangSoan = data.result.content;
-          if(this.listThuDangSoan.length == 0){
+          if (this.listThuDangSoan.length == 0) {
             this.showMessage(mType.info, 'Thông báo', 'Không tìm thấy dữ liệu');
           }
-        },(error: ErrorModel)=>{
+        }, (error: ErrorModel) => {
           this.showMessage(mType.info, 'Thông báo', 'Không tìm thấy dữ liệu');
         })
       }
@@ -424,7 +459,7 @@ export class VanThuSoanThuComponent extends iComponentBase implements OnInit {
     }
   }
 
-  getDataSearch(ev: any){
+  getDataSearch(ev: any) {
 
   }
 
