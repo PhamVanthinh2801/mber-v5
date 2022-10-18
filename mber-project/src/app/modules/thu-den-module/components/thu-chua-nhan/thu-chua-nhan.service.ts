@@ -6,6 +6,9 @@ import {Injectable} from "@angular/core";
   providedIn: 'root'
 })
 export class ThuChuaNhanService extends apiServiceBase {
+  getAllThuMoi(statusLetter: any) {
+    return this.postData(API.PHAN_HE.THU_DI, API.API_THU_DI.GET_THU_DI_THEO_LOAI, statusLetter);
+  }
   getThuChuaNhan(sParam: any) {
     return this.postData(API.PHAN_HE.THU_DEN, API.API_THU_DEN.GET_LETTER_PAGE, sParam);
   }

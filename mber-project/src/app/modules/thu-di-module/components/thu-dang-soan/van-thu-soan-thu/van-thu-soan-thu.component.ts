@@ -343,7 +343,7 @@ export class VanThuSoanThuComponent extends iComponentBase implements OnInit {
           address: this.receiveAddress,
           contactName: this.nguoiNhanBenNgoai,
           phone: this.soDienThoai
-        } : {},  // phần này giành cho bên ngoài truyền vào là một object bên ngoài
+        } : null,  // phần này giành cho bên ngoài truyền vào là một object bên ngoài
         affiliatedReceiveUnitId: this.selectedAffiliatedReceiveUnit?.sysOrganizationId,  // Đơn vị trực thuộc nhận
         recipientId: this.checkboxTypeLetter.key == 1 ? this.selectedRecipient?.employeeId : null,  // Người nhận
         mobilePhone: this.checkboxTypeLetter.key == 1 ? this.soDienThoai : null,
