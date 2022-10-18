@@ -115,8 +115,18 @@
       <div class="col-6 grid">
         <div class="col-4"><label>Sổ thư đi</label></div>
         <div class="col-8">
-          <p-dropdown [options]="letterCode" [showClear]="true" placeholder="---Vui lòng chọn---"
-                      [(ngModel)]="selectedLetterFrom" optionLabel="name"></p-dropdown>
+          <p-dropdown [options]="letterCode" [(ngModel)]="selectedLetterFrom"
+                      optionLabel="name" [filter]="true" filterBy="name"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedLetterFrom">
+                <div>{{selectedLetterFrom.name}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.name}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
       <div class="col-6 grid">
@@ -171,35 +181,53 @@
         <div class="col-4"><label>Đơn vị trực thuộc gửi</label></div>
         <div class="col-8">
           <p-dropdown [options]="listDonViTrucThuocGui"
+                      [(ngModel)]="selectedAffiliatedSendUnit"
                       (onChange)="loadNhanVienTheoBoPhan()"
+                      optionLabel="name"
+                      [filter]="true"
+                      filterBy="name"
                       [showClear]="true"
-                      placeholder="---Vui lòng chọn---" [(ngModel)]="selectedAffiliatedSendUnit"
-                      optionLabel="name"></p-dropdown>
+                      placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedAffiliatedSendUnit">
+                <div>{{selectedAffiliatedSendUnit.name}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.name}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
       <div class="col-6 grid">
         <div class="col-4"><label>Người gửi</label></div>
         <div class="col-8">
           <p-dropdown [options]="listNguoiGui"
-                      [showClear]="true" placeholder="---Vui lòng chọn---"
-                      [(ngModel)]="selectedSender" optionLabel="fullName"></p-dropdown>
+                      [(ngModel)]="selectedSender"
+                      optionLabel="fullName"
+                      [filter]="true"
+                      filterBy="fullName"
+                      [showClear]="true"
+                      placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedSender">
+                <div>{{selectedSender.fullName}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.fullName}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
       <div class="col-6 grid">
         <div class="col-4"><label>Số hiệu văn bản</label></div>
         <div class="col-8">
           <input pInputText type="text"
-                 [(ngModel)]="textCode"
-                 placeholder="auto gencode"/>
+                 [(ngModel)]="textCode"/>
         </div>
       </div>
-      <div class="col-6 grid">
-        <div class="col-4"><label>Trích yếu</label></div>
-        <div class="col-8">
-          <input pInputText type="text"
-                 [(ngModel)]="summary"/>
-        </div>
-      </div>
+
       <div class="col-6 grid">
         <div class="col-4"><label>Độ mật</label></div>
         <div class="col-8">
@@ -216,106 +244,130 @@
       </div>
       <div *ngIf="this.checkboxTypeLetter.key == '2'" class="col-6 grid">
         <div class="col-4"><label>Nơi nhận bên ngoài</label></div>
-        <div class="col-8 flex flex-row">
-          <div class="ng-autocomplete">
-            <ng-autocomplete
-              [data]="noiNhanBenNgoai"
-              [searchKeyword]="keyword"
-              placeholder="--Vui lòng chọn--"
-              (selected)='selectEvent($event)'
-              (inputChanged)='onChangeSearch($event)'
-              (inputFocused)='onFocused($event)'
-              historyIdentifier="countries"
-              [itemTemplate]="itemTemplate"
-              [notFoundTemplate]="notFoundTemplate">
-            </ng-autocomplete>
-            <ng-template #itemTemplate let-item>
-              <a [innerHTML]="item.contactName"></a>
+        <div class="col-8">
+          <p-dropdown [options]="noiNhanBenNgoai" [(ngModel)]="selectedNoiNhanBenNgoai"
+                      (onChange)="clearEventAddresss()"
+                      optionLabel="contactName" [filter]="true" filterBy="contactName"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedNoiNhanBenNgoai">
+                <div>{{selectedNoiNhanBenNgoai.contactName}}</div>
+              </div>
             </ng-template>
-            <ng-template #notFoundTemplate let-notFound>
-              <div [innerHTML]="notFound"></div>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.contactName}}</div>
             </ng-template>
-          </div>
+          </p-dropdown>
         </div>
       </div>
       <div *ngIf="this.checkboxTypeLetter.key == '1'" class="col-6 grid">
         <div class="col-4"><label>Nơi nhận</label></div>
         <div class="col-8">
-          <p-dropdown [options]="organizations"
+          <p-dropdown [options]="organizations" [(ngModel)]="selectedreceivePlace"
                       (onChange)="loadDonViNhan()"
-                      [showClear]="true" placeholder="---Vui lòng chọn---"
-                      [(ngModel)]="selectedreceivePlace" optionLabel="name"></p-dropdown>
+                      optionLabel="name" [filter]="true" filterBy="name"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedreceivePlace">
+                <div>{{selectedreceivePlace.name}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.name}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
       <div *ngIf="this.checkboxTypeLetter.key == '1'" class="col-6 grid">
         <div class="col-4"><label>Đơn vị nhận</label></div>
         <div class="col-8">
-          <p-dropdown [options]="listDonViNhan" [showClear]="true"
+          <p-dropdown [options]="listDonViNhan" [(ngModel)]="selectedReceiveUnit"
                       (onChange)="loadDonViTrucThuocNhan()"
-                      placeholder="---Vui lòng chọn---" [(ngModel)]="selectedReceiveUnit"
-                      optionLabel="name"></p-dropdown>
+                      optionLabel="name" [filter]="true" filterBy="name"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedReceiveUnit">
+                <div>{{selectedReceiveUnit.name}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.name}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
       <div class="col-6 grid" *ngIf="checkboxTypeLetter.key =='1'">
         <div class="col-4"><label>Đơn vị trực thuộc nhận</label></div>
         <div class="col-8">
-          <p-dropdown [options]="listDonViTrucThuocNhan" [showClear]="true"
+          <p-dropdown [options]="listDonViTrucThuocNhan" [(ngModel)]="selectedAffiliatedReceiveUnit"
                       (onChange)="loadNguoiNhan()"
-                      placeholder="---Vui lòng chọn---" [(ngModel)]="selectedAffiliatedReceiveUnit"
-                      optionLabel="name"></p-dropdown>
+                      optionLabel="name" [filter]="true" filterBy="name"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedAffiliatedReceiveUnit">
+                <div>{{selectedAffiliatedReceiveUnit.name}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.name}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
       <div *ngIf="checkboxTypeLetter.key=='1'" class="col-6 grid">
         <div class="col-4"><label>Người nhận</label></div>
         <div class="col-8">
-          <input class="w-full" [(ngModel)]='nguoiNhanBenNgoai' pInputText type="text">
-        </div>
-      </div>
-
-      <div *ngIf="checkboxTypeLetter.key=='1'" class="col-6 grid">
-        <div class="col-4"><label>Người nhận</label></div>
-        <div class="col-8">
-          <input class="w-full" [(ngModel)]='nguoiNhanBenNgoai' pInputText type="text">
+          <p-dropdown [options]="listRecipient" [(ngModel)]="selectedRecipient"
+                      optionLabel="fullName" [filter]="true" filterBy="fullName"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedRecipient">
+                <div>{{selectedRecipient.fullName}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.fullName}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
       <div class="col-6 grid">
         <div class="col-4"><label>Địa chỉ nhận</label></div>
         <div class="col-8">
-          <input pInputText type="text" [(ngModel)]="receiveAddress"/>
+          <textarea [(ngModel)]="selectedNoiNhanBenNgoai.address"
+                    class="w-full" [rows]="1" [cols]="30" pInputTextarea></textarea>
         </div>
       </div>
+
 
       <div class="col-6 grid">
         <div class="col-4"><label>Đơn vị chuyển phát</label></div>
         <div class="col-8">
-          <input pInputText type="text" [(ngModel)]="receiveAddress"/>
-        </div>
-      </div>
-
-      <div class="col-6 grid">
-        <div class="col-4"><label>Số vận đơn</label></div>
-        <div class="col-8">
-          <input pInputText type="text" [(ngModel)]="receiveAddress"/>
+          <p-dropdown [options]="listUnitDelivery" [(ngModel)]="selectedDelivery"
+                      optionLabel="name" [filter]="true" filterBy="name"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedDelivery">
+                <div>{{selectedDelivery.name}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.name}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
 
       <div class="col-6 grid">
         <div class="col-4"><label>Chi phí</label></div>
         <div class="col-8">
-          <input pInputText type="text" [(ngModel)]="receiveAddress"/>
-        </div>
-      </div>
-
-      <div *ngIf="checkboxTypeLetter.key=='1'" class="col-6 grid">
-        <div class="col-4"><label>Người nhận</label></div>
-        <div class="col-8">
-          <input class="w-full" [(ngModel)]='nguoiNhanBenNgoai' pInputText type="text">
+          <p-inputNumber styleClass="w-full" class="w-full" [(ngModel)]="thuDi.cost" mode="decimal"></p-inputNumber>
         </div>
       </div>
       <div class="col-6 grid">
         <div class="col-4"><label>Số vận đơn</label></div>
         <div class="col-8">
-          <input pInputText type="text" [(ngModel)]="receiveAddress"/>
+          <input pInputText [disabled]="true" type="text" [(ngModel)]="thuDi.itemCode"/>
         </div>
       </div>
 
@@ -332,6 +384,14 @@
                  placeholder="auto gencode"/>
         </div>
       </div>
+      <div class="col-6 grid">
+          <div class="col-4"><label>Trích yếu</label></div>
+          <div class="col-8">
+            <label>
+              <textarea [(ngModel)]="summary" class="w-full" [rows]="1" [cols]="30" pInputTextarea></textarea>
+            </label>
+          </div>
+      </div>
     </div>
     <div class="grid">
       <div class="col-12">
@@ -342,7 +402,7 @@
           <button class="tool" icon="pi pi-save" pButton type="button" (click)="onClickLuu()" label="Lưu">
           </button>
           <button class="tool" pButton icon="pi pi-send" type="button" (click)="onClickGuiDauMoi()"
-                  label="Gửi đầu mối"></button>
+                  label="Gửi"></button>
           <button class="tool" icon="pi pi-times" pButton type="button" label="Đóng"></button>
         </div>
       </div>

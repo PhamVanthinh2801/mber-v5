@@ -13,12 +13,10 @@ import {ThuChoXyLyComponent} from "./components/thu-cho-xy-ly/thu-cho-xy-ly.comp
 import {VanThuChoXuLyComponent} from "./components/thu-cho-xy-ly/van-thu-cho-xu-ly/van-thu-cho-xu-ly.component";
 import {MessageService} from "primeng/api";
 import { ThuDaGuiComponent } from './components/thu-da-gui/thu-da-gui.component';
-import { NhanVienThuDaGuiComponent } from './components/thu-da-gui/nhan-vien-thu-da-gui/nhan-vien-thu-da-gui.component';
 import { VanThuThuDaGuiComponent } from './components/thu-da-gui/van-thu-thu-da-gui/van-thu-thu-da-gui.component';
 import {PrimeNgModule} from "../primeng-module/primeng.module";
 import {BaseModule} from "../base-module/base.module";
 import { TatCaThuDiComponent } from './components/tat-ca-thu-di/tat-ca-thu-di.component';
-import { TatCaThuDiNhanVienComponent } from './components/tat-ca-thu-di/tat-ca-thu-di-nhan-vien/tat-ca-thu-di-nhan-vien.component';
 import { TatCaThuDiVanThuComponent } from './components/tat-ca-thu-di/tat-ca-thu-di-van-thu/tat-ca-thu-di-van-thu.component';
 import { ThuTraLaiComponent } from './components/thu-tra-lai/thu-tra-lai.component';
 import { ThuTraLaiNhanVienComponent } from './components/thu-tra-lai/thu-tra-lai-nhan-vien/thu-tra-lai-nhan-vien.component';
@@ -47,10 +45,8 @@ const routes: Routes = [
     ThuChoXyLyComponent,
     VanThuChoXuLyComponent,
     ThuDaGuiComponent,
-    NhanVienThuDaGuiComponent,
     VanThuThuDaGuiComponent,
     TatCaThuDiComponent,
-    TatCaThuDiNhanVienComponent,
     TatCaThuDiVanThuComponent,
     ThuTraLaiComponent,
     ThuTraLaiNhanVienComponent,

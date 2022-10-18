@@ -9,11 +9,12 @@ import {MessageService} from "primeng/api";
 import {
   DoKhanModel, DoMatModel,
   DonViChuyenPhatModel,
-  DonViModel, NhanVienModel,
+  DonViModel, NhanVienModel, NoiNhanBenNgoaiModel,
   NoiNhanModel,
   SoThuModel,
   ThuDiModel
 } from "../../../../base-module/models";
+import {ErrorModel} from "../../../../base-module/models/error/error.model";
 
 
 @Component({
@@ -28,7 +29,7 @@ export class VanThuChoXuLyComponent extends iComponentBase implements OnInit {
   listStatusLetter: any;
   checkStatusLetter: any;
   thuDi: ThuDiModel;
-  selectedRowLetter: ThuDiModel;
+  selectedRowLetter: any;
   listThuChoXyLy: ThuDiModel[];
   listDonVi: DonViModel[];
   listDonViTrucThuocGui: DonViModel[];
@@ -65,8 +66,9 @@ export class VanThuChoXuLyComponent extends iComponentBase implements OnInit {
   // Đơn vị chuyển phát
   listDonViChuyenPhat: DonViChuyenPhatModel[];
   selectedDonViChuyenPhat: DonViChuyenPhatModel;
+  listOutSideReceiving: NoiNhanBenNgoaiModel[];
+  selectedOutSideReceiving: any;
   // Số vận đơn
-  soVanDon: any;
   chiPhi: any;
   statusString = 'Chờ xử lý';
   phone: number;
@@ -112,6 +114,8 @@ export class VanThuChoXuLyComponent extends iComponentBase implements OnInit {
 
   ngOnInit(): void {
     this.thuDi = {};
+    this.selectedRowLetter = {};
+    this.selectedOutSideReceiving = {};
     this.checkStatus = this.listStatusLetter[0];
     this.checkStatusLetter = this.listStatusLetter[0];
     this.selectionYear = this.years[this.years.length - 1]
@@ -119,7 +123,21 @@ export class VanThuChoXuLyComponent extends iComponentBase implements OnInit {
     this.getDonVi();
     this.getTypeLetterOnInit();
     this.getInfoThuDi();
+    this.getNoiNhanBenNgoaiInit();
   }
+
+  autoGenSoVanDon() {
+    this.shareApi.getAutoGenCode().subscribe((data: any) => {
+      this.thuDi.itemCode = data.result;
+    })
+  }
+
+  getNoiNhanBenNgoaiInit() {
+    this.shareApi.getAllNoiNhanBenNgoai().subscribe((data: any) => {
+      this.listOutSideReceiving = data.result.items;
+    })
+  }
+
 
   getInfoThuDi() {
     // lấy sổ thư đi.
@@ -142,16 +160,17 @@ export class VanThuChoXuLyComponent extends iComponentBase implements OnInit {
     this.shareApi.getDonViChuyenPhat().subscribe((data: any) => {
       this.listDonViChuyenPhat = data.result.items;
     })
+    this.getAllNhanVien();
+  }
+
+  getAllNhanVien() {
+    this.shareApi.getAllNhanVien().subscribe((data: any) => {
+      this.listPersonForUnit = data.result.items;
+    })
   }
 
   getTypeLetterOnInit() {
     this.checkboxTypeLetter = this.listTypeLetters[0];
-  }
-
-  autoGenCode() {
-    this.shareApi.getAutoGenCode().subscribe((data: any)=>{
-      this.soVanDon = data.result;
-    })
   }
 
 
@@ -219,6 +238,8 @@ export class VanThuChoXuLyComponent extends iComponentBase implements OnInit {
     // get đơn vị nhận theo nơi nhận
     if (this.selectedReceivePlace == undefined) {
       this.listReceiveUnit = [];
+      this.listAffiliatedReceiveUnit = [];
+      this.listPersonForUnit = [];
     } else
       this.shareApi.getParentOrganizations(this.selectedReceivePlace.sysOrganizationId).subscribe((data: any) => {
         this.listReceiveUnit = data.result.items;
@@ -240,14 +261,44 @@ export class VanThuChoXuLyComponent extends iComponentBase implements OnInit {
     if (this.selectedAffiliatedReceiveUnit == undefined) {
       this.listPersonForUnit = [];
     } else
-      this.shareApi.getParentOrganizations(this.selectedAffiliatedReceiveUnit.sysOrganizationId).subscribe((data: any) => {
+      this.shareApi.getPersonByParentOganization(this.selectedAffiliatedReceiveUnit.sysOrganizationId).subscribe((data: any) => {
         this.listPersonForUnit = data.result.items;
       })
+  }
+
+  checkRightLeftData(data: any) {
+    if (data) {
+      this.loadNguoiNhan();
+    } else {
+      this.insertDataFromRecipient();
+    }
+  }
+
+  insertDataFromRecipient() {
+    this.getAllNhanVien();
+    // get don vị
+    this.shareApi.getAllDonVi().subscribe(data => {
+      this.listReceivePlace = data.result.items;
+    }) // nơi nhận
+    this.listReceiveUnit = [this.selectedPersonForUnit?.organization.orgParent]; // đơn vị nhận
+    this.listAffiliatedReceiveUnit = [this.selectedPersonForUnit?.organization.orgParent]; // đơn vị trực thuộc nhận
+    setTimeout(() => {
+      // xử lý get person
+      this.afterData();
+    }, 500)
+
+  }
+
+  afterData() {
+    this.selectedReceivePlace = this.selectedPersonForUnit?.organization.orgParent; // nơi nhận
+    this.selectedReceiveUnit = this.selectedPersonForUnit?.organization.orgParent; // đơn vị nhận
+    this.selectedAffiliatedReceiveUnit = this.selectedPersonForUnit?.organization.orgParent; // đơn vị trực thuộc nhận
   }
 
   onRowSelect(ev: any) {
     this.selectedRowLetter = ev.data;
     this.thuDi = this.selectedRowLetter;
+    this.selectedOutSideReceiving = this.selectedRowLetter?.outSiteReceive
     this.listSoThuDi = [this.selectedRowLetter.letterCode]
     this.selectedDonViTrucThuocGui = this.selectedRowLetter.affiliatedSendUnit
     this.inputDate = new Date(this.selectedRowLetter.inputDate)
@@ -255,9 +306,11 @@ export class VanThuChoXuLyComponent extends iComponentBase implements OnInit {
     this.listNguoiGui = [this.selectedRowLetter.sender];
     this.listSecurity = [this.selectedRowLetter.securityLevel]
     this.listUrgencyLevel = [this.selectedRowLetter.urgencyLevel]
+
+    // Nơi nhận popup data
     this.listReceiveUnit = [this.selectedRowLetter.receiveUnit]
     this.listAffiliatedReceiveUnit = [this.selectedRowLetter.affiliatedReceiveUnit]
-    this.listPersonForUnit = [this.selectedRowLetter.recipient]
+
     // push loại khi mở popup
     if (this.selectedRowLetter.type == 1) {
       this.checkboxTypeLetter = this.listTypeLetters[0];
@@ -265,8 +318,15 @@ export class VanThuChoXuLyComponent extends iComponentBase implements OnInit {
     if (this.selectedRowLetter.type == 2) {
       this.checkboxTypeLetter = this.listTypeLetters[1];
     }
-    this.autoGenCode();
+    this.autoGenSoVanDon();
+
     console.log('seclect Bên ngoài', this.selectedRowLetter)
+  }
+
+  checkDataOutSideRecipt() {
+    if (!this.selectedOutSideReceiving) {
+      this.selectedOutSideReceiving = {};
+    }
   }
 
   onPopupThuChoXuLy() {
@@ -279,8 +339,8 @@ export class VanThuChoXuLyComponent extends iComponentBase implements OnInit {
         this.selectedUrgencyLevel = this.selectedRowLetter.urgencyLevel;
         this.selectedReceivePlace = this.selectedRowLetter.receivePlace;
         this.selectedReceiveUnit = this.selectedRowLetter.receiveUnit;
-        this.selectedAffiliatedReceiveUnit = this.selectedRowLetter.affiliatedReceiveUnit;
         this.selectedPersonForUnit = this.selectedRowLetter.recipient;
+        this.selectedAffiliatedReceiveUnit = this.selectedRowLetter.affiliatedReceiveUnit
       } else {
         this.showXuLy = false;
         this.showMessage(mType.info, 'Thông báo', 'Vui lòng chọn dữ liệu trên bảng');
@@ -314,7 +374,7 @@ export class VanThuChoXuLyComponent extends iComponentBase implements OnInit {
           phone: this.phone
         } : null,  // phần này giành cho bên ngoài truyền vào là một object bên ngoài
         cost: this.chiPhi,
-        itemCode: this.soVanDon,
+        itemCode: this.thuDi.itemCode,
         textCode: this.thuDi.textCode,  // Số hiệu văn bản
         summary: this.thuDi.summary,  // Trích yếu
         affiliatedReceiveUnitId: this.selectedAffiliatedReceiveUnit?.sysOrganizationId,  // Đơn vị trực thuộc nhận
@@ -377,7 +437,19 @@ export class VanThuChoXuLyComponent extends iComponentBase implements OnInit {
 
   onReturnTo() {
     try {
-      this.startPayLoad(3);
+      this.selectedRowLetter.status = 3;
+      const param = this.selectedRowLetter;
+      if (param) {
+        this.shareApi.updateLetter(this.selectedRowLetter.id, param).subscribe((data: any) => {
+          this.showMessage(mType.success, 'Thông báo', 'Trả lại thư cho người gửi thành công');
+          this.freshPage();
+        }, (error: ErrorModel) => {
+          this.showMessage(mType.warn, 'Thông báo', 'Gửi đi thất bại vui lòng kiểm tra thông tin' + error);
+        })
+      } else {
+        this.showMessage(mType.warn, 'Thông báo', 'Gửi đi thất bại vui lòng kiểm tra thông tin');
+        return;
+      }
     } catch (e) {
       console.log(e)
     }
