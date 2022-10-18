@@ -360,7 +360,7 @@ export class VanThuSoanThuComponent extends iComponentBase implements OnInit {
       type: Number(this.checkboxTypeLetter.key),  // Phân loại thư
       staffId: this.user?.employeeId,// nhân viên lấy từ hệ thống đăng nhập
       letterCodeId: this.selectedLetterFrom?.id,
-      itemCode: this.thuDi.itemCode,
+      itemCode: this.selectedLetterFrom.itemCode,
       code: this.codeLetterFrom,
       inputDate: this.inputDate.getTime(),
       sendDate: this.sendDate.getTime(),

@@ -60,7 +60,7 @@ export class NhanVienSoanThuComponent extends iComponentBase implements OnInit {
   listStatusLetter: any;
   soDienThoai: any;
   noiNhanBenNgoai: NoiNhanBenNgoaiModel[];
-  selectedNoiNhanBenNgoai: NoiNhanBenNgoaiModel;
+  selectedNoiNhanBenNgoai: any;
   keyword = 'contactName';
   nguoiNhanBenNgoai: any;
   person: any;
@@ -104,6 +104,7 @@ export class NhanVienSoanThuComponent extends iComponentBase implements OnInit {
   }
 
   ngOnInit(): void {
+    this.selectedNoiNhanBenNgoai = {};
     this.getNoiNhanBenNgoai();
     this.listTypeLetters = [{name: 'Nội bộ', key: '1'}, {name: 'Bên ngoài', key: '2'}];  // selection loại thư bên trong và bên ngoài
     this.checkboxTypeLetter = this.listTypeLetters[0];
@@ -269,6 +270,7 @@ export class NhanVienSoanThuComponent extends iComponentBase implements OnInit {
   // load dữ liệu vào popup
   onRowSelect(ev: any) {
     this.selectedThuDangSoan = ev.data;
+    this.checkboxTypeLetter = this.listTypeLetters[this.selectedThuDangSoan.type - 1]
     this.selectedAffiliatedSendUnit = this.selectedThuDangSoan.affiliatedSendUnit // load đơn trị trực thuộc gửi
     this.selectedSender = this.selectedThuDangSoan.sender // load người gửi
     this.listNguoiGui = [this.selectedSender]; // bỏ vào danh sách người gửi
@@ -321,6 +323,7 @@ export class NhanVienSoanThuComponent extends iComponentBase implements OnInit {
         type: Number(this.checkboxTypeLetter.key),  // Phân loại thư
         staffId: this.user?.employeeId,// nhân viên lấy từ hệ thống đăng nhập
         letterCodeId: this.selectedLetterFrom.id,
+        itemCode: this.selectedLetterFrom.itemCode,
         code: this.codeLetterFrom,
         inputDate: this.inputDate.getTime(),
         sendDate: this.sendDate.getTime(),
@@ -337,7 +340,7 @@ export class NhanVienSoanThuComponent extends iComponentBase implements OnInit {
           address: this.receiveAddress,
           contactName: this.nguoiNhanBenNgoai,
           phone: this.soDienThoai
-        } : {},  // phần này giành cho bên ngoài truyền vào là một object bên ngoài
+        } : null,  // phần này giành cho bên ngoài truyền vào là một object bên ngoài
         affiliatedReceiveUnitId: this.selectedAffiliatedReceiveUnit?.sysOrganizationId,  // Đơn vị trực thuộc nhận
         recipientId: this.checkboxTypeLetter.key == 1 ? this.selectedRecipient?.employeeId : null,  // Người nhận
         mobilePhone: this.checkboxTypeLetter.key == 1 ? this.soDienThoai : null,
