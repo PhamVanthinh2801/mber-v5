@@ -389,9 +389,6 @@ export class VanThuSoanThuComponent extends iComponentBase implements OnInit {
     } catch (e) {
       this.showMessage(mType.error, 'lỗi khởi tạo dữ liệu', e);
     }
-
-    console.log('soạn thư params', param)
-    return param;
   }
 
   onClickGuiDauMoi() {
