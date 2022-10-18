@@ -35,7 +35,6 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th>Số vận đơn</th>
             <th>Phận loại thư</th>
             <th>Nơi gửi</th>
             <th>Ngày đến</th>
@@ -44,12 +43,11 @@
             <th>Đơn vị trực thuộc</th>
             <th>Người xác nhận</th>
             <th>Ngày nhập</th>
-            <th>Tình trạng thư đến</th>
+            <th>Tình trạng</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-row>
           <tr [pSelectableRow]="row">
-            <td>{{row.itemCode}}</td>
             <td>{{checkTypeLetter(row.type)}}</td>
             <td>{{row.sendPlace}}</td>
             <td>{{row.dateTo}}</td>

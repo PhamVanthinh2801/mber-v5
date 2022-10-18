@@ -134,13 +134,13 @@
       <div class="col-6 grid">
         <div class="col-4"><label>Đơn vị</label></div>
         <div class="col-8"><input [disabled]="true"
-          [(ngModel)]="user.organization.name" class="w-full" pInputText type="text"></div>
+                                  [(ngModel)]="user.organization.name" class="w-full" pInputText type="text"></div>
       </div>
       <div class="col-6 grid">
         <div class="col-4"><label>Đơn vị trực thuộc</label></div>
         <div class="col-8"><input [disabled]="true"
-          [(ngModel)]="user.organization.orgParent.name" class="w-full" pInputText
-          type="text"></div>
+                                  [(ngModel)]="user.organization.orgParent.name" class="w-full" pInputText
+                                  type="text"></div>
       </div>
     </div>
   </p-fieldset>
@@ -164,8 +164,19 @@
       <div class="col-6 grid">
         <div class="col-4"><label>Sổ thư đi</label></div>
         <div class="col-8">
-          <p-dropdown [options]="listSoThuDi" [showClear]="true" placeholder="---Vui lòng chọn---"
-                      [(ngModel)]="selectedSoThuDi" optionLabel="name"></p-dropdown>
+          <p-dropdown [options]="listSoThuDi"
+                      [(ngModel)]="selectedSoThuDi"
+                      optionLabel="name" [filter]="true" filterBy="name"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedSoThuDi">
+                <div>{{selectedSoThuDi.name}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.name}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
       <div class="col-6 grid">
@@ -216,18 +227,37 @@
         <div class="col-4"><label>Đơn vị trực thuộc gửi</label></div>
         <div class="col-8">
           <p-dropdown [options]="listDonViTrucThuocGui"
-                      [showClear]="true"
+                      [(ngModel)]="selectedDonViTrucThuocGui"
                       (onChange)="loadNhanVienTheoBoPhan()"
-                      placeholder="---Vui lòng chọn---" [(ngModel)]="selectedDonViTrucThuocGui"
-                      optionLabel="name"></p-dropdown>
+                      optionLabel="name" [filter]="true" filterBy="name"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedDonViTrucThuocGui">
+                <div>{{selectedDonViTrucThuocGui.name}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.name}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
       <div class="col-6 grid">
         <div class="col-4"><label>Người gửi</label></div>
         <div class="col-8">
           <p-dropdown [options]="listNguoiGui"
-                      [showClear]="true" placeholder="---Vui lòng chọn---"
-                      [(ngModel)]="selectedNguoiGui" optionLabel="fullName"></p-dropdown>
+                      [(ngModel)]="selectedNguoiGui"
+                      optionLabel="fullName" [filter]="true" filterBy="fullName"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedNguoiGui">
+                <div>{{selectedNguoiGui.fullName}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.fullName}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
       <div class="col-6 grid">
@@ -263,9 +293,17 @@
           <p-dropdown [options]="listReceivePlace"
                       [(ngModel)]="selectedReceivePlace"
                       (onChange)="loadDonViNhan()"
-                      [showClear]="true"
-                      placeholder="---Vui lòng chọn---"
-                      optionLabel="name"></p-dropdown>
+                      optionLabel="name" [filter]="true" filterBy="name"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedReceivePlace">
+                <div>{{selectedReceivePlace.name}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.name}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
       <div *ngIf="checkboxTypeLetter.key == '1'" class="col-6 grid">
@@ -274,44 +312,92 @@
           <p-dropdown [options]="listReceiveUnit"
                       [(ngModel)]="selectedReceiveUnit"
                       (onChange)="loadDonViTrucThuocNhan()"
-                      [showClear]="true"
-                      placeholder="---Vui lòng chọn---"
-                      optionLabel="name"></p-dropdown>
+                      optionLabel="name" [filter]="true" filterBy="name"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedReceiveUnit">
+                <div>{{selectedReceiveUnit.name}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.name}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
       <div *ngIf="checkboxTypeLetter.key == '1'" class="col-6 grid">
         <div class="col-4"><label>Đơn vị trực thuộc nhận</label></div>
         <div class="col-8">
           <p-dropdown [options]="listAffiliatedReceiveUnit"
-                      (onChange)="loadNguoiNhan()"
                       [(ngModel)]="selectedAffiliatedReceiveUnit"
-                      [showClear]="true"
-                      placeholder="---Vui lòng chọn---"
-                      optionLabel="name"></p-dropdown>
+                      (onChange)="checkRightLeftData(selectedAffiliatedReceiveUnit)"
+                      optionLabel="name" [filter]="true" filterBy="name"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedAffiliatedReceiveUnit">
+                <div>{{selectedAffiliatedReceiveUnit.name}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.name}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
       <div *ngIf="checkboxTypeLetter.key == '1'" class="col-6 grid">
+
         <div class="col-4"><label>Người nhận</label></div>
         <div class="col-8">
           <p-dropdown [options]="listPersonForUnit"
                       [(ngModel)]="selectedPersonForUnit"
-                      [showClear]="true"
-                      placeholder="---Vui lòng chọn---"
-                      optionLabel="fullName"></p-dropdown>
+                      (click)="checkRightLeftData(selectedAffiliatedReceiveUnit)"
+                      optionLabel="fullName" [filter]="true" filterBy="fullName"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedPersonForUnit">
+                <div>{{selectedPersonForUnit.fullName}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.fullName}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
 
       <div *ngIf="checkboxTypeLetter.key == '2'" class="col-6 grid">
         <div class="col-4"><label>Nơi nhận bên ngoài</label></div>
         <div class="col-8">
-          <input pInputText type="text"/>
+          <p-dropdown [options]="listOutSideReceiving"
+                      appendTo="body"
+                      virtualScroll="true"
+                      [(ngModel)]="selectedOutSideReceiving"
+                      (onChange)="checkDataOutSideRecipt()"
+                      optionLabel="contactName" [filter]="true" filterBy="contactName"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedOutSideReceiving">
+                <div>{{selectedOutSideReceiving.contactName}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.contactName}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
 
-      <div class="col-6 grid">
+      <div *ngIf="checkboxTypeLetter.key == '1'" class="col-6 grid">
         <div class="col-4"><label>Địa chỉ nhận</label></div>
         <div class="col-8">
           <input [(ngModel)]="thuDi.receiveAddress" pInputText type="text"/>
+        </div>
+      </div>
+
+      <div *ngIf="checkboxTypeLetter.key == '2'" class="col-6 grid">
+        <div class="col-4"><label>Địa chỉ nhận</label></div>
+        <div class="col-8">
+          <input [(ngModel)]="selectedOutSideReceiving.address" pInputText type="text"/>
         </div>
       </div>
 
@@ -329,14 +415,15 @@
       <div class="col-6 grid">
         <div class="col-4"><label>Số vận đơn</label></div>
         <div class="col-8">
-          <input [disabled]="true" [(ngModel)]="soVanDon" pInputText type="text"/>
+          <input [disabled]="true" [(ngModel)]="thuDi.itemCode" pInputText type="text"/>
         </div>
       </div>
 
       <div class="col-6 grid">
         <div class="col-4"><label>Chi phí</label></div>
         <div class="col-8">
-          <p-inputNumber placeholder="VNĐ" styleClass="w-full" class="w-full" [(ngModel)]="chiPhi" mode="decimal"></p-inputNumber>
+          <p-inputNumber placeholder="VNĐ" styleClass="w-full" class="w-full" [(ngModel)]="chiPhi"
+                         mode="decimal"></p-inputNumber>
         </div>
       </div>
       <div class="col-6 grid">
