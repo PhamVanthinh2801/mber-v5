@@ -233,7 +233,7 @@ export class ThuMoiComponent extends iComponentBase implements OnInit {
     })
   }
   loadDonViNhan() {
-    // get đơn vị nhận theo nơi nhận
+    //get đơn vị nhận theo nơi nhận
     if (this.selectedReceivePlace == undefined) {
       this.listReceiveUnit = [];
     } else
@@ -243,6 +243,7 @@ export class ThuMoiComponent extends iComponentBase implements OnInit {
   }
   loadNguoiNhan() {
     // get người nhận theo đơn vị trực thuộc nhận
+
     if (this.selectedAffiliatedReceiveUnit == undefined) {
       this.listPersonForUnit = [];
     } else

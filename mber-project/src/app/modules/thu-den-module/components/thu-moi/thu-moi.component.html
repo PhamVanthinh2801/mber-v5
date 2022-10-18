@@ -344,12 +344,6 @@
       <div class="col-6 grid">
         <div class="col-4"><label>Nơi nhận </label></div>
         <div class="col-8">
-<!--          <p-dropdown [options]="listReceivePlace"-->
-<!--                      [(ngModel)]="selectedReceivePlace"-->
-<!--                      (onChange)="loadDonViNhan()"-->
-<!--                      [showClear]="true"-->
-<!--                      placeholder="-&#45;&#45;Vui lòng chọn-&#45;&#45;"-->
-<!--                      optionLabel="name"></p-dropdown>-->
           <p-dropdown [options]="listReceivePlace" [(ngModel)]="selectedReceivePlace"
                       (onChange)="loadDonViNhan()"
                       optionLabel="name" [filter]="true" filterBy="name"
@@ -368,12 +362,6 @@
       <div class="col-6 grid">
         <div class="col-4"><label>Đơn vị nhận</label></div>
         <div class="col-8">
-<!--          <p-dropdown [options]="listReceiveUnit"-->
-<!--                      [(ngModel)]="selectedReceiveUnit"-->
-<!--                      (onChange)="loadDonViTrucThuocNhan()"-->
-<!--                      [showClear]="true"-->
-<!--                      placeholder="-&#45;&#45;Vui lòng chọn-&#45;&#45;"-->
-<!--                      optionLabel="name"></p-dropdown>-->
           <p-dropdown [options]="listReceiveUnit" [(ngModel)]="selectedReceiveUnit"
                       (onChange)="loadDonViTrucThuocNhan()"
                       optionLabel="name" [filter]="true" filterBy="name"
@@ -392,12 +380,6 @@
       <div class="col-6 grid">
         <div class="col-4"><label>Đơn vị trực thuộc nhận</label></div>
         <div class="col-8">
-<!--          <p-dropdown [options]="listAffiliatedReceiveUnit"-->
-<!--                      [(ngModel)]="selectedAffiliatedReceiveUnit"-->
-<!--                      (onChange)="checkRightLeftData(selectedAffiliatedReceiveUnit)"-->
-<!--                      [showClear]="true"-->
-<!--                      placeholder="-&#45;&#45;Vui lòng chọn-&#45;&#45;"-->
-<!--                      optionLabel="name"></p-dropdown>-->
           <p-dropdown [options]="listAffiliatedReceiveUnit" [(ngModel)]="selectedAffiliatedReceiveUnit"
                       (onChange)="checkRightLeftData(selectedAffiliatedReceiveUnit)"
                       optionLabel="name" [filter]="true" filterBy="name"
@@ -416,12 +398,6 @@
       <div class="col-6 grid">
         <div class="col-4"><label>Người nhận</label></div>
         <div class="col-8">
-<!--          <p-dropdown [options]="listPersonForUnit"-->
-<!--                      [showClear]="true"-->
-<!--                      [(ngModel)]="selectedPersonForUnit"-->
-<!--                      (onChange)="checkRightLeftData(selectedAffiliatedReceiveUnit)"-->
-<!--                      placeholder="-&#45;&#45;Vui lòng chọn-&#45;&#45;"-->
-<!--                      optionLabel="fullName"></p-dropdown>-->
           <p-dropdown [options]="listPersonForUnit" [(ngModel)]="selectedPersonForUnit"
                       (onChange)="checkRightLeftData(selectedAffiliatedReceiveUnit)"
                       optionLabel="fullName" [filter]="true" filterBy="fullName"
