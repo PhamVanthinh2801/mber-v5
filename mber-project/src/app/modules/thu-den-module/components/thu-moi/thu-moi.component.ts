@@ -102,6 +102,8 @@ export class ThuMoiComponent extends iComponentBase implements OnInit {
   ngOnInit(): void {
     this.thuDen = {};
     this.checkStatus = this.listStatusLetter[0];
+    this.listTypeLetters = [{name: 'Nội bộ', key: '1'}, {name: 'Bên ngoài', key: '2'}];  // selection loại thư bên trong và bên ngoài
+    this.checkboxTypeLetter = this.listTypeLetters[0];
     this.checkStatusLetter = this.listStatusLetter[0];
     this.selectionYear = this.years[this.years.length - 1]
     this.getAllThuMoi();
@@ -145,7 +147,32 @@ export class ThuMoiComponent extends iComponentBase implements OnInit {
       }
     })
   }
+  checkRightLeftData(data: any) {
+    if (data) {
+      this.loadNguoiNhan();
+    } else {
+      this.insertDataFromRecipient();
+    }
+  }
 
+  insertDataFromRecipient() {
+    this.listAffiliatedReceiveUnit = [this.selectedPersonForUnit?.organization];
+    this.listReceiveUnit = [this.selectedPersonForUnit?.organization.orgParent];
+    // get don vị
+    this.shareApi.getAllDonVi().subscribe(data => {
+      this.listReceivePlace = data.result.items;
+    })
+    setTimeout(() => {
+      this.afterData();
+    }, 500)
+
+  }
+
+  afterData() {
+    this.selectedAffiliatedReceiveUnit = this.selectedPersonForUnit?.organization;
+    this.selectedReceiveUnit = this.selectedPersonForUnit?.organization.orgParent;
+    this.selectedReceivePlace = this.selectedPersonForUnit?.organization.orgParent;
+  }
   onDeletedRow() {
     if (this.selectedRowLetter) {
       try {
@@ -297,7 +324,7 @@ export class ThuMoiComponent extends iComponentBase implements OnInit {
   }
   onClickLuu() {
     try {
-      this.checkStatus.status = 5;
+      this.checkStatus.status = 3;
       const param = this.createParams();
       this.thuMoiservice.updateLetter(this.selectedRowLetter.id, param).subscribe((data: any) => {
         if (data) {
@@ -318,6 +345,7 @@ export class ThuMoiComponent extends iComponentBase implements OnInit {
         type: Number(this.checkboxTypeLetter.key),  // Phân loại thư
         staffId: this.user?.employeeId,// nhân viên lấy từ hệ thống đăng nhập
         code: this.codecn,
+        itemCode: this.selectedRowLetter.itemCode,
         letterCodeId: this.selectedSoThuDi.id,
         inputDate: this.inputDate.getTime(),
         sendDate: this.sendDate.getTime(),
@@ -325,7 +353,11 @@ export class ThuMoiComponent extends iComponentBase implements OnInit {
         affiliatedSendUnitId: this.selectedDonViTrucThuocGui?.sysOrganizationId,
         textCode: this.textCode,
         recipientId: this.checkboxTypeLetter.key == 1 ? this.selectedPersonForUnit?.employeeId : null,  // Người nhận
-
+        outSiteReceive: this.checkboxTypeLetter.key == 2 ? {
+          address: this.diachi,
+          contactName: null,
+          phone: null
+        } : null,  // phần này giành cho bên ngoài truyền vào là một object bên ngoài
         senderId: this.selectedNguoiGui?.employeeId,
         securityLevelId: this.selectedSecurity.id,
         urgencyLevelId: this.selectedUrgencyLevel?.id,
@@ -346,6 +378,7 @@ export class ThuMoiComponent extends iComponentBase implements OnInit {
   }
   onRowSelect(ev: any) {
     this.selectedRowLetter = ev.data;
+    this.checkboxTypeLetter = this.listTypeLetters[this.selectedRowLetter.type-1]
     this.selectedAffiliatedReceiveUnit = this.selectedRowLetter.selectedAffiliatedReceiveUnit;
     this.listNguoiGui = [ev.data.sender]
     this.listReceiveUnit = [ev.data.receiveUnit]

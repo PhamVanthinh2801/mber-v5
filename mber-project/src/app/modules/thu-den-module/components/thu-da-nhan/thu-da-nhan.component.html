@@ -5,9 +5,22 @@
       <div class="col-4 grid">
         <div class="col-4"><label for="">Cơ Quan<span class="red-text">*</span></label></div>
         <div class="col-8">
-          <p-dropdown [options]="listDonVi" [(ngModel)]="selectedReceiveUnit" (onChange)="loadnhan()" [showClear]="true"
-                      placeholder="---Vui lòng chọn---"
-                      optionLabel="name"></p-dropdown>
+<!--          <p-dropdown [options]="listDonVi" [(ngModel)]="selectedReceiveUnit" (onChange)="loadnhan()" [showClear]="true"-->
+<!--                      placeholder="-&#45;&#45;Vui lòng chọn-&#45;&#45;"-->
+<!--                      optionLabel="name"></p-dropdown>-->
+          <p-dropdown [options]="listDonVi" [(ngModel)]="selectedReceiveUnit"
+                      (onChange)="loadnhan()"
+                      optionLabel="name" [filter]="true" filterBy="name"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedReceiveUnit">
+                <div>{{selectedReceiveUnit.name}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.name}}</div>
+            </ng-template>
+          </p-dropdown>
 
         </div>
       </div>

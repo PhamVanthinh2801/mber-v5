@@ -4,7 +4,7 @@
   <div class="button-header fix-but">
     <button class="tool" pButton icon="pi pi-trash" type="button" (click)="onDeletedRow()" label="Xóa"></button>
     <button class="tool" pButton icon="pi pi-refresh" type="button" (click)="onUpdateThuMoi()"
-            label="Chỉnh Sửa"></button>
+            label="Tiếp Nhận"></button>
   </div>
 
   <p-fieldset legend="Thông tin người nhập">
@@ -13,9 +13,22 @@
         <div class="col-4 grid">
           <div class="col-4"><label for="fullName">Cơ Quan<span class="red-text">*</span></label></div>
           <div class="col-8">
-            <p-dropdown [options]="listDonVi" [(ngModel)]="selectedReceiveUnit" (onChange)="loadnhan()"
-                        [showClear]="true" placeholder="-&#45;&#45;Vui lòng chọn-&#45;&#45;"
-                        optionLabel="name"></p-dropdown>
+<!--            <p-dropdown [options]="listDonVi" [(ngModel)]="selectedReceiveUnit" (onChange)="loadnhan()"-->
+<!--                        [showClear]="true" placeholder="-&#45;&#45;Vui lòng chọn-&#45;&#45;"-->
+<!--                        optionLabel="name"></p-dropdown>-->
+            <p-dropdown [options]="listDonVi" [(ngModel)]="selectedReceiveUnit"
+                        (onChange)="loadnhan()"
+                        optionLabel="name" [filter]="true" filterBy="name"
+                        [showClear]="true" placeholder="--Vui lòng chọn--">
+              <ng-template pTemplate="selectedItem">
+                <div *ngIf="selectedReceiveUnit">
+                  <div>{{selectedReceiveUnit.name}}</div>
+                </div>
+              </ng-template>
+              <ng-template let-data pTemplate="item">
+                <div>{{data.name}}</div>
+              </ng-template>
+            </p-dropdown>
 
           </div>
         </div>
@@ -30,9 +43,22 @@
         <div class="col-4 grid">
           <div class="col-4"><label>Đơn vị</label></div>
           <div class="col-8">
+<!--            <p-dropdown [options]="listDonVi" [(ngModel)]="selectedReceiveUnit"-->
+<!--                        placeholder="-&#45;&#45;Vui lòng chọn-&#45;&#45;"-->
+<!--                        optionLabel="name"></p-dropdown>-->
             <p-dropdown [options]="listDonVi" [(ngModel)]="selectedReceiveUnit"
-                        placeholder="-&#45;&#45;Vui lòng chọn-&#45;&#45;"
-                        optionLabel="name"></p-dropdown>
+                        (onChange)="loadnhan()"
+                        optionLabel="name" [filter]="true" filterBy="name"
+                        [showClear]="true" placeholder="--Vui lòng chọn--">
+              <ng-template pTemplate="selectedItem">
+                <div *ngIf="selectedReceiveUnit">
+                  <div>{{selectedReceiveUnit.name}}</div>
+                </div>
+              </ng-template>
+              <ng-template let-data pTemplate="item">
+                <div>{{data.name}}</div>
+              </ng-template>
+            </p-dropdown>
           </div>
         </div>
       </div>
@@ -182,8 +208,21 @@
       <div class="col-6 grid">
         <div class="col-4"><label>Sổ thư đi <span class="red-text">*</span></label></div>
         <div class="col-8">
-          <p-dropdown [options]="listSoThuDen" [showClear]="true" placeholder="---Vui lòng chọn---"
-                      [(ngModel)]="selectedSoThuDi" optionLabel="name"></p-dropdown>
+<!--          <p-dropdown [options]="listSoThuDen" [showClear]="true" placeholder="-&#45;&#45;Vui lòng chọn-&#45;&#45;"-->
+<!--                      [(ngModel)]="selectedSoThuDi" optionLabel="name"></p-dropdown>-->
+          <p-dropdown [options]="listSoThuDen" [(ngModel)]="selectedSoThuDi"
+                      (onChange)="loadnhan()"
+                      optionLabel="name" [filter]="true" filterBy="name"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedSoThuDi">
+                <div>{{selectedSoThuDi.name}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.name}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
       <div class="col-6 grid">
@@ -212,7 +251,9 @@
             yearRange="2000:2030"
             appendTo="body"
             [showIcon]="true"
-            dateFormat="dd/mm/yy"></p-calendar>
+            dateFormat="dd/mm/yy"
+            [showTime]="true"
+            inputId="time"></p-calendar>
         </div>
       </div>
       <div class="col-6 grid">
@@ -227,25 +268,51 @@
                       [showIcon]="true"
                       dateFormat="dd/mm/yy"
                       [showTime]="true"
-                      inputId="time"></p-calendar>
+                      inputId="time"
+                      ></p-calendar>
         </div>
       </div>
       <div class="col-6 grid">
         <div class="col-4"><label>Đơn vị trực thuộc gửi</label></div>
         <div class="col-8">
-          <p-dropdown [options]="listDonViTrucThuocGui"
-                      [showClear]="true"
+<!--          <p-dropdown [options]="listDonViTrucThuocGui"-->
+<!--                      [showClear]="true"-->
+<!--                      (onChange)="loadNhanVienTheoBoPhan()"-->
+<!--                      placeholder="-&#45;&#45;Vui lòng chọn-&#45;&#45;" [(ngModel)]="selectedDonViTrucThuocGui"-->
+<!--                      optionLabel="name"></p-dropdown>-->
+          <p-dropdown [options]="listDonViTrucThuocGui" [(ngModel)]="selectedDonViTrucThuocGui"
                       (onChange)="loadNhanVienTheoBoPhan()"
-                      placeholder="---Vui lòng chọn---" [(ngModel)]="selectedDonViTrucThuocGui"
-                      optionLabel="name"></p-dropdown>
+                      optionLabel="name" [filter]="true" filterBy="name"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedDonViTrucThuocGui">
+                <div>{{selectedDonViTrucThuocGui.name}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.name}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
       <div class="col-6 grid">
         <div class="col-4"><label>Người gửi</label></div>
         <div class="col-8">
-          <p-dropdown [options]="listNguoiGui"
-                      [showClear]="true" placeholder="---Vui lòng chọn---"
-                      [(ngModel)]="selectedNguoiGui" optionLabel="fullName"></p-dropdown>
+<!--          <p-dropdown [options]="listNguoiGui"-->
+<!--                      [showClear]="true" placeholder="-&#45;&#45;Vui lòng chọn-&#45;&#45;"-->
+<!--                      [(ngModel)]="selectedNguoiGui" optionLabel="fullName"></p-dropdown>-->
+          <p-dropdown [options]="listNguoiGui" [(ngModel)]="selectedNguoiGui"
+                      optionLabel="fullName" [filter]="true" filterBy="fullName"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedNguoiGui">
+                <div>{{selectedNguoiGui.fullName}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.fullName}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
       <div class="col-6 grid">
@@ -277,45 +344,97 @@
       <div class="col-6 grid">
         <div class="col-4"><label>Nơi nhận </label></div>
         <div class="col-8">
-          <p-dropdown [options]="listReceivePlace"
-                      [(ngModel)]="selectedReceivePlace"
+<!--          <p-dropdown [options]="listReceivePlace"-->
+<!--                      [(ngModel)]="selectedReceivePlace"-->
+<!--                      (onChange)="loadDonViNhan()"-->
+<!--                      [showClear]="true"-->
+<!--                      placeholder="-&#45;&#45;Vui lòng chọn-&#45;&#45;"-->
+<!--                      optionLabel="name"></p-dropdown>-->
+          <p-dropdown [options]="listReceivePlace" [(ngModel)]="selectedReceivePlace"
                       (onChange)="loadDonViNhan()"
-                      [showClear]="true"
-                      placeholder="---Vui lòng chọn---"
-                      optionLabel="name"></p-dropdown>
+                      optionLabel="name" [filter]="true" filterBy="name"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedReceivePlace">
+                <div>{{selectedReceivePlace.name}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.name}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
       <div class="col-6 grid">
         <div class="col-4"><label>Đơn vị nhận</label></div>
         <div class="col-8">
-          <p-dropdown [options]="listReceiveUnit"
-                      [(ngModel)]="selectedReceiveUnit"
+<!--          <p-dropdown [options]="listReceiveUnit"-->
+<!--                      [(ngModel)]="selectedReceiveUnit"-->
+<!--                      (onChange)="loadDonViTrucThuocNhan()"-->
+<!--                      [showClear]="true"-->
+<!--                      placeholder="-&#45;&#45;Vui lòng chọn-&#45;&#45;"-->
+<!--                      optionLabel="name"></p-dropdown>-->
+          <p-dropdown [options]="listReceiveUnit" [(ngModel)]="selectedReceiveUnit"
                       (onChange)="loadDonViTrucThuocNhan()"
-                      [showClear]="true"
-                      placeholder="---Vui lòng chọn---"
-                      optionLabel="name"></p-dropdown>
+                      optionLabel="name" [filter]="true" filterBy="name"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedReceiveUnit">
+                <div>{{selectedReceiveUnit.name}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.name}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
       <div class="col-6 grid">
         <div class="col-4"><label>Đơn vị trực thuộc nhận</label></div>
         <div class="col-8">
-          <p-dropdown [options]="listAffiliatedReceiveUnit"
-                      (onChange)="loadNguoiNhan()"
-                      [showClear]="true"
-                      [(ngModel)]="selectedAffiliatedReceiveUnit"
-                      placeholder="---Vui lòng chọn---"
-                      optionLabel="name"></p-dropdown>
+<!--          <p-dropdown [options]="listAffiliatedReceiveUnit"-->
+<!--                      [(ngModel)]="selectedAffiliatedReceiveUnit"-->
+<!--                      (onChange)="checkRightLeftData(selectedAffiliatedReceiveUnit)"-->
+<!--                      [showClear]="true"-->
+<!--                      placeholder="-&#45;&#45;Vui lòng chọn-&#45;&#45;"-->
+<!--                      optionLabel="name"></p-dropdown>-->
+          <p-dropdown [options]="listAffiliatedReceiveUnit" [(ngModel)]="selectedAffiliatedReceiveUnit"
+                      (onChange)="checkRightLeftData(selectedAffiliatedReceiveUnit)"
+                      optionLabel="name" [filter]="true" filterBy="name"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedAffiliatedReceiveUnit">
+                <div>{{selectedAffiliatedReceiveUnit.name}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.name}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
       <div class="col-6 grid">
         <div class="col-4"><label>Người nhận</label></div>
         <div class="col-8">
-          <p-dropdown [options]="listPersonForUnit"
-                      [showClear]="true"
-                      [(ngModel)]="selectedPersonForUnit"
-
-                      placeholder="---Vui lòng chọn---"
-                      optionLabel="fullName"></p-dropdown>
+<!--          <p-dropdown [options]="listPersonForUnit"-->
+<!--                      [showClear]="true"-->
+<!--                      [(ngModel)]="selectedPersonForUnit"-->
+<!--                      (onChange)="checkRightLeftData(selectedAffiliatedReceiveUnit)"-->
+<!--                      placeholder="-&#45;&#45;Vui lòng chọn-&#45;&#45;"-->
+<!--                      optionLabel="fullName"></p-dropdown>-->
+          <p-dropdown [options]="listPersonForUnit" [(ngModel)]="selectedPersonForUnit"
+                      (onChange)="checkRightLeftData(selectedAffiliatedReceiveUnit)"
+                      optionLabel="fullName" [filter]="true" filterBy="fullName"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedPersonForUnit">
+                <div>{{selectedPersonForUnit.fullName}}</div>
+              </div>
+            </ng-template>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.fullName}}</div>
+            </ng-template>
+          </p-dropdown>
         </div>
       </div>
       <div class="col-6 grid">
@@ -371,7 +490,7 @@
           <!--            <p-checkbox label="Gửi mail cho người nhận" name="groupname" value="val2"></p-checkbox>-->
           <!--          </div>-->
           <button class="tool" (click)="onClickLuu()" icon="pi pi-refresh" pButton type="button"
-                  label="Lưu ">
+                  label="Tiếp Nhận ">
           </button>
           <!--          <button  class="tool" pButton icon="pi pi-send" type="button"-->
           <!--                  label="Gửi đầu mối"></button>-->
