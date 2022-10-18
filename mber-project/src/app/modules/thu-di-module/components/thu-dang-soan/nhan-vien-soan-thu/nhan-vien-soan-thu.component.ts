@@ -6,6 +6,7 @@ import {MessageService} from "primeng/api";
 import {LocalStorageService} from "../../../../system-module/functions/store/local-storage.service";
 import {SharedApi} from "../../../../base-module/service/api.shared.services";
 import {NhanVienSoanThuService} from "./nhan-vien-soan-thu.service";
+import {NoiNhanBenNgoaiModel} from "../../../../base-module/models";
 
 
 enum statusLetter {
@@ -58,7 +59,8 @@ export class NhanVienSoanThuComponent extends iComponentBase implements OnInit {
   checkStatus: any;
   listStatusLetter: any;
   soDienThoai: any;
-  noiNhanBenNgoai: any;
+  noiNhanBenNgoai: NoiNhanBenNgoaiModel[];
+  selectedNoiNhanBenNgoai: NoiNhanBenNgoaiModel;
   keyword = 'contactName';
   nguoiNhanBenNgoai: any;
   person: any;
@@ -137,6 +139,12 @@ export class NhanVienSoanThuComponent extends iComponentBase implements OnInit {
       this.urgency = data.result.items;
     })
 
+  }
+
+  clearEventAddresss(){
+    if(!this.selectedNoiNhanBenNgoai){
+      this.selectedNoiNhanBenNgoai = {};
+    }
   }
 
   loadNhanVienTheoBoPhan() {

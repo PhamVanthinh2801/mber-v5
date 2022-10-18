@@ -45,6 +45,7 @@ enum typeLetterFrom {
 })
 export class VanThuComponent extends iComponentBase implements OnInit {
   // hai giá trị này sẽ xử lý search cho đơn vị nhận bên ngoài, chỗ mà nhập tới đâu search tới đấy.
+
   keyword = 'contactName';
   searchText: string;
   noiNhanBenNgoai: any;
@@ -70,7 +71,7 @@ export class VanThuComponent extends iComponentBase implements OnInit {
   selectedRecipient: any // selected Người nhận
   listDonViChuyenPhat: any;
   selectionDonViChuyenPhat: any;
-  receiveAddress = '' // địa chỉ nhận
+  receiveAddress = 'Số 261 Khuất Duy Tiến, Thanh Xuân, Hà Nội' // địa chỉ nhận
   inputDate = new Date(); // ngày nhập
   sendDate = new Date(); // ngày nhập
   textCode: any;
@@ -219,6 +220,8 @@ export class VanThuComponent extends iComponentBase implements OnInit {
     // get đơn vị nhận theo nơi nhận
     if (this.selectedReceivePlace == undefined) {
       this.listReceiveUnit = []
+      this.listDonViTrucThuocNhan = [];
+      this.listNguoiNhan = [];
     } else
       this.nhapMoiService.getParentOrganizations(this.selectedReceivePlace.sysOrganizationId).subscribe((data: any) => {
         this.listReceiveUnit = data.result.items;
@@ -255,6 +258,7 @@ export class VanThuComponent extends iComponentBase implements OnInit {
   }
 
   insertDataFromRecipient() {
+    this.getAllNguoiNhanInit();
     this.listDonViTrucThuocNhan = [this.selectedRecipient?.organization];
     this.listReceiveUnit = [this.selectedRecipient?.organization.orgParent];
     // get don vị
@@ -316,7 +320,7 @@ export class VanThuComponent extends iComponentBase implements OnInit {
           securityLevelId: this.selectedSecurity?.id,  // Độ mật *
           urgencyLevelId: this.selectedUrgency?.id,  // Độ khẩn *
           type: Number(this.checkboxTypeLetter.key),  // Phân loại thư
-          receivePlaceId: this.selectedReceivePlace?.sysOrganizationId,  // Nơi nhận
+          receivePlaceId: this.checkboxTypeLetter.key == 1 ? this.selectedReceivePlace?.sysOrganizationId : null,  // Nơi nhận
           receiveUnitId: this.selectedReceiveUnit?.sysOrganizationId,  // Đơn vị nhận
           outSiteReceive: this.checkboxTypeLetter.key == 2 ? {
             address: this.receiveAddress,

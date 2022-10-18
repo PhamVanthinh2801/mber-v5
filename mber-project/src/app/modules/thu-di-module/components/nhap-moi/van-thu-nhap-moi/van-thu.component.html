@@ -114,6 +114,7 @@
                         yearRange="2000:2030"
                         appendTo="body"
                         [showTime]="true" inputId="time"
+                        [showIcon]="true"
                         dateFormat="dd/mm/yy"></p-calendar>
           </div>
         </div>
@@ -165,12 +166,6 @@
           <div class="col-8"><input [(ngModel)]="textCode"
                                     class="w-full" pInputText type="text"></div>
         </div>
-        <div class="col-4 grid">
-          <div class="col-4"><label>Trích yếu</label></div>
-          <div class="col-8"><input [(ngModel)]="summary"
-                                    class="w-full" pInputText type="text"></div>
-        </div>
-
         <div class="col-4 grid">
           <div class="col-4"><label>Độ mật <span class="red-text">*</span></label></div>
           <div class="col-8">
@@ -246,7 +241,7 @@
           <div class="col-4"><label>Người nhận</label></div>
           <div class="col-8">
             <p-dropdown [options]="listNguoiNhan" [(ngModel)]="selectedRecipient"
-                        (onChange)="checkRightLeftData(selectedAffiliatedReceiveUnit)"
+                        (click)="checkRightLeftData(selectedAffiliatedReceiveUnit)"
                         optionLabel="fullName" [filter]="true" filterBy="fullName"
                         [showClear]="true" placeholder="--Vui lòng chọn--">
               <ng-template pTemplate="selectedItem">
@@ -284,16 +279,23 @@
             </div>
           </div>
         </div>
-        <div class="col-4 grid">
+        <div *ngIf="checkboxTypeLetter.key=='1'" class="col-4 grid">
           <div class="col-4"><label>Địa chỉ nhận <span class="red-text">*</span></label></div>
-          <div class="col-8"><input class="w-full"
-                                    [(ngModel)]='receiveAddress' pInputText type="text"></div>
+          <div class="col-8">
+            <textarea [disabled]="true" [(ngModel)]="receiveAddress" class="w-full" [rows]="2" [cols]="30" pInputTextarea></textarea>
+          </div>
+        </div>
+        <div *ngIf="checkboxTypeLetter.key=='2'" class="col-4 grid">
+          <div class="col-4"><label>Địa chỉ nhận <span class="red-text">*</span></label></div>
+          <div class="col-8">
+            <textarea [(ngModel)]="receiveAddress" class="w-full" [rows]="1" [cols]="30" pInputTextarea></textarea>
+          </div>
         </div>
         <div class="col-4 grid">
           <div class="col-4"><label>Đơn vị chuyển phát</label></div>
           <div class="col-8">
             <p-dropdown [options]="listDonViChuyenPhat" [(ngModel)]="selectionDonViChuyenPhat"
-                        optionLabel="fullName" [filter]="true" filterBy="name"
+                        optionLabel="name" [filter]="true" filterBy="name"
                         [showClear]="true" placeholder="--Vui lòng chọn--">
               <ng-template pTemplate="selectedItem">
                 <div *ngIf="selectionDonViChuyenPhat">
@@ -326,6 +328,16 @@
           <div class="col-8"><input id="1" [disabled]="true" [(ngModel)]="checkStatus.name" class="w-full"
                                     placeholder="Đang soạn"
                                     pInputText type="text"></div>
+        </div>
+        <div class="col-8 grid">
+          <div class="col-12 grid">
+            <div class="col-2"><label>Trích yếu</label></div>
+            <div class="col-10">
+              <label>
+                <textarea [(ngModel)]="summary" class="w-full" [rows]="5" [cols]="30" pInputTextarea></textarea>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
 

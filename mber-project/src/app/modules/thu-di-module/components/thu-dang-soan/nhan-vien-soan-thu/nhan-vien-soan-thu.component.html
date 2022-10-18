@@ -204,13 +204,7 @@
                  placeholder="auto gencode"/>
         </div>
       </div>
-      <div class="col-6 grid">
-        <div class="col-4"><label>Trích yếu</label></div>
-        <div class="col-8">
-          <input pInputText type="text"
-                 [(ngModel)]="summary"/>
-        </div>
-      </div>
+
       <div class="col-6 grid">
         <div class="col-4"><label>Độ mật</label></div>
         <div class="col-8">
@@ -227,26 +221,39 @@
       </div>
       <div *ngIf="this.checkboxTypeLetter.key == '2'" class="col-6 grid">
         <div class="col-4"><label>Nơi nhận bên ngoài</label></div>
-        <div class="col-8 flex flex-row">
-          <div class="ng-autocomplete">
-            <ng-autocomplete
-              [data]="noiNhanBenNgoai"
-              [searchKeyword]="keyword"
-              placeholder="--Vui lòng chọn--"
-              (selected)='selectEvent($event)'
-              (inputChanged)='onChangeSearch($event)'
-              (inputFocused)='onFocused($event)'
-              historyIdentifier="countries"
-              [itemTemplate]="itemTemplate"
-              [notFoundTemplate]="notFoundTemplate">
-            </ng-autocomplete>
-            <ng-template #itemTemplate let-item>
-              <a [innerHTML]="item.contactName"></a>
+        <div class="col-8">
+          <p-dropdown [options]="noiNhanBenNgoai" [(ngModel)]="selectedNoiNhanBenNgoai"
+                      (onChange)="clearEventAddresss()"
+                      optionLabel="contactName" [filter]="true" filterBy="contactName"
+                      [showClear]="true" placeholder="--Vui lòng chọn--">
+            <ng-template pTemplate="selectedItem">
+              <div *ngIf="selectedNoiNhanBenNgoai">
+                <div>{{selectedNoiNhanBenNgoai.contactName}}</div>
+              </div>
             </ng-template>
-            <ng-template #notFoundTemplate let-notFound>
-              <div [innerHTML]="notFound"></div>
+            <ng-template let-data pTemplate="item">
+              <div>{{data.contactName}}</div>
             </ng-template>
-          </div>
+          </p-dropdown>
+<!--          <div class="ng-autocomplete">-->
+<!--            <ng-autocomplete-->
+<!--              [data]="noiNhanBenNgoai"-->
+<!--              [searchKeyword]="keyword"-->
+<!--              placeholder="&#45;&#45;Vui lòng chọn&#45;&#45;"-->
+<!--              (selected)='selectEvent($event)'-->
+<!--              (inputChanged)='onChangeSearch($event)'-->
+<!--              (inputFocused)='onFocused($event)'-->
+<!--              historyIdentifier="countries"-->
+<!--              [itemTemplate]="itemTemplate"-->
+<!--              [notFoundTemplate]="notFoundTemplate">-->
+<!--            </ng-autocomplete>-->
+<!--            <ng-template #itemTemplate let-item>-->
+<!--              <a [innerHTML]="item.contactName"></a>-->
+<!--            </ng-template>-->
+<!--            <ng-template #notFoundTemplate let-notFound>-->
+<!--              <div [innerHTML]="notFound"></div>-->
+<!--            </ng-template>-->
+<!--          </div>-->
         </div>
       </div>
       <div *ngIf="this.checkboxTypeLetter.key == '1'" class="col-6 grid">
@@ -309,6 +316,14 @@
           <input pInputText type="text" [(ngModel)]="status" [disabled]="true"
                  placeholder="auto gencode"/>
         </div>
+      </div>
+      <div class="col-6 grid">
+          <div class="col-4"><label>Trích yếu</label></div>
+          <div class="col-8">
+            <label>
+              <textarea [(ngModel)]="summary" class="w-full" [rows]="1" [cols]="30" pInputTextarea></textarea>
+            </label>
+          </div>
       </div>
     </div>
     <div class="grid">
