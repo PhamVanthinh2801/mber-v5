@@ -307,6 +307,7 @@ export class VanThuSoanThuComponent extends iComponentBase implements OnInit {
 
   // load dữ liệu vào popup
   onRowSelect(ev: any) {
+    console.log(ev)
     this.selectedThuDangSoan = ev.data;
     this.selectedAffiliatedSendUnit = this.selectedThuDangSoan.affiliatedSendUnit // load đơn trị trực thuộc gửi
     this.selectedSender = this.selectedThuDangSoan.sender // load người gửi
@@ -320,6 +321,12 @@ export class VanThuSoanThuComponent extends iComponentBase implements OnInit {
     // load người nhận
     this.listRecipient = [this.selectedThuDangSoan.recipient]
     this.selectedRecipient = this.selectedThuDangSoan.recipient
+    // địa chỉ nhận
+    this.thuDi.receiveAddress = this.selectedThuDangSoan.receiveAddress
+    // chi phí
+    this.thuDi.cost = this.selectedThuDangSoan.cost
+    // đơn vị chuyển phát
+    this.selectedDelivery = this.selectedThuDangSoan.deliveryUnit;
   }
 
   onUpdateThuDangSoan() {

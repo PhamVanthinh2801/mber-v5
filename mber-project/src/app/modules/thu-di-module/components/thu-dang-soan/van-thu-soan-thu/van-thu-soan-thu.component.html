@@ -15,8 +15,9 @@
   </div>
   <div class="grid">
     <div class="col-12">
-      <p-table #dt [value]="listThuDangSoan"
-               selectionMode="single" [(selection)]="selectedThuDangSoan"
+      <p-table [value]="listThuDangSoan"
+               selectionMode="single"
+               [(selection)]="selectedThuDangSoan"
                (onRowSelect)="onRowSelect($event)"
                [paginator]="true" [rows]="10"
                styleClass="p-datatable-gridlines" responsiveLayout="scroll">
@@ -105,6 +106,7 @@
               [inputId]="category.key"
               name="category"
               [value]="category"
+              [disabled]="true"
               [(ngModel)]="checkboxTypeLetter"
               (onClick)="typeLetterAction()"
             ></p-radioButton>
@@ -331,15 +333,22 @@
           </p-dropdown>
         </div>
       </div>
-      <div class="col-6 grid">
+
+      <div *ngIf="checkboxTypeLetter.key=='1'" class="col-6 grid">
+        <div class="col-4"><label>Địa chỉ nhận</label></div>
+        <div class="col-8">
+          <textarea [(ngModel)]="thuDi.receiveAddress"
+                    class="w-full" [rows]="1" [cols]="30" pInputTextarea></textarea>
+        </div>
+      </div>
+
+      <div *ngIf="checkboxTypeLetter.key=='2'" class="col-6 grid">
         <div class="col-4"><label>Địa chỉ nhận</label></div>
         <div class="col-8">
           <textarea [(ngModel)]="selectedNoiNhanBenNgoai.address"
                     class="w-full" [rows]="1" [cols]="30" pInputTextarea></textarea>
         </div>
       </div>
-
-
       <div class="col-6 grid">
         <div class="col-4"><label>Đơn vị chuyển phát</label></div>
         <div class="col-8">
