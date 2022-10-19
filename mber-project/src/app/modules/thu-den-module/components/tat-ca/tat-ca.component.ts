@@ -34,7 +34,7 @@ export class TatCaComponent extends iComponentBase implements OnInit {
   listReceivePlace: any[];
   checkNhanVien: any;
   checkVanThu: any;
-  listThuMoi: ThuDenModel;
+  listTatCaThu: ThuDenModel;
   inputDate = new Date();
   sendDate = new Date();
   listNguoiGui:any;
@@ -49,8 +49,7 @@ export class TatCaComponent extends iComponentBase implements OnInit {
   selectedAffiliatedSendUnit: any;
   // get người theo đơn vị trực thuộc nhận
   listPersonForUnit: NhanVienModel[];
-  selectedPersonForUnit: NhanVienModel;
-  statusString = 'Thư Đã Gửi';
+
   constructor(private tatCaservice: TatCaService,
               private tokenStorageService: LocalStorageService,
               private shareApi: SharedApi,
@@ -86,7 +85,7 @@ export class TatCaComponent extends iComponentBase implements OnInit {
     this.checkStatusLetter = this.listStatusLetter[0];
     this.selectionYear = this.years[this.years.length - 1]
     this.getDonVi();
-    this.getAllThuMoi();
+    this.getAllThuDenInit();
     this.getTypeLetterOnInit();
   }
 
@@ -109,8 +108,8 @@ export class TatCaComponent extends iComponentBase implements OnInit {
       year: this.selectionYear?.year,
       keyword: this.keyword
     }
-    this.tatCaservice.getAllThuMoi().subscribe((data: any) => {
-      this.listThuMoi = data.result.items;
+    this.tatCaservice.getAllThuDen().subscribe((data: any) => {
+      this.listTatCaThu = data.result.items;
     })
   }
   getDonVi() {
@@ -124,27 +123,25 @@ export class TatCaComponent extends iComponentBase implements OnInit {
   getTypeLetterOnInit() {
     this.checkboxTypeLetter = this.listTypeLetters[0];
   }
-  getAllThuMoi() {
-    this.tatCaservice.getAllThuMoi().subscribe((data: any) => {
+  getAllThuDenInit() {
+    this.tatCaservice.getAllThuDen().subscribe((data: any) => {
       console.log(data)
       if (data) {
-        this.listThuMoi = data.result.items;
-        console.log('aaaaa',data)
+        this.listTatCaThu = data.result.items;
       }
     })
 
   }
-  loadnhan() {
-   // this.checkStatusLetter = this.listStatusLetter[3]
+  loadNhan() {
     const param = {
-    //  status: 3,
+      status: 3,
       organizationId: this.selectedReceiveUnit ? this.selectedReceiveUnit?.sysOrganizationId : null,
       year: this.selectionYear?.year,
       keyword: this.keyword
     }
     setTimeout(()=> {
-      this.tatCaservice.getAllThuMoi().subscribe((data: any) => {
-        this.listThuMoi = data.result.items;
+      this.tatCaservice.getAllThuDen().subscribe((data: any) => {
+        this.listTatCaThu = data.result.items;
       })
     }, 500)
   }

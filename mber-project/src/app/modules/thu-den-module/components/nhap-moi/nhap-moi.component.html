@@ -286,7 +286,7 @@
         <div style="margin-right:30px">
           <p-checkbox label="Gửi mail cho người nhận" name="groupname" value="val2"></p-checkbox>
         </div>
-        <button class="tool" icon="pi pi-save" (click)="onSend()" pButton type="button" label="Tiếp nhận">
+        <button *ngIf="checkboxTypeLetter.key == '1'" class="tool" icon="pi pi-save" (click)="onSend()" pButton type="button" label="Tiếp nhận">
         </button>
         <button *ngIf="checkboxTypeLetter.key == '2'" (click)="onSend()" class="tool-auto-width" icon="pi pi-chevron-circle-up" pButton
                 type="button" label="Tiếp nhận và sao chép">

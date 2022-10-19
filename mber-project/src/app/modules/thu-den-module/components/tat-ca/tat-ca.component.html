@@ -5,11 +5,8 @@
       <div class="col-4 grid">
         <div class="col-4"><label>Cơ Quan<span class="red-text">*</span></label></div>
         <div class="col-8">
-<!--          <p-dropdown [options]="listDonVi" [(ngModel)]="selectedReceiveUnit" (onChange)="loadnhan()" [showClear]="true"-->
-<!--                      placeholder="-&#45;&#45;Vui lòng chọn-&#45;&#45;"-->
-<!--                      optionLabel="name"></p-dropdown>-->
           <p-dropdown [options]="listDonVi" [(ngModel)]="selectedReceiveUnit"
-                      (onChange)="loadnhan()"
+                      (onChange)="loadNhan()"
                       optionLabel="name" [filter]="true" filterBy="name"
                       [showClear]="true" placeholder="--Vui lòng chọn--">
             <ng-template pTemplate="selectedItem">
@@ -27,7 +24,7 @@
       <div class="col-4 grid">
         <div class="col-4 "><label>Năm</label></div>
         <div class="col-8">
-          <p-dropdown [options]="years" [(ngModel)]="selectionYear" (onChange)="loadnhan()"
+          <p-dropdown [options]="years" [(ngModel)]="selectionYear" (onChange)="loadNhan()"
                       placeholder="---Vui lòng chọn---"
                       optionLabel="year"></p-dropdown>
         </div>
@@ -53,7 +50,7 @@
     </div>
     <div class="grid">
       <div class="col-12">
-        <p-table [value]="listThuMoi"
+        <p-table [value]="listTatCaThu"
                  selectionMode="single"
                  [(selection)]="selectedRowLetter"
                  (onRowSelect)="onRowSelect($event)"
@@ -110,7 +107,7 @@
               <td>{{row.affiliatedReceiveUnit?.name}}</td>
               <td>{{row.recipient?.fullName}}</td>
               <td>{{row.receiveAddress}}</td>
-              <td>{{row.status }}</td>
+              <td>{{(row.status == 2 || row.status == 3) ? (row.status | StatusLetterTo) : (row.status == 5 ? 'Thư mơi' : '')}}</td>
             </tr>
           </ng-template>
         </p-table>

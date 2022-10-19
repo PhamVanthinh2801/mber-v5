@@ -14,7 +14,7 @@
           <div class="col-4"><label for="fullName">Cơ Quan<span class="red-text">*</span></label></div>
           <div class="col-8">
             <p-dropdown [options]="listDonVi" [(ngModel)]="selectedReceiveUnit"
-                        (onChange)="loadnhan()"
+                        (onChange)="loadNhan()"
                         optionLabel="name" [filter]="true" filterBy="name"
                         [showClear]="true" placeholder="--Vui lòng chọn--">
               <ng-template pTemplate="selectedItem">
@@ -32,7 +32,7 @@
         <div class="col-4 grid">
           <div class="col-4 "><label>Năm</label></div>
           <div class="col-8">
-            <p-dropdown [options]="years" [(ngModel)]="selectionYear" (onChange)="loadnhan()"
+            <p-dropdown [options]="years" [(ngModel)]="selectionYear" (onChange)="loadNhan()"
                         placeholder="-&#45;&#45;Vui lòng chọn-&#45;&#45;"
                         optionLabel="year"></p-dropdown>
           </div>
@@ -41,7 +41,7 @@
           <div class="col-4"><label>Đơn vị</label></div>
           <div class="col-8">
             <p-dropdown [options]="listDonVi" [(ngModel)]="selectedReceiveUnit"
-                        (onChange)="loadnhan()"
+                        (onChange)="loadNhan()"
                         optionLabel="name" [filter]="true" filterBy="name"
                         [showClear]="true" placeholder="--Vui lòng chọn--">
               <ng-template pTemplate="selectedItem">
@@ -139,7 +139,7 @@
               <td>{{row.affiliatedReceiveUnit?.name}}</td>
               <td>{{row.recipient?.fullName}}</td>
               <td>{{row.receiveAddress}}</td>
-              <td>{{row.status | StatusLetter}}</td>
+              <td>{{row.status == 5 ? 'Thư mới' : 'thư không xác định  '}}</td>
             </tr>
           </ng-template>
         </p-table>
@@ -203,7 +203,7 @@
         <div class="col-4"><label>Sổ thư đi <span class="red-text">*</span></label></div>
         <div class="col-8">
           <p-dropdown [options]="listSoThuDen" [(ngModel)]="selectedSoThuDi"
-                      (onChange)="loadnhan()"
+                      (onChange)="loadNhan()"
                       optionLabel="name" [filter]="true" filterBy="name"
                       [showClear]="true" placeholder="--Vui lòng chọn--">
             <ng-template pTemplate="selectedItem">
@@ -261,16 +261,19 @@
                       dateFormat="dd/mm/yy"
                       [showTime]="true"
                       inputId="time"
-                      ></p-calendar>
+          ></p-calendar>
         </div>
       </div>
       <div class="col-6 grid">
         <div class="col-4"><label>Đơn vị trực thuộc gửi</label></div>
         <div class="col-8">
-          <p-dropdown [options]="listDonViTrucThuocGui" [(ngModel)]="selectedDonViTrucThuocGui"
-                      (onChange)="loadNhanVienTheoBoPhan()"
-                      optionLabel="name" [filter]="true" filterBy="name"
-                      [showClear]="true" placeholder="--Vui lòng chọn--">
+          <p-dropdown [options]="listDonViTrucThuocGui"
+                      [(ngModel)]="selectedDonViTrucThuocGui"
+                      optionLabel="name"
+                      [filter]="true"
+                      filterBy="name"
+                      [showClear]="true"
+                      placeholder="--Vui lòng chọn--">
             <ng-template pTemplate="selectedItem">
               <div *ngIf="selectedDonViTrucThuocGui">
                 <div>{{selectedDonViTrucThuocGui.name}}</div>
@@ -409,14 +412,9 @@
     <div class="grid">
       <div class="col-12">
         <div class="flex flex-row  justify-content-end" style="padding-top:20px; padding-bottom:20px ;width:97%">
-          <!--          <div style="margin-right:50px">-->
-          <!--            <p-checkbox label="Gửi mail cho người nhận" name="groupname" value="val2"></p-checkbox>-->
-          <!--          </div>-->
-          <button class="tool" (click)="onClickLuu()" icon="pi pi-refresh" pButton type="button"
+          <button class="tool" (click)="onClickTiepNhan()" icon="pi pi-refresh" pButton type="button"
                   label="Tiếp Nhận ">
           </button>
-          <!--          <button  class="tool" pButton icon="pi pi-send" type="button"-->
-          <!--                  label="Gửi đầu mối"></button>-->
           <button class="tool" icon="pi pi-times" pButton type="button"
                   label="Đóng">
           </button>

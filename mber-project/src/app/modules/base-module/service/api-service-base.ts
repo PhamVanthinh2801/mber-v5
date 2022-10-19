@@ -8,7 +8,7 @@ import {retry} from "rxjs/operators";
 
 
 @Injectable()
-export class apiServiceBase  {
+export class apiServiceBase {
   constructor(public httpClient: HttpClient) {
   }
 
@@ -108,8 +108,6 @@ export class apiServiceBase  {
           console.log('lỗi đây này', error)
           return throwError(error);
         })
-
-
       );
     } catch (error) {
       document.body.style.cursor = 'default';
@@ -126,7 +124,13 @@ export class apiServiceBase  {
       // @ts-ignore
       console.log(url);
       // @ts-ignore
-      return this.httpClient.put(url, inputData, this.getOptionsRequest(ignoreLoading)).pipe(catchError(this.handleError));
+      return this.httpClient.put(url, inputData, this.getOptionsRequest(ignoreLoading)).pipe(
+        retry(1),
+        // catchError(this.handleError)
+        catchError((error: HttpErrorResponse) => {
+          console.log('lỗi đây này', error)
+          return throwError(error);
+        }))
     } catch (error) {
       document.body.style.cursor = 'default';
       console.log(error);
@@ -138,12 +142,12 @@ export class apiServiceBase  {
     let errorMessage = 'Unknown error!';
     if (error.error instanceof ErrorEvent) {
       // Client-side errors
-     return errorMessage = `Error: ${error.error.message}`;
+      return errorMessage = `Error: ${error.error.message}`;
     } else if (error.error != ErrorEvent) {
       return null;
     } else {
       // Server-side errors
-     return errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+      return errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
     }
     window.alert(errorMessage);
     return throwError(errorMessage);
