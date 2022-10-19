@@ -12,7 +12,7 @@ export class ThuMoiService extends apiServiceBase {
   }
 
   updateLetter(id: number, sParam: any): Observable<any> {
-    return this.putData(API.PHAN_HE.THU_DI, API.API_THU_DI.UPDATE_THU_DI + '/' + id, sParam);
+    return this.putData(API.PHAN_HE.THU_DEN, API.API_THU_DEN.UPDATE_LETTER_TO+ '/' + id, sParam);
   }
 
   getThuMoi(status: any): Observable<any> {

@@ -103,14 +103,30 @@ export class NhapMoiComponent extends iComponentBase implements OnInit {
     this.user = this.tokenStorageService.getUserFromStorage(); // get thông tin người dùng đăng nhập trong hệ thống
     this.listTypeLetters = [{name: 'Nội bộ', key: '1'}, {name: 'Bên ngoài', key: '2'}];  // selection loại thư bên trong và bên ngoài
     this.checkboxTypeLetter = this.listTypeLetters[0]; // Selected mặc định thư nội bộ khi vào màn hình.
-    this.getThuDen();
     this.initData();
+    this.getThuDen();
+  }
+
+  getThuDen() {
+    const param = {
+      pageSize: 100,
+      pageIndex: 1,
+      status: 5,
+      type: 1
+    }
+    this.sharedApi.getThuDiTheoTrangThai(param).subscribe((data: any) => {
+      this.listVanDon = data.result.content;
+    })
   }
 
   // action chọn loại thư nội bộ hoặc bên ngoài để xử lý vấn đề gì đấy
   typeLetterAction() {
     if (this.checkboxTypeLetter.key == '1') {
+      this.thuDen = {}
+      this.thuDen.requestDate = new Date();
     } else {
+      this.thuDen = {}
+      this.thuDen.requestDate = new Date();
     }
     console.log(this.checkboxTypeLetter)
   }
@@ -212,26 +228,13 @@ export class NhapMoiComponent extends iComponentBase implements OnInit {
 
   onShowVanDon() {
     try {
+      console.log('xxxx click')
       this.showVanDon = true;
-      console.log(this.listVanDon)
     } catch (e) {
       console.log(e)
     }
   }
 
-  getThuDen() {
-    const param = {
-      status: 5,
-      organizationId: null,
-      year: null,
-      keyword: null,
-      pageIndex: 1,
-      pageSize: 1000
-    }
-    this.sharedApi.getThuDiTheoTrangThai(param).subscribe((data: any) => {
-      this.listVanDon = data.result.content;
-    })
-  }
 
   onRowSelect(ev: any) {
     this.checkboxTypeLetter = this.listTypeLetters[ev.data.type - 1]; // Selected mặc định thư nội bộ khi vào màn hình.

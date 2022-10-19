@@ -17,7 +17,15 @@ export class ThuChuaNhanComponent extends iComponentBase implements OnInit {
   listThuChuaNhan: ThuDenModel[];
   selectedThuChuaNhan: ThuDenModel;
   showConfirm = false;
+  listStatusLetter: any;
+  listReceivePlace: any[];
+  keyword = '';
+  listDonVi: DonViModel[];
+  checkStatusLetter: any;
+  selectedReceiveUnit: DonViModel;
   showConfirmAccept = false;
+  years = [{year: 2017}, {year: 2018}, {year: 2019}, {year: 2020}, {year: 2021}, {year: 2022}]
+  selectionYear: any;
   showDialogNhanThu = false;
   showDialogNhanHoThu = false;
   listDonViNhanHo: DonViModel[];
@@ -36,6 +44,7 @@ export class ThuChuaNhanComponent extends iComponentBase implements OnInit {
   ngOnInit(): void {
     this.user = this.tokenStorageService.getUserFromStorage(); // get thông tin người dùng đăng nhập trong hệ thống
     this.getThuChuaNhan();
+    this.getDonVi()
   }
 
   getThuChuaNhan() {
@@ -69,7 +78,20 @@ export class ThuChuaNhanComponent extends iComponentBase implements OnInit {
         this.showConfirmAccept = true;
     }
   }
-
+  loadnhan() {
+    this.checkStatusLetter = this.listStatusLetter[5]
+    const param = {
+      status: 5,
+      organizationId: this.selectedReceiveUnit ? this.selectedReceiveUnit?.sysOrganizationId : null,
+      year: this.selectionYear?.year,
+      keyword: this.keyword
+    }
+    setTimeout(()=> {
+      this.thuChuaNhanService.getAllThuMoi(param).subscribe((data: any) => {
+        this.listThuChuaNhan = data.result.content;
+      })
+    }, 500)
+  }
   onDelete(isConfirm?: any) {
     try {
       if (isConfirm == 'yes') {
@@ -94,7 +116,14 @@ export class ThuChuaNhanComponent extends iComponentBase implements OnInit {
       this.showConfirm = false;
     }
   }
-
+  getDonVi() {
+    this.sharedApi.getAllDonVi().subscribe((data: any) => {
+      if (data) {
+        this.listDonVi = data.result.items;
+        this.listReceivePlace = data.result.items;
+      }
+    })
+  }
   // Nhận hộ thư
   payloadNhanHoThu() {
     try {

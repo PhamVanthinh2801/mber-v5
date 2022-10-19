@@ -322,10 +322,14 @@ export class VanThuComponent extends iComponentBase implements OnInit {
           type: Number(this.checkboxTypeLetter.key),  // Phân loại thư
           receivePlaceId: this.checkboxTypeLetter.key == 1 ? this.selectedReceivePlace?.sysOrganizationId : null,  // Nơi nhận
           receiveUnitId: this.selectedReceiveUnit?.sysOrganizationId,  // Đơn vị nhận
+          // selected nơi nhận bên ngoài nếu có dữ liệu bên ngoài dưới DB
+          outSiteReceiveId: null, // todo
           outSiteReceive: this.checkboxTypeLetter.key == 2 ? {
             address: this.receiveAddress,
             contactName: this.nguoiNhanBenNgoai,
-            phone: this.soDienThoai
+            phone: this.soDienThoai,
+            name:'',
+            id: null// todo
           } : null,  // phần này giành cho bên ngoài truyền vào là một object bên ngoài
           affiliatedReceiveUnitId: this.selectedAffiliatedReceiveUnit?.sysOrganizationId,  // Đơn vị trực thuộc nhận
           recipientId: this.checkboxTypeLetter.key == 1 ? this.selectedRecipient?.employeeId : null,  // Người nhận
