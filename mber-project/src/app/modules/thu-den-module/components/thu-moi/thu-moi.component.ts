@@ -9,13 +9,14 @@ import {SharedApi} from "../../../base-module/service/api.shared.services";
 import {
   DoKhanModel,
   DoMatModel,
-  DonViModel, NhanVienModel,
-  NoiNhanModel, SoThuModel,
-  ThuDenModel, ThuDiModel
+  DonViModel,
+  NhanVienModel,
+  SoThuModel,
+  ThuDenModel,
+  ThuDiModel,
 } from "../../../base-module/models";
 import {StatusLetterTo} from "../../../base-module/enum/trang-thai-thu/statusLetter.enum";
 import {ErrorModel} from "../../../base-module/models/error/error.model";
-import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-thu-moi',
@@ -23,55 +24,38 @@ import {Observable} from "rxjs";
   styleUrls: ['./thu-moi.component.scss']
 })
 export class ThuMoiComponent extends iComponentBase implements OnInit {
-  diachi: any;
-  isVanthu = false;
   user: NhanVienModel;
-  textCode: any;
-  codecn: '';
-  keyword = '';
-  listSoThuDen: any;
-  listStatusLetter: any;
-  listTypeLetters: any;
-  thuDen: ThuDenModel;
-  showXuLy = false;
-  letterCode: any;
-  checkStatusLetter: any;
-  selectedRowLetter: any;
-  listDonVi: DonViModel[];
-  checkboxTypeLetter: any = null;
-  checkStatus: any;
-  years = [{year: 2017}, {year: 2018}, {year: 2019}, {year: 2020}, {year: 2021}, {year: 2022}]
+  listYear = [{year: 2017}, {year: 2018}, {year: 2019}, {year: 2020}, {year: 2021}, {year: 2022}]
   selectionYear: any;
-  selectedSoThuDi: SoThuModel;
-  //Nơi
-  listReceivePlace: any[];
-  selectedReceivePlace: NoiNhanModel;
-  checkNhanVien: any;
-  checkVanThu: any;
-  listThuMoi: any;
-  selectedDonViTrucThuocGui: any;
-  inputDate = new Date();
-  sendDate = new Date();
-  listNguoiGui: any;
-  selectedNguoiGui: any;
-  listSecurity: any;
-  listUrgencyLevel: any;
-  selectedUrgencyLevel: DoKhanModel;
-  selectedSecurity: DoMatModel;
-  listDonViTrucThuocGui: DonViModel[];
-  //Đơn Vị
-  listReceiveUnit: DonViModel[];
-  selectedReceiveUnit: DonViModel;
-  //Đơn Vị Trực Thuộc nhận
-  listAffiliatedReceiveUnit: DonViModel[];
-  selectedAffiliatedReceiveUnit: DonViModel;
-  selectedAffiliatedSendUnit: any;
-  // get người theo đơn vị trực thuộc nhận
-  listPersonForUnit: NhanVienModel[];
-  selectedPersonForUnit: NhanVienModel;
-  statusString = 'Thư Đã Gửi';
+  listStatusLetter: any;
+  checkStatusLetterTo: any;
+  isPopupUpdate = false;
+  statusLetter = 'Thư mới';
+  mayLe: any;
+  listNewLetter: ThuDiModel[];
+  selectedRowLetter: ThuDiModel
+  listOrgan: DonViModel[]
+  selectedOrgan: DonViModel
+  listUnit: DonViModel[]
+  selectedUnit: DonViModel
+  checkboxTypeLetter: any = null; // chọn nội bộ hoặc bên ngoài
+  listTypeLetters: any; // list checkbox thư nội bộ và bên ngoài,
+  listLetterCode: SoThuModel[]
+  selectedLetterCode: SoThuModel
+  thuDen: ThuDenModel
+  listSendUnit: DonViModel[]
+  selectedSendUnit: DonViModel
+  listSecurity: DoMatModel[];
+  listUrgencyLevel: DoKhanModel[]
+  listReceiveUnit: DonViModel[]
+  selectedReceiveUnit: DonViModel
+  listAffiliatedReceiveUnit: DonViModel[]
+  selectedAffiliatedReceiveUnit: DonViModel
+  listSender: NhanVienModel[]
+  selectedSender: NhanVienModel
 
-  constructor(private thuMoiservice: ThuMoiService,
+
+  constructor(private thuMoiService: ThuMoiService,
               private tokenStorageService: LocalStorageService,
               private shareApi: SharedApi,
               public title: Title,
@@ -79,9 +63,6 @@ export class ThuMoiComponent extends iComponentBase implements OnInit {
     super(msg, title);
     this.user = this.tokenStorageService.getUserFromStorage(); // get thông tin người dùng đăng nhập
     this.listTypeLetters = [{name: 'Nội bộ', key: '1'}, {name: 'Bên ngoài', key: '2'}];  // selection loại thư bên trong và bên ngoài
-
-    this.checkNhanVien = window.localStorage.getItem('nhanvien')
-    this.checkVanThu = window.localStorage.getItem('vanthu')
     this.listStatusLetter = [
       {
         status: StatusLetterTo.NEW,
@@ -102,324 +83,148 @@ export class ThuMoiComponent extends iComponentBase implements OnInit {
   }
 
   ngOnInit(): void {
-    this.thuDen = {};
-    this.checkStatus = this.listStatusLetter[0];
+    this.checkStatusLetterTo = this.listStatusLetter[0];
     this.listTypeLetters = [{name: 'Nội bộ', key: '1'}, {name: 'Bên ngoài', key: '2'}];  // selection loại thư bên trong và bên ngoài
     this.checkboxTypeLetter = this.listTypeLetters[0];
-    this.checkStatusLetter = this.listStatusLetter[0];
-    this.selectionYear = this.years[this.years.length - 1]
-    this.getAllThuMoi();
-    this.getDonVi();
-    this.getSoThuDi();
-    this.getTypeLetterOnInit();
-
-    // lấy sổ thư đi.
-    this.shareApi.getSoThuDi().subscribe(data => {
-      this.thuDen.letterCode = data.result.items;
-    })
-    this.thuMoiservice.getAllOrganizations().subscribe(data => {
-      this.thuDen.letterCode = data.result.items;
-    })
-
-    // get đơn vị
-    this.thuMoiservice.getParentOrganizations(this.user.organization.sysOrganizationId).subscribe((data: any) => {
-      this.listDonViTrucThuocGui = data.result.items;
-    })
-    // get người gửi và nhận
-    this.thuMoiservice.getAllPerson().subscribe(data => {
-      this.listPersonForUnit = data.result.items;
-    })
-
-    // get độ mật
-    this.thuMoiservice.getAllSecurity().subscribe(data => {
-      this.listSecurity = data.result.items;
-    })
-    // get độ khẩn
-    this.thuMoiservice.getAllUrgency().subscribe(data => {
-      this.listUrgencyLevel = data.result.items;
-    })
-
+    this.getNewLetterInit();
+    this.dataInit();
   }
 
-
-  getDonVi() {
+  dataInit() {
+    // init data thư đi
+    this.thuDen = {};
+    // Get cơ quan đơn vị
     this.shareApi.getAllDonVi().subscribe((data: any) => {
-      if (data) {
-        this.listDonVi = data.result.items;
-        this.listReceivePlace = data.result.items;
-      }
+      this.listOrgan = data.result.items
+      this.listReceiveUnit = data.result.items;
+      this.listSendUnit = data.result.items
+    })
+    // Get sổ thư
+    this.shareApi.getSoThuDi().subscribe((data: any) => {
+      this.listLetterCode = data.result.items;
     })
   }
 
-  checkRightLeftData(data: any) {
-    if (data) {
-      this.loadNguoiNhan();
+  // action chọn loại thư nội bộ hoặc bên ngoài để xử lý vấn đề gì đấy
+  typeLetterAction() {
+    if (this.checkboxTypeLetter.key == 'B') {
     } else {
-      this.insertDataFromRecipient();
     }
   }
 
-  insertDataFromRecipient() {
-    this.listAffiliatedReceiveUnit = [this.selectedPersonForUnit?.organization];
-    this.listReceiveUnit = [this.selectedPersonForUnit?.organization.orgParent];
-    // get don vị
-    this.shareApi.getAllDonVi().subscribe(data => {
-      this.listReceivePlace = data.result.items;
+  getNewLetterInit() {
+    const param = {
+      pageSize: 100,
+      pageIndex: 1,
+      status: 5
+    }
+    this.shareApi.getThuDiTheoTrangThai(param).subscribe((data: any) => {
+      this.listNewLetter = data.result.content;
     })
-    setTimeout(() => {
-      this.afterData();
-    }, 500)
-
   }
 
-  afterData() {
-    this.selectedAffiliatedReceiveUnit = this.selectedPersonForUnit?.organization;
-    this.selectedReceiveUnit = this.selectedPersonForUnit?.organization.orgParent;
-    this.selectedReceivePlace = this.selectedPersonForUnit?.organization.orgParent;
+  onRowSelect(ev) {
+    try {
+      // đoạn này xử lý ánh xạ data vào popup
+      console.log('tb', this.selectedRowLetter)
+      this.thuDen.requestDate = new Date(); // ngày yêu cầu
+      this.thuDen.dateTo = new Date() // ngày đến
+      this.thuDen.receiveTime = new Date() // thời gian nhận
+      this.thuDen.code = this.selectedRowLetter.code // mã thư
+      this.thuDen.itemCode = this.selectedRowLetter.itemCode; // số vận dơn
+      this.selectedLetterCode = this.selectedRowLetter.letterCode
+      this.thuDen.documentCode = this.selectedRowLetter.textCode;
+      this.selectedSendUnit = this.selectedRowLetter.sendUnit; // đơn vị gửi
+      this.mayLe = this.selectedRowLetter.sender // Máy lẻ của người nhận
+      this.mayLe = this.mayLe.fullName + ', ' + this.mayLe.mobilePhone + ', ' + this.mayLe.positionName
+      this.thuDen.status = this.selectedRowLetter.status;
+      this.thuDen.note = this.selectedRowLetter.summary // Ghi chú
+      if (this.thuDen.status == 5) {
+        this.statusLetter = 'Thư mới'
+      }
+      // đối với option không có list sẵn thì cho vào đây trước rồi đưa vào popup sau
+      this.listSecurity = [this.selectedRowLetter.securityLevel]
+      this.listUrgencyLevel = [this.selectedRowLetter.urgencyLevel]
+      this.listReceiveUnit = [this.selectedRowLetter.receiveUnit]
+      this.listAffiliatedReceiveUnit = [this.selectedRowLetter.affiliatedReceiveUnit] //đơn vị trực thuộc nhận
+      this.listSender = [this.selectedRowLetter.sender]
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+
+  onOpenPopupLetter() {
+    try {
+      this.isPopupUpdate = true
+      // đối với option không có list thì đặt selected của nó vào đây
+      this.thuDen.securityLevel = this.selectedRowLetter.securityLevel
+      this.thuDen.urgencyLevel = this.selectedRowLetter.urgencyLevel
+      this.selectedReceiveUnit = this.selectedRowLetter.receiveUnit
+      this.selectedAffiliatedReceiveUnit = this.selectedRowLetter.affiliatedReceiveUnit
+      this.selectedSender = this.selectedRowLetter.sender
+
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   onDeletedRow() {
-    if (this.selectedRowLetter) {
-      try {
-        this.thuMoiservice.deletedThuMoi(this.selectedRowLetter.id).subscribe((data: any) => {
-          if (data) {
-            this.showMessage(mType.success, 'Thông báo', 'Xóa thành công');
-            this.getAllThuMoi();
-          } else {
-          }
-        })
-
-      } catch (e) {
-        this.showMessage(mType.error, 'Thông báo', 'Xóa không thành công');
-      }
-    } else {
-      this.showMessage(mType.warn, 'Thông báo', 'Vui lòng chọn dữ liệu');
-      this.showXuLy = false;
-      return;
-    }
-
-  }
-
-  loadNhan() {
-    const param = {
-      status: 5,
-      organizationId: this.selectedReceiveUnit ? this.selectedReceiveUnit?.sysOrganizationId : null,
-      year: this.selectionYear?.year,
-      keyword: this.keyword
-    }
-    setTimeout(() => {
-      this.thuMoiservice.getAllThuMoi(param).subscribe((data: any) => {
-        this.listThuMoi = data.result.content;
-      })
-    }, 500)
-  }
-
-  loadNhanVienTheoBoPhan() {
-    // get nhan vien theo bo phan
-    if (this.selectedDonViTrucThuocGui == undefined) {
-      this.listNguoiGui = [];
-    } else
-      this.thuMoiservice.getPersonByParentOganization(this.selectedDonViTrucThuocGui.sysOrganizationId).subscribe((data: any) => {
-        this.listNguoiGui = data.result.items;
-      })
-  }
-
-  // shared call API here
-  // @ts-ignore
-  getParentOrganizationsData(id: any): Observable<any> {
-    let resData = [];
-    if (id) {
-      this.thuMoiservice.getParentOrganizations(id).subscribe((data: any) => {
-       return resData =  data.result.items;
-      })
-    }
-  }
-
-  loadDonViTrucThuocNhan() {
-    // get đơn vị trực thuộc nhận theo đơn vị nhận
-    if (this.selectedReceiveUnit == undefined) {
-      this.listAffiliatedReceiveUnit = [];
-    } else
-      // this.listAffiliatedReceiveUnit =
-        this.getParentOrganizationsData(this.selectedReceiveUnit.sysOrganizationId).subscribe((data: any)=> {
-          this.listAffiliatedReceiveUnit = data;
-        })
-  }
-
-  getSoThuDi() {
-    this.shareApi.getSoThuDi().subscribe(data => {
-      this.listSoThuDen = data.result.items;
-    })
-  }
-
-  loadDonViNhan() {
-    //get đơn vị nhận theo nơi nhận
-    if (this.selectedReceivePlace == undefined) {
-      this.listReceiveUnit = [];
-    } else
-    this.thuMoiservice.getParentOrganizations(this.selectedReceivePlace.sysOrganizationId).subscribe((data: any) => {
-      this.listReceiveUnit = data.result.items;
-    })
-  }
-
-  loadNguoiNhan() {
-    // get người nhận theo đơn vị trực thuộc nhận
-
-    if (this.selectedAffiliatedReceiveUnit == undefined) {
-      this.listPersonForUnit = [];
-    } else
-      this.shareApi.getPersonByParentOganization(this.selectedAffiliatedReceiveUnit?.sysOrganizationId).subscribe((data: any) => {
-        this.listPersonForUnit = data.result.items;
-        console.log('aaaa', this.listPersonForUnit);
-      })
-
-  }
-
-  onSearch() {
-    this.checkStatusLetter = this.listStatusLetter[5]
-    const param = {
-      status: 5,
-      organizationId: this.selectedReceiveUnit ? this.selectedReceiveUnit?.sysOrganizationId : null,
-      year: this.selectionYear?.year,
-      keyword: this.keyword
-    }
-    this.thuMoiservice.getAllThuMoi(param).subscribe((data: any) => {
-      this.listThuMoi = data.result.content;
-    })
-  }
-
-  onUpdateThuMoi() {
     try {
-      this.showXuLy = true;
-      if (this.selectedRowLetter) {
-        this.selectedSoThuDi = this.selectedRowLetter.letterCode;
-        this.selectedNguoiGui = this.selectedRowLetter.sender;
-        this.inputDate = new Date(this.selectedRowLetter.inputDate);
-        this.sendDate = new Date(this.selectedRowLetter.sendDate);
-        this.selectedSecurity = this.selectedRowLetter.securityLevel;
-        this.selectedUrgencyLevel = this.selectedRowLetter.urgencyLevel;
-        this.selectedReceivePlace = this.selectedRowLetter.receivePlace;
-        this.selectedReceiveUnit = this.selectedRowLetter.receiveUnit;
-        this.selectedAffiliatedReceiveUnit = this.selectedRowLetter.affiliatedReceiveUnit;
-        this.diachi = this.selectedRowLetter.receiveAddress;
-        this.selectedPersonForUnit = this.selectedRowLetter.recipient;
-      } else {
-        this.showMessage(mType.warn, 'Thông báo', 'Vui lòng chọn dữ liệu');
-        this.showXuLy = false;
-        return;
-      }
-    } catch (e) {
-      console.log('error get update data')
-    }
-  }
-
-  getAllThuMoi() {
-    this.checkStatusLetter = this.listStatusLetter[3]
-    const param = {
-      status: 5
-    }
-    this.thuMoiservice.getAllThuMoi(param).subscribe((data: any) => {
-      if (data) {
-        this.listThuMoi = data.result.content;
-      }
-    })
-  }
-
-  // TODO tiếp nhận sẽ giúp lá thư được gửi từ bên thư đi sang là trạng thái 5 của thư đi, sang bên văn thư bên này thành thư đến và ở trạng thái 1
-  // TODO người dùng click thư sẽ chuyển sang trạng thái 2 nghĩa là thư đang chờ nhận
-  onClickTiepNhan() {
-    try {
-      this.checkStatus.status = 2;
-      const param = this.createParams();
-      this.thuMoiservice.updateLetter(this.selectedRowLetter.id, param).subscribe((data: any) => {
+      this.shareApi.deletedLetterFrom(this.selectedRowLetter.id).subscribe((data: any) => {
         if (data) {
-          this.showMessage(mType.success, 'Thông báo', 'Tiếp nhận thành công');
-          setTimeout(() => {
-            window.location.reload();
-          }, 500)
+          this.showMessage(mType.success, 'Thông báo', 'Xóa thư thành công');
+          this.getNewLetterInit();
         }
-      }, (error: ErrorModel) => {
-        this.showMessage(mType.error, 'Thông báo lỗi', 'Tiếp nhận lỗi' + error.error.result.errors);
       })
     } catch (e) {
       console.log(e)
     }
   }
 
-  createParams(): any {
+  createParam(): any {
+    const param = {
+      isSample: false, // mẫu nếu bên ngoài có check true false, nội bộ mặc định là false
+      type: Number(this.checkboxTypeLetter.key), // loại thư nội bộ hay bên ngoài 1,2
+      itemCode: this.thuDen.itemCode, // Số vận đơn
+      letterCodeId: this.selectedLetterCode?.id, // Sổ thư đến
+      dateTo: this.thuDen.dateTo.getTime(), //Ngày đến
+      documentCode: this.thuDen.documentCode, //Số hiệu văn bản
+      sendPlaceId: this.selectedSendUnit.sysOrganizationId, // nơi gửi
+      requestDate: this.thuDen.requestDate.getTime(), //Ngày yêu cầu từ
+      securityLevelId: this.thuDen.securityLevel.id, // độ mật
+      urgencyLevelId: this.thuDen.urgencyLevel.id, // độ khẩn
+      receiveUnitId: this.selectedReceiveUnit?.sysOrganizationId, // // đơn vị nhận
+      affiliatedReceiveUnitId: this.selectedAffiliatedReceiveUnit?.sysOrganizationId, // Đơn vị trực thuộc nhận
+      recipientId: this.selectedSender.employeeId, // người nhận
+      ext: this.mayLe, //Máy lẻ
+      receiveTime: this.thuDen.receiveTime.getTime(), // thời gian nhận
+      status: 2, // trạng thái thư đến
+      note: this.thuDen.note, // ghi chú
+      staffId: this.user.employeeId, // nhân viên
+      verifierId: null, // Người xác nhận ở status = 3
+      verifyTime: null, // thời gian xác nhận status = 3
+      reserveReceiverId: null, //Người nhận hộ status = 3
+      reserveReceiverUnitId: null //Đơn vị của người nhận hộ status = 3
+    }
+    console.log('create param', param)
+    return param;
+  }
+
+  onClickTiepNhan() {
     try {
-      const param = {
-        isSample: false,
-        type: Number(this.checkboxTypeLetter.key),  // Phân loại thư
-        staffId: this.user?.employeeId,// nhân viên lấy từ hệ thống đăng nhập
-        code: this.codecn,
-        itemCode: this.selectedRowLetter.itemCode,
-        letterCodeId: this.selectedSoThuDi.id,
-        inputDate: this.inputDate.getTime(),
-        sendDate: this.sendDate.getTime(),
-        sendUnitId: this.user?.organization?.sysOrganizationId,
-        affiliatedSendUnitId: this.selectedDonViTrucThuocGui?.sysOrganizationId,
-        textCode: this.textCode,
-        recipientId: this.checkboxTypeLetter.key == 1 ? this.selectedPersonForUnit?.employeeId : null,  // Người nhận
-        outSiteReceive: this.checkboxTypeLetter.key == 2 ? {
-          address: this.diachi,
-          contactName: null,
-          phone: null
-        } : null,  // phần này giành cho bên ngoài truyền vào là một object bên ngoài
-        // TODO 1: đối với thư mới, Hiện tại đang không có các thông tin trong bảng như(TODO bên dưới),
-        // TODO 2: Nhập mới: có action là tiếp nhận
-        // TODO 3: thư mới: có action là tiếp nhận
-        // TODO 4: Hiện tại todo-1 và todo-2 có chức năng như nhau, đều tiếp nhận, chỉ khác nhau là thư mới có thêm chỗ cập nhật.
-        // TODO 5: Mình sẽ fake chỗ này tạm thời cho chạy được trước sau đó tính tiếp.
-        receiveTime: new Date().getTime(), // TODO check data chạy oke
-        requestDate: new Date().getTime(), // TODO check data chạy oke
-        sendPlaceId: 1,                     // TODO check data, hiện tại tiếp nhận thư mới không cho để trống nơi gửi
-        // TODO check data, nơi gửi của bên nhận chính là đơn vị của
-        //  bên kia soạn thư gửi đi của bên thư đến
-        senderId: this.selectedNguoiGui?.employeeId,
-        securityLevelId: this.selectedSecurity.id,
-        urgencyLevelId: this.selectedUrgencyLevel?.id,
-        receivePlaceId: this.selectedReceivePlace.sysOrganizationId, // nơi nhận
-        receiveUnitId: this.selectedReceiveUnit?.sysOrganizationId, //đơn vị nhận
-        affiliatedReceiveUnitId: this.selectedAffiliatedReceiveUnit?.sysOrganizationId,  // Đơn vị trực thuộc nhận
-        receiveAddress: this.diachi,  // Địa chỉ nhận
-        status: this.checkStatus.status  //1 Thư mới
-      }
-      console.log('param create', param)
-      return param;
+      const param = this.createParam()
+      console.log('param', param)
+      this.thuMoiService.updateLetter(this.selectedRowLetter.id, param).subscribe((data: any) => {
+        if (data) {
+          this.showMessage(mType.success, 'Thông báo', 'Xác nhận thành công')
+          this.freshPage();
+        }
+      }, (error: ErrorModel) => {
+        this.showMessage(mType.error, 'Thông báo lỗi', 'Xác nhận không thành công' + error.error.result.errors)
+      })
     } catch (e) {
-      this.showMessage(mType.error, 'lỗi khởi tạo dữ liệu', e);
+      console.log(e)
     }
-  }
-
-  getTypeLetterOnInit() {
-    this.checkboxTypeLetter = this.listTypeLetters[0];
-  }
-
-  onRowSelect(ev: any) {
-    console.log('data table', ev);
-    this.selectedRowLetter = ev.data;
-    this.checkboxTypeLetter = this.listTypeLetters[this.selectedRowLetter.type - 1]
-    this.selectedAffiliatedReceiveUnit = this.selectedRowLetter.selectedAffiliatedReceiveUnit;
-    this.listNguoiGui = [ev.data.sender]
-    this.listReceiveUnit = [ev.data.receiveUnit]
-    this.listAffiliatedReceiveUnit = [ev.data.affiliatedReceiveUnit]
-    this.listPersonForUnit = [this.selectedRowLetter.recipient]
-    this.textCode = this.selectedRowLetter.textCode;
-    this.codecn = this.selectedRowLetter.code;
-    this.diachi = [ev.data.receiveAddress]
-
-    // Đơn vị trực thuộc gửi popup
-    this.selectedDonViTrucThuocGui = this.selectedRowLetter.affiliatedSendUnit;
-    console.log('this is đơn vị trực thuộc gửi', this.selectedDonViTrucThuocGui)
-  }
-
-  checkTypeLetter(typeLetter): string {
-    if (typeLetter == 1) {
-      return 'Nội bộ'
-    }
-    if (typeLetter == 2) {
-      return 'Bên ngoài'
-    } else return null
   }
 }

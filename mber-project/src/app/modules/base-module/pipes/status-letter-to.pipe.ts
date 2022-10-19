@@ -4,7 +4,7 @@ import {Pipe, PipeTransform} from '@angular/core';
 @Pipe({name: 'StatusLetterTo'})
 export class StatusLetterToPipe implements PipeTransform {
   transform(value: number): string {
-    if (value == 1) {
+    if (value == 1 || value == 5) {
       return 'Thư mới';
     }
     if (value == 2) {

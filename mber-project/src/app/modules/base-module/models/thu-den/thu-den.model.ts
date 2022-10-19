@@ -1,9 +1,15 @@
+import {DoKhanModel, DoMatModel, DonViModel} from "..";
+
 export interface ThuDenModel {
   id?:number,
   type?: number, //phân loại thư
   isSample?: boolean // thư mẫu
   staff?: object, // nhân viên lấy từ hệ thống đăng nhập
-  letterCode?: object | any, // sổ thư đi
+  letterCode?: {
+    name?: string,
+    code?: string,
+    id?: number
+  }, // sổ thư đi
   itemCode?:object | any; //Số vận đơn
   documentCode?: string; //Số hiệu văn bản
   code?: number, // Mã thư đi,
@@ -20,10 +26,10 @@ export interface ThuDenModel {
     employeeId?: number
   }, // người gửi
   summary?: string, // trích yếu
-  securityLevel?: object, // độ mật
-  urgencyLevel?: object, // độ khẩn
+  securityLevel?: DoMatModel, // độ mật
+  urgencyLevel?: DoKhanModel, // độ khẩn
   receivePlace?: object, // Nơi nhận,
-  receiveUnit?: object,  // đơn vị nhận
+  receiveUnit?: DonViModel,  // đơn vị nhận
   outSiteReceive?: object, // Nơi nhận bên ngoài
   affiliatedReceiveUnit?: object, // đơn vị trực thuộc nhận
   recipient?: {

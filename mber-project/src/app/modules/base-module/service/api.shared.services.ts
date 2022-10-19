@@ -2,23 +2,27 @@ import {apiServiceBase} from ".//api-service-base";
 import * as API from ".//api-gateway";
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
+import {API_THU_DI} from ".//api-gateway";
 
 @Injectable({
   providedIn: 'root'
 })
 export class SharedApi extends apiServiceBase {
   // get thư đi theo trạng thái
-  getThuDiTheoTrangThai(statusLetter: any){
+  getThuDiTheoTrangThai(statusLetter: any) {
     return this.postData(API.PHAN_HE.THU_DI, API.API_THU_DI.GET_THU_DI_THEO_LOAI, statusLetter);
   }
+
   // update trạng thái thư
   public updateLetter(id: number, sParam: any): Observable<any> {
-    return this.putData(API.PHAN_HE.THU_DI, API.API_THU_DI.UPDATE_THU_DI+'/'+id, sParam);
+    return this.putData(API.PHAN_HE.THU_DI, API.API_THU_DI.UPDATE_THU_DI + '/' + id, sParam);
   }
+
   // get nhân viên theo bộ phận
   public getPersonByParentOganization(id: number): Observable<any> {
     return this.getData(API.PHAN_HE.EMPLOYEE, API.API_EMPLOYEE.GET_EMPLOYEE_BY_ID_ORG + id);
   }
+
   // Lấy toàn bộ đơn vị
   getAllDonVi() {
     return this.getData(API.PHAN_HE.DON_VI, API.API_DON_VI.GET_ALL_DON_VI)
@@ -60,7 +64,16 @@ export class SharedApi extends apiServiceBase {
   }
 
   // get toàn bộ nơi nhận bên ngoài
-  getAllNoiNhanBenNgoai(){
+  getAllNoiNhanBenNgoai() {
     return this.getData(API.PHAN_HE.NOI_NHAN_BEN_NGOAI, API.API_NOI_NHAN_BEN_NGOAI.GET_ALL_NOI_NHAN_BEN_NGOAI);
   }
+  // Xóa thư đến
+  deletedLetterTo(id: number) {
+    return this.deletedData(API.PHAN_HE.THU_DEN, API.API_THU_DEN.DELETE_LETTER_TO + id);
+  }
+  // Xóa thư đi
+  deletedLetterFrom(id: number) {
+    return this.deletedData(API.PHAN_HE.THU_DI, API.API_THU_DI.DELETED +'/'+ id);
+  }
+
 }
