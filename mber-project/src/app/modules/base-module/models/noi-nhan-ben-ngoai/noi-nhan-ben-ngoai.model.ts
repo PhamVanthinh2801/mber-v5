@@ -3,4 +3,5 @@ export interface NoiNhanBenNgoaiModel {
   address?: string,
   contactName?: string,
   phone?: string
+  id?: number;
 }
