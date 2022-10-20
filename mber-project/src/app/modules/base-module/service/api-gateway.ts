@@ -34,6 +34,9 @@ export class API_DO_MAT {
 
 export class API_DO_KHAN {
   public static GET_ALL_DO_KHAN = 'get-all'
+  public static CREATE = 'create'
+  public static DELETED = 'delete/'
+  public static UPDATE = 'update/'
 }
 
 export class API_DON_VI {

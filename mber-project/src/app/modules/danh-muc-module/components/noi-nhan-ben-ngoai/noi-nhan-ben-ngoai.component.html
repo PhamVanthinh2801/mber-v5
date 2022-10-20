@@ -5,10 +5,10 @@
       [isFunction]="true"
       [listData]="onChangedData()"
       [cols]="cols"
+      (idData)="dataEmit($event)"
       (isClickDelete)="clickEventDeletedChild($event)"
       (isClickAdd)="clickEventAddChild($event)"
-      (isClickEdited)="clickEventEditedChild($event)"
-      (idData)="dataEmit($event)"></app-base-danh-muc>
+      (isClickEdited)="clickEventEditedChild($event)"></app-base-danh-muc>
   </p-panel>
 </p-fieldset>
 

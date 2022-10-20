@@ -10,18 +10,21 @@ import {MessageService} from "primeng/api";
 import { BaseDanhMucComponent } from './components/base-danh-muc/base-danh-muc.component';
 import { NoiNhanBenNgoaiComponent } from './components/noi-nhan-ben-ngoai/noi-nhan-ben-ngoai.component';
 import { DoKhanComponent } from './components/do-khan/do-khan.component';
+import { LoaiSoDenComponent } from './components/loai-so-den/loai-so-den.component';
 
 const routes: Routes = [
   {path: 'test-module', component: BaseDanhMucComponent},
   {path: 'noi-nhan-ben-ngoai', component: NoiNhanBenNgoaiComponent},
   {path: 'do-khan', component: DoKhanComponent},
+  {path: 'loai-so-den', component: LoaiSoDenComponent},
 ]
 
 @NgModule({
   declarations: [
     BaseDanhMucComponent,
     NoiNhanBenNgoaiComponent,
-    DoKhanComponent
+    DoKhanComponent,
+    LoaiSoDenComponent
   ],
   imports: [
     FormsModule,
