@@ -47,6 +47,21 @@
       </ul>
     </div>
 
+    <div class="router-menu">
+      <ul class="link-menu">
+        <li class="sub-menu">Danh mục <i class="pi pi-angle-down"></i>
+          <ul class="sub-menu-child">
+            <li *ngFor="let item of listMenuDanhMuc; let i = index;">
+              <a [routerLink]="[item.link]">
+                {{item.name}}
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+
 
     <div *ngIf="isLogin" class="router-menu">
       <ul class="link-menu">

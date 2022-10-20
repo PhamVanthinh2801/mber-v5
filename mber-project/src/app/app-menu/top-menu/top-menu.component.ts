@@ -13,7 +13,8 @@ export class TopMenuComponent implements OnInit {
   submenu = {
     thuDen: '/thu-den',
     thuDi: '/thu-di',
-    baoCao: '/bao-cao'
+    baoCao: '/bao-cao',
+    danhMuc: '/danh-muc'
   }
   childMenuThuDen = [
     {
@@ -86,6 +87,47 @@ export class TopMenuComponent implements OnInit {
       name: 'Báo cáo tổng hợp thư'
     },
   ]
+
+  listMenuDanhMuc = [
+    {
+      link: this.submenu.danhMuc + '/test-module',
+      name: 'Test module'
+    },
+    {
+      link: this.submenu.danhMuc + '/noi-nhan-ben-ngoai',
+      name: 'Nơi nhận bên ngoài'
+    },
+    {
+      link: this.submenu.danhMuc + '/do-mat',
+      name: 'Độ mật'
+    },
+    {
+      link: this.submenu.danhMuc + '/do-khan',
+      name: 'Độ khẩn'
+    },
+    {
+      link: this.submenu.danhMuc + '/loai-so-den',
+      name: 'Loại sổ đến'
+    },
+    {
+      link: this.submenu.danhMuc + '/loai-so-di',
+      name: 'Loại sổ đi'
+    },
+    {
+      link: this.submenu.danhMuc + '/mau-thu-den',
+      name: 'Mẫu thư đến'
+    },
+    {
+      link: this.submenu.danhMuc + '/mau-thu-di',
+      name: 'Mẫu thư đi'
+    },
+    {
+      link: this.submenu.danhMuc + '/import-thu-di',
+      name: 'Import thư đi'
+    }
+
+
+  ]
   isLogin = false;
   user: any;
 
@@ -117,7 +159,7 @@ export class TopMenuComponent implements OnInit {
   todoCheckVanThu() {
     this.selectVanthu = true;
     this.selectNhanVien = false;
-    if(this.selectVanthu == true){
+    if (this.selectVanthu == true) {
       window.localStorage.setItem('vanthu', 'vanthu')
       window.localStorage.removeItem('nhanvien')
       setTimeout(() => {
@@ -129,7 +171,7 @@ export class TopMenuComponent implements OnInit {
   todoCheckNhanVien() {
     this.selectNhanVien = true;
     this.selectVanthu = false;
-    if(this.selectNhanVien == true){
+    if (this.selectNhanVien == true) {
       window.localStorage.setItem('nhanvien', 'nhanvien')
       window.localStorage.removeItem('vanthu')
       setTimeout(() => {

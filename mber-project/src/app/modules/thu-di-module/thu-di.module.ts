@@ -19,7 +19,6 @@ import {BaseModule} from "../base-module/base.module";
 import { TatCaThuDiComponent } from './components/tat-ca-thu-di/tat-ca-thu-di.component';
 import { TatCaThuDiVanThuComponent } from './components/tat-ca-thu-di/tat-ca-thu-di-van-thu/tat-ca-thu-di-van-thu.component';
 import { ThuTraLaiComponent } from './components/thu-tra-lai/thu-tra-lai.component';
-import { ThuTraLaiNhanVienComponent } from './components/thu-tra-lai/thu-tra-lai-nhan-vien/thu-tra-lai-nhan-vien.component';
 import { ThuTraLaiVanThuComponent } from './components/thu-tra-lai/thu-tra-lai-van-thu/thu-tra-lai-van-thu.component';
 import { ImportThuDiComponent } from './components/import-thu-di/import-thu-di.component';
 import { ImportThuDiVanThuComponent } from './components/import-thu-di/import-thu-di-van-thu/import-thu-di-van-thu.component';
@@ -49,7 +48,6 @@ const routes: Routes = [
     TatCaThuDiComponent,
     TatCaThuDiVanThuComponent,
     ThuTraLaiComponent,
-    ThuTraLaiNhanVienComponent,
     ThuTraLaiVanThuComponent,
     ImportThuDiComponent,
     ImportThuDiVanThuComponent,
