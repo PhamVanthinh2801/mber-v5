@@ -1,5 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {TestService} from "./base-danh-muc.service";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-base-danh-muc',
@@ -7,20 +6,28 @@ import {TestService} from "./base-danh-muc.service";
   styleUrls: ['./base-danh-muc.component.scss']
 })
 export class BaseDanhMucComponent implements OnInit {
-  @Input() header='Test Module'
+  selectedData: any;
+  @Input() isFunction = false;
   @Input() listData: any;
   @Input() cols: any;
-  selectedData: any;
-  constructor( private testService: TestService) { }
-  // cols = [
-  //   { field : 'code', header: 'Code' },
-  // ];
-
-  ngOnInit(): void {
-    // this.testService.getALlThuDi().subscribe((data: any)=> {
-    //   this.listData = data.result.items
-    //   console.log(data)
-    // })
+  @Output() idData: EventEmitter<number> = new EventEmitter<number>();
+  @Output() isClickDelete : EventEmitter<any> = new EventEmitter<any>();
+  @Output() isClickAdd : EventEmitter<any> = new EventEmitter<any>();
+  @Output() isClickEdited : EventEmitter<any> = new EventEmitter<any>();
+  constructor() {
   }
-
+  ngOnInit(): void {
+  }
+  onRowSelect(ev) {
+    this.idData.emit(this.selectedData)
+  }
+  deletedData() {
+    this.isClickDelete.emit('true')
+  }
+  addDate() {
+    this.isClickAdd.emit('true')
+  }
+  editedData(){
+    this.isClickEdited.emit('true')
+  }
 }

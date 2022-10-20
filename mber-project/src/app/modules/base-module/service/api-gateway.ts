@@ -16,8 +16,12 @@ export class API_LOGIN {
   public static LOGIN = 'login'
 }
 
+// http://123.24.142.93:6588/mailing/categories/out-site-receives/delete/8
 export class API_NOI_NHAN_BEN_NGOAI {
   public static GET_ALL_NOI_NHAN_BEN_NGOAI = 'get-all'
+  public static DELETED = 'delete/'
+  public static CREATE = 'create'
+  public static UPDATE = 'update/'
 }
 
 export class API_DON_VI_CHUYEN_PHAT {

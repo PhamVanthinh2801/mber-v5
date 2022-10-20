@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
     if (this.tokenStorageService.getUserFromStorage()==undefined || this.tokenStorageService.getUserFromStorage() == null) {
       this.router.navigate(['/login']);
     }else {
-      this.router.navigate(['/danh-muc/noi-nhan-ben-ngoai']);
+      this.router.navigate(['/danh-muc/do-khan']);
     }
   }
 }

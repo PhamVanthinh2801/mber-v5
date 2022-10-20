@@ -1,1 +1,93 @@
-<app-base-danh-muc [listData]="listNoiNhanBenNgoai" [cols]="cols" [header]="'Nơi nhận bên ngoài'"></app-base-danh-muc>
+<p-toast></p-toast>
+<p-fieldset legend="Nơi nhận bên ngoài" [style]="{overflow: 'auto', height:'87vh'}">
+  <p-panel header="Đơn vị vận chuyển">
+    <app-base-danh-muc
+      [isFunction]="true"
+      [listData]="onChangedData()"
+      [cols]="cols"
+      (isClickDelete)="clickEventDeletedChild($event)"
+      (isClickAdd)="clickEventAddChild($event)"
+      (isClickEdited)="clickEventEditedChild($event)"
+      (idData)="dataEmit($event)"></app-base-danh-muc>
+  </p-panel>
+</p-fieldset>
+
+<p-dialog [draggable]="false" header="Thêm mới nơi nhận bên ngoài" [(visible)]="onPopupAddData"
+          [style]="{width: '70vw', height:'70vh'}">
+  <p-fieldset legend="Thông tin">
+    <div class="grid">
+      <div class="col-6 grid">
+        <div class="col-4"><label>Nơi nhận bên ngoài</label></div>
+        <div class="col-8">
+          <input [(ngModel)]="outSideReceipt.contactName" pInputText type="text"/>
+        </div>
+      </div>
+      <div class="col-6 grid">
+        <div class="col-4"><label>Địa chỉ nhận</label></div>
+        <div class="col-8">
+          <input [(ngModel)]="outSideReceipt.address" pInputText type="text"/>
+        </div>
+      </div>
+      <div class="col-6 grid">
+        <div class="col-4"><label>Số điện thoại</label></div>
+        <div class="col-8">
+          <input [(ngModel)]="outSideReceipt.phone" pInputText type="text"/>
+        </div>
+      </div>
+      <div class="col-6 grid">
+        <div class="col-4"><label>Người nhận</label></div>
+        <div class="col-8">
+          <input [(ngModel)]="outSideReceipt.name" pInputText type="text"/>
+        </div>
+      </div>
+    </div>
+  </p-fieldset>
+  <div class="grid">
+    <div class="col-12 flex justify-content-center">
+      <button pButton class="tool" type="button" icon="pi pi-book" (click)="addDataToChild()" label="Lưu dữ liệu">
+      </button>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog [draggable]="false" header="Chỉnh sửa nơi nhận bên ngoài" [(visible)]="onPopupEditedData"
+          [style]="{width: '70vw', height:'70vh'}">
+  <p-fieldset legend="Thông tin">
+    <div class="grid">
+      <div class="col-6 grid">
+        <div class="col-4"><label>Nơi nhận bên ngoài</label></div>
+        <div class="col-8">
+          <input [(ngModel)]="outSideReceipt.contactName" pInputText type="text"/>
+        </div>
+      </div>
+      <div class="col-6 grid">
+        <div class="col-4"><label>Địa chỉ nhận</label></div>
+        <div class="col-8">
+          <input [(ngModel)]="outSideReceipt.address" pInputText type="text"/>
+        </div>
+      </div>
+      <div class="col-6 grid">
+        <div class="col-4"><label>Số điện thoại</label></div>
+        <div class="col-8">
+          <input [(ngModel)]="outSideReceipt.phone" pInputText type="text"/>
+        </div>
+      </div>
+      <div class="col-6 grid">
+        <div class="col-4"><label>Người nhận</label></div>
+        <div class="col-8">
+          <input [(ngModel)]="outSideReceipt.name" pInputText type="text"/>
+        </div>
+      </div>
+    </div>
+  </p-fieldset>
+  <div class="grid">
+    <div class="col-12 flex justify-content-center">
+      <button pButton class="tool" type="button" icon="pi pi-book" (click)="editedDataToChild()" label="Lưu dữ liệu">
+      </button>
+    </div>
+  </div>
+</p-dialog>
+
+
+
+

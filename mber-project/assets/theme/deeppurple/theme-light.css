@@ -15,6 +15,12 @@
   --font-family: "Roboto", sans-serif;
 }
 /*TODO add member*/
+.col-4 > button {
+  display: flex;
+  justify-content:center;
+  align-items: center;
+  margin-bottom:0.5rem;
+}
 .p-calendar .p-inputtext:disabled {
   flex: 1 1 auto;
   width: 1%;
@@ -1878,6 +1884,7 @@ p-togglebutton.ng-dirty.ng-invalid > .p-togglebutton.p-button {
 }
 
 .p-button {
+  height:1.8rem;
   color: #ffffff;
   background: #1D01D4;
   border: 0 none;

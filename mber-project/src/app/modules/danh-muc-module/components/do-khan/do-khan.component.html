@@ -1,0 +1,32 @@
+<p-toast></p-toast>
+<p-fieldset legend="Độ khẩn" [style]="{overflow: 'auto', height:'87vh'}">
+  <p-panel header="Thông tin">
+    <app-base-danh-muc
+      [isFunction]="true"
+      [listData]="listUrgency"
+      (isClickAdd)="addUrgency($event)"
+      [cols]="cols">
+    </app-base-danh-muc>
+  </p-panel>
+</p-fieldset>
+
+<p-dialog [draggable]="false" header="Thêm mới độ khẩn" [(visible)]="showAdd"
+          [style]="{width: '70vw', height:'70vh'}">
+  <p-fieldset legend="Thông tin">
+      <div class="grid">
+        <div class="col-4">
+          <label>Tên độ khẩn</label>
+        </div>
+        <div class="col-8">
+          <input pInputText="">
+        </div>
+      </div>
+  </p-fieldset>
+  <div class="grid">
+    <div class="col-12 flex justify-content-center">
+      <button pButton class="tool" type="button" icon="pi pi-book" label="Lưu dữ liệu">
+      </button>
+    </div>
+  </div>
+</p-dialog>
+
