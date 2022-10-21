@@ -12,6 +12,7 @@ import { NoiNhanBenNgoaiComponent } from './components/noi-nhan-ben-ngoai/noi-nh
 import { DoKhanComponent } from './components/do-khan/do-khan.component';
 import { LoaiSoDenComponent } from './components/loai-so-den/loai-so-den.component';
 import { LoaiSoDiComponent } from './components/loai-so-di/loai-so-di.component';
+import { MauThuDiComponent } from './components/mau-thu-di/mau-thu-di.component';
 
 const routes: Routes = [
   {path: 'test-module', component: BaseDanhMucComponent},
@@ -19,6 +20,7 @@ const routes: Routes = [
   {path: 'do-khan', component: DoKhanComponent},
   {path: 'loai-so-den', component: LoaiSoDenComponent},
   {path: 'loai-so-di', component: LoaiSoDiComponent},
+  {path: 'mau-thu-di', component: MauThuDiComponent},
 ]
 
 @NgModule({
@@ -27,7 +29,8 @@ const routes: Routes = [
     NoiNhanBenNgoaiComponent,
     DoKhanComponent,
     LoaiSoDenComponent,
-    LoaiSoDiComponent
+    LoaiSoDiComponent,
+    MauThuDiComponent
   ],
   imports: [
     FormsModule,

@@ -1,3 +1,5 @@
+import {DonViChuyenPhatModel, DonViModel, NhanVienModel, NoiNhanBenNgoaiModel} from "..";
+
 export interface ThuDiModel {
   id?:number,
   type?: number, //phân loại thư
@@ -23,19 +25,12 @@ export interface ThuDiModel {
   urgencyLevel?: {
     id?: number
   }, // độ khẩn
-  receivePlace?: {
-    sysOrganizationId?: number
-  }, // Nơi nhận,
-  receiveUnit?: {
-    sysOrganizationId?: number
-  },  // đơn vị nhận
-  outSiteReceive?: object, // Nơi nhận bên ngoài
-  affiliatedReceiveUnit?: {
-    sysOrganizationId?: number
-  }, // đơn vị trực thuộc nhận
-  recipient?: {
-    employeeId?: number
-  }, // Người nhận
+  receivePlace?: DonViModel,// Nơi nhận,
+  receiveUnit?: DonViModel,  // đơn vị nhận
+  outSiteReceive?: NoiNhanBenNgoaiModel, // Nơi nhận bên ngoài
+  affiliatedReceiveUnit?: DonViModel, // đơn vị trực thuộc nhận
+  deliveryUnit?:DonViChuyenPhatModel,
+  recipient?: NhanVienModel, // Người nhận
   mobilePhone?: string, // Số điện thoại,
   receiveAddress?: string // địa chỉ nhận
   status?: number // trạng thái của thư

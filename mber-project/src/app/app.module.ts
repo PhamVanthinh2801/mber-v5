@@ -16,7 +16,6 @@ import {authInterceptorProviders} from "./modules/base-module/service/MyHttpInte
 import {PrimeNgModule} from "./modules/primeng-module/primeng.module";
 import {BaseModule} from "./modules/base-module/base.module";
 import {BaoCaoModule} from "./modules/bao-cao-module/bao-cao-module";
-import { BaoCaoSoThuDiComponent } from './modules/bao-cao-module/components/bao-cao-so-thu-di/bao-cao-so-thu-di.component';
 
 
 @NgModule({
