@@ -63,6 +63,11 @@ export class SharedApi extends apiServiceBase {
     return this.getData(API.PHAN_HE.DANH_MUC_SO_THU_DEN, API.API_DANH_MUC_SO_THU_DEN.GET_ALL_DANH_MUC_SO_THU_DEN);
   }
 
+  // Lấy toàn bộ số thư đên
+  public getSoThuDen() {
+    return this.getData(API.PHAN_HE.DANH_MUC_SO_THU_DEN, API.API_DANH_MUC_SO_THU_DEN.GET_ALL_DANH_MUC_SO_THU_DEN);
+  }
+
   // get toàn bộ nơi nhận bên ngoài
   getAllNoiNhanBenNgoai() {
     return this.getData(API.PHAN_HE.NOI_NHAN_BEN_NGOAI, API.API_NOI_NHAN_BEN_NGOAI.GET_ALL_NOI_NHAN_BEN_NGOAI);

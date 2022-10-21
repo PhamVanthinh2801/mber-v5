@@ -64,6 +64,9 @@ export class API_THU_DI {
 }
 export class API_DANH_MUC_SO_THU_DEN {
   public static GET_ALL_DANH_MUC_SO_THU_DEN = 'get-all'
+  public static CREATE = 'create'
+  public static UPDATE = 'update/'
+  public static DELETE = 'delete/'
 }
 
 export class API_EMPLOYEE {

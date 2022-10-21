@@ -1,9 +1,9 @@
 <p-toast></p-toast>
-<p-fieldset legend="Sổ thư đến" [style]="{overflow: 'auto', height:'87vh'}">
+<p-fieldset legend="Sổ thư đi" [style]="{overflow: 'auto', height:'87vh'}">
   <p-panel header="Thông tin">
     <app-base-danh-muc
       [isFunction]="true"
-      [listData]="listBookFrom"
+      [listData]="listBookTo"
       [cols]="cols"
       (idData)="dataEmit($event)"
       (isClickAdd)="popUpAdd($event)"
@@ -15,7 +15,7 @@
 </p-fieldset>
 
 
-<p-dialog [draggable]="false" header="Thêm mới sổ thư đến" [(visible)]="onShowBookFromAdd"
+<p-dialog [draggable]="false" header="Thêm mới sổ thư đi" [(visible)]="onShowBookToAdd"
           [style]="{width: '70vw', height:'70vh'}">
   <p-fieldset legend="Thông tin">
     <div class="grid">
@@ -35,7 +35,7 @@
   </div>
 </p-dialog>
 
-<p-dialog [draggable]="false" header="Cập nhật sổ thư đến" [(visible)]="onShowBookFromEdited"
+<p-dialog [draggable]="false" header="Cập nhật sổ thư đi" [(visible)]="onShowBookToEdited"
           [style]="{width: '70vw', height:'70vh'}">
   <p-fieldset legend="Thông tin">
     <div class="grid">

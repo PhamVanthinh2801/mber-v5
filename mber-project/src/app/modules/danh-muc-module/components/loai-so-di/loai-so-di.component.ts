@@ -1,21 +1,22 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {SoThuModel} from "../../../base-module/models";
 import {SharedApi} from "../../../base-module/service/api.shared.services";
-import {iComponentBase, mType} from "../../../base-module/functions/iServiceBase";
-import {LoaiSoDenService} from "./loai-so-den.service";
+import {LoaiSoDenService} from "../loai-so-den/loai-so-den.service";
 import {Title} from "@angular/platform-browser";
 import {MessageService} from "primeng/api";
+import {iComponentBase, mType} from "../../../base-module/functions/iServiceBase";
 import {ErrorModel} from "../../../base-module/models/error/error.model";
+import {LoaiSoDiService} from "./loai-so-di.service";
 
 @Component({
-  selector: 'app-loai-so-den',
-  templateUrl: './loai-so-den.component.html',
-  styleUrls: ['./loai-so-den.component.scss']
+  selector: 'app-loai-so-di',
+  templateUrl: './loai-so-di.component.html',
+  styleUrls: ['./loai-so-di.component.scss']
 })
-export class LoaiSoDenComponent extends iComponentBase implements OnInit {
-  listBookFrom: SoThuModel[];
-  onShowBookFromAdd = false;
-  onShowBookFromEdited = false;
+export class LoaiSoDiComponent extends iComponentBase implements OnInit {
+  listBookTo: SoThuModel[];
+  onShowBookToAdd = false;
+  onShowBookToEdited = false;
   selectedLetterNoteBook: SoThuModel;
   cols = [
     {field: 'id', header: 'Mã code', style: 'width: 6%; text-align: center'},
@@ -23,7 +24,7 @@ export class LoaiSoDenComponent extends iComponentBase implements OnInit {
   ]
 
   constructor(private sharedApi: SharedApi,
-              private soDenService: LoaiSoDenService,
+              private soDiService: LoaiSoDiService,
               public title: Title,
               public msg: MessageService) {
     super(msg, title);
@@ -37,7 +38,7 @@ export class LoaiSoDenComponent extends iComponentBase implements OnInit {
   getNoteBookTo() {
     this.sharedApi.getSoThuDen().subscribe((data: any) => {
       if (data) {
-        this.listBookFrom = data.result.items;
+        this.listBookTo = data.result.items;
       }
     })
   }
@@ -48,21 +49,21 @@ export class LoaiSoDenComponent extends iComponentBase implements OnInit {
 
   popUpAdd(ev: any) {
     if (ev == 'true') {
-      this.onShowBookFromAdd = true;
+      this.onShowBookToAdd = true;
     }
   }
 
   popUpEdited(ev: any) {
     if (ev == 'true') {
       console.log('data select', this.selectedLetterNoteBook)
-      this.onShowBookFromEdited = true;
+      this.onShowBookToEdited = true;
     }
   }
 
   addLetterNoteBook() {
-    this.soDenService.addData(this.selectedLetterNoteBook).subscribe((data: any) => {
+    this.soDiService.addData(this.selectedLetterNoteBook).subscribe((data: any) => {
       if (data) {
-        this.showMessage(mType.success, 'Thông báo', 'Thêm sổ thư đến thành công');
+        this.showMessage(mType.success, 'Thông báo', 'Thêm sổ thư đi thành công');
         this.selectedLetterNoteBook = {}
         this.freshPage();
       }
@@ -72,9 +73,9 @@ export class LoaiSoDenComponent extends iComponentBase implements OnInit {
   }
 
   editLetterNoteBook(){
-    this.soDenService.updateData(this.selectedLetterNoteBook.id, this.selectedLetterNoteBook).subscribe((data: any) => {
+    this.soDiService.updateData(this.selectedLetterNoteBook.id, this.selectedLetterNoteBook).subscribe((data: any) => {
       if (data) {
-        this.showMessage(mType.success, 'Thông báo', 'Cập nhật sổ thư đến thành công');
+        this.showMessage(mType.success, 'Thông báo', 'Cập nhật sổ đi đến thành công');
         this.selectedLetterNoteBook = {}
         this.freshPage();
       }
@@ -85,8 +86,8 @@ export class LoaiSoDenComponent extends iComponentBase implements OnInit {
 
   isDeleted(ev) {
     if (ev == 'true') {
-      this.soDenService.onDeleted(this.selectedLetterNoteBook.id).subscribe((data: any) => {
-        this.showMessage(mType.success, 'Thông báo', 'Xóa sổ thư đến thành công');
+      this.soDiService.onDeleted(this.selectedLetterNoteBook.id).subscribe((data: any) => {
+        this.showMessage(mType.success, 'Thông báo', 'Xóa sổ thư đi thành công');
         this.selectedLetterNoteBook = {}
         this.getNoteBookTo();
       })
