@@ -293,7 +293,13 @@ export class MauThuDiComponent extends iComponentBase implements OnInit {
         this.mauThuDiService.updateLetterSample(this.selectedRowData.id, this.thuDi).subscribe((data: any) => {
           if (data) {
             this.showMessage(mType.success, 'Thông báo', 'Cập nhật thành công');
+            setTimeout(() => {
+              this.onShowLetterSample = false;
+            }, 500)
+            this.getLetterSample();
           }
+        },(error: ErrorModel)=>{
+          this.showMessage(mType.error, 'Thông báo', 'Cập nhật lỗi'+error.error.result.errors);
         })
       }
     } catch (e) {
