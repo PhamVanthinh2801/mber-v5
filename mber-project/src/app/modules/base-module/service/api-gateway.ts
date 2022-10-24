@@ -54,13 +54,12 @@ export class API_THU_DEN {
 }
 
 export class API_THU_DI {
-  public static GET_THU_DANG_SOAN = 'thu-dang-soan'
   public static GET_ALL_THU_DI = 'get-all'
   public static ADD_THU_DI = 'create'
   public static UPDATE_THU_DI = 'update'
   public static GET_THU_DI_THEO_LOAI = 'page';
   public static GEN_CODE = 'gen-code'
-  public static DELETED = 'permanently-deleted';
+  public static DELETED = 'delete/';
 }
 export class API_DANH_MUC_SO_THU_DEN {
   public static GET_ALL_DANH_MUC_SO_THU_DEN = 'get-all'

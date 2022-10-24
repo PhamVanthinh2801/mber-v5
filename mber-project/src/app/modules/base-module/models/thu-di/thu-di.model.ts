@@ -7,16 +7,12 @@ export interface ThuDiModel {
   staff?: object, // nhân viên lấy từ hệ thống đăng nhập
   letterCode?: object | any, // sổ thư đi
   code?: number, // Mã thư đi,
-  inputDate?: Date, // Ngày nhập
-  sendDate?: Date, // Ngày gửi
+  inputDate?: Date | any, // Ngày nhập
+  sendDate?: Date | any, // Ngày gửi
   sendUnit?: object, // đơn vị gửi
-  affiliatedSendUnit?: {
-    sysOrganizationId?: number
-  }, // đơn vị trực thuộc gửi
+  affiliatedSendUnit?: DonViModel, // đơn vị trực thuộc gửi
   itemCode?: object, // Số vận đơn
-  sender?: {
-    employeeId?: number
-  }, // người gửi
+  sender?: NhanVienModel, // người gửi
   textCode?: string, // Số hiệu văn bản
   summary?: string, // trích yếu
   securityLevel?: {

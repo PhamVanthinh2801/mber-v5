@@ -9,11 +9,12 @@ import {
   SoThuModel,
   ThuDiModel
 } from "../../../base-module/models";
-import {iComponentBase} from "../../../base-module/functions/iServiceBase";
+import {iComponentBase, mType} from "../../../base-module/functions/iServiceBase";
 import {Title} from "@angular/platform-browser";
 import {MessageService} from "primeng/api";
 import {MauThuDiService} from "./mau-thu-di.service";
 import {LocalStorageService} from "../../../system-module/functions/store/local-storage.service";
+import {ErrorModel} from "../../../base-module/models/error/error.model";
 
 @Component({
   selector: 'app-mau-thu-di',
@@ -26,11 +27,8 @@ export class MauThuDiComponent extends iComponentBase implements OnInit {
   selectedUnit: DonViModel;
   listLetterSample: ThuDiModel[]
   listLetterBook: SoThuModel[];
-  selectedLetterBook: SoThuModel;
   listAffiliatedSendUnit: DonViModel[]
-  selectedAffiliatedSendUnit: DonViModel
   listSender: NhanVienModel[];
-  selectedSender: NhanVienModel;
   listSecurity: DoMatModel[]
   listUrgency: DoKhanModel[]
   listReceivePlace: DonViModel[]
@@ -44,6 +42,10 @@ export class MauThuDiComponent extends iComponentBase implements OnInit {
   checkboxTypeLetter: any = null; // chọn nội bộ hoặc bên ngoài
   listTypeLetters: any; // list checkbox thư nội bộ và bên ngoài,
   thuDi: ThuDiModel;
+  selectedRowData: ThuDiModel;
+  checkTypeAction: string;
+  titlePopUp = '';
+  isCheckDisabled = false;
 
   constructor(private sharedApi: SharedApi,
               private mauThuDiService: MauThuDiService,
@@ -54,6 +56,7 @@ export class MauThuDiComponent extends iComponentBase implements OnInit {
   }
 
   ngOnInit(): void {
+    this.thuDi = {}
     this.listTypeLetters = [{name: 'Nội bộ', key: '1'}, {name: 'Bên ngoài', key: '2'}];  // selection loại thư bên trong và bên ngoài
     this.checkboxTypeLetter = this.listTypeLetters[0];
     this.getDataInit();
@@ -61,45 +64,26 @@ export class MauThuDiComponent extends iComponentBase implements OnInit {
 
   getDataInit() {
     this.user = this.tokenStorageService.getUserFromStorage(); // get thông tin người dùng đăng nhập trong hệ thống
-    this.thuDi = {};
     this.thuDi.inputDate = new Date();
     this.thuDi.sendDate = new Date()
-    // this.thuDi.affiliatedSendUnit
     // lấy đơn vị
     this.sharedApi.getAllDonVi().subscribe((data: any) => {
       this.listUnit = data.result.items;
       this.listAffiliatedSendUnit = data.result.items;
       this.listReceivePlace = data.result.items;
     })
-    const param = {
-      isSample: true
-    }
-
-    // lấy thư mẫu tron Db
-    this.mauThuDiService.getALlLetterSample(param).subscribe((data: any) => {
-      console.log(data)
-      this.listLetterSample = data.result.content
-      ;
-    })
-
     // lấy sổ thư
     this.sharedApi.getSoThuDen().subscribe((data: any) => {
       this.listLetterBook = data.result.items;
       console.log(data)
     })
-
-    // auto gen mã thư đi
-    this.sharedApi.getAutoGenCode().subscribe((data) => {
-      this.thuDi.code = data.result;
-    })
-
     // lấy độ mật
     this.sharedApi.getDoMat().subscribe((data: any) => {
       this.listSecurity = data.result.items;
     })
 
-    // lấy độ mật
-    this.sharedApi.getDoMat().subscribe((data: any) => {
+    // lấy độ khẩn
+    this.sharedApi.getDoKhan().subscribe((data: any) => {
       this.listUrgency = data.result.items;
     })
 
@@ -108,23 +92,107 @@ export class MauThuDiComponent extends iComponentBase implements OnInit {
       this.listDeliveryUnit = data.result.items
     })
 
+    // get init nhân viên
+    this.sharedApi.getAllNhanVien().subscribe((data: any)=> {
+      this.listSender = data.result.items;
+    })
+
+    // lấy mẫu init
+    this.getLetterSample();
+
+    // get mã thư đi init
+    this.getCode();
+
+    //Số vận đơn init
+    this.getItemCode()
+  }
+
+  getCode() {
+    // auto gen mã thư đi code
+    this.sharedApi.getAutoGenCode().subscribe((data) => {
+      this.thuDi.code = data.result;
+    })
+  }
+
+  getItemCode() {
+    // auto gen số vận đơn itemCode
     this.sharedApi.getAutoGenCode().subscribe((data: any) => {
       this.thuDi.itemCode = data.result;
     })
   }
 
-  onRowSelect(ev: any) {
+  getLetterSample() {
+    // lấy thư mẫu tron Db
+    const param = {
+      isSample: true,
+      status: 1
+    }
+    this.mauThuDiService.getALlLetterSample(param).subscribe((data: any) => {
+      console.log(data)
+      this.listLetterSample = data.result.content
+      ;
+    })
   }
 
-  addLetterSample() {
+  onRowSelect(ev: any) {
+    this.selectedRowData = ev.data;
+    this.thuDi = this.selectedRowData;
+  }
+
+  clickOnEdit() {
+    if (this.selectedRowData) {
+      this.checkboxTypeLetter = this.listTypeLetters[this.selectedRowData.type - 1];
+      this.isCheckDisabled = true;
+      this.titlePopUp = 'Chỉnh sửa mẫu thư đi'
+      this.checkTypeAction = 'edit'
+      this.thuDi.inputDate = new Date(this.selectedRowData.inputDate)
+      this.thuDi.sendDate = new Date(this.selectedRowData.sendDate)
+      this.onShowLetterSample = true;
+
+      // maping with data popup
+      this.listReceiveUnit = [this.thuDi.receiveUnit]
+      this.listAffiliatedReceiveUnit = [this.thuDi.affiliatedReceiveUnit]
+      this.listRecipient = [this.thuDi.recipient];
+    } else {
+      this.onShowLetterSample = false;
+      this.showMessage(mType.info, 'Thông báo', 'Vui lòng chọn dữ liệu để cập nhật');
+    }
+  }
+
+  clickAddSample() {
+    this.isCheckDisabled = false;
+    this.checkTypeAction = 'add'
+    this.titlePopUp = 'Thêm mới mẫu thư đi'
+    this.thuDi = {};
+    this.thuDi.inputDate = new Date();
+    this.thuDi.sendDate = new Date();
+    this.getItemCode();
+    this.getCode();
     this.onShowLetterSample = true;
   }
 
+  clickDeleted(){
+    try {
+      if(this.selectedRowData) {
+        this.mauThuDiService.deletedLetterSample(this.selectedRowData.id).subscribe((data: any) => {
+          if (data) {
+            this.showMessage(mType.success, 'Thông báo', 'Xóa mẫu thư đi thành công');
+            this.getLetterSample();
+          }
+        })
+      }else{
+        this.showMessage(mType.info, 'Thông báo', 'Chọn mẫu thư đi để xóa');
+      }
+    }catch (e) {
+
+    }
+  }
+
   getSender(ev: any) {
-    if (!this.selectedAffiliatedSendUnit) {
+    if (!this.thuDi.affiliatedSendUnit) {
       this.listSender = []
     } else {
-      this.sharedApi.getPersonByParentOganization(this.selectedAffiliatedSendUnit.sysOrganizationId).subscribe((data: any) => {
+      this.sharedApi.getPersonByParentOganization(this.thuDi.affiliatedSendUnit.sysOrganizationId).subscribe((data: any) => {
         this.listSender = data.result.items;
       })
     }
@@ -173,8 +241,8 @@ export class MauThuDiComponent extends iComponentBase implements OnInit {
       inputDate: this.thuDi.inputDate.getTime(),  // Ngày nhập
       sendDate: this.thuDi.sendDate.getTime(), // Ngày gửi
       sendUnitId: this.user?.organization?.sysOrganizationId,  // Đơn vị gửi
-      affiliatedSendUnitId: this.selectedAffiliatedSendUnit?.sysOrganizationId, // Đơn vị trực thuộc gửi
-      senderId: this.selectedSender?.employeeId,  // Người gửi
+      affiliatedSendUnitId: this.thuDi.affiliatedSendUnit?.sysOrganizationId, // Đơn vị trực thuộc gửi
+      senderId: this.thuDi.sender?.employeeId,  // Người gửi
       textCode: this.thuDi.textCode,  // Số hiệu văn bản
       summary: this.thuDi.summary,  // Trích yếu
       securityLevelId: this.thuDi.securityLevel?.id,  // Độ mật *
@@ -194,14 +262,42 @@ export class MauThuDiComponent extends iComponentBase implements OnInit {
       affiliatedReceiveUnitId: this.thuDi.affiliatedReceiveUnit?.sysOrganizationId,  // Đơn vị trực thuộc nhận
       recipientId: this.checkboxTypeLetter.key == 1 ? this.thuDi.recipient?.employeeId : null,  // Người nhận
       mobilePhone: this.checkboxTypeLetter.key == 1 ? this.thuDi.mobilePhone : null,
-      receiveAddress: this.thuDi.receiveAddress,  // Địa chỉ nhận
-      status: this.thuDi.status ? this.thuDi.status: null  // Tình trạng
+      receiveAddress: this.thuDi.receiveAddress ? this.thuDi.receiveAddress : 'số 261 Khuất Duy Tiến',  // Địa chỉ nhận
+      status: 1 // Tình trạng
     }
   }
 
-  saveData() {
-    const param = this.createParam();
-    console.log('thu di ', param)
+  saveData(typeAction: any) {
+    try {
+      if (typeAction == 'add') {
+        const param = this.createParam();
+        this.mauThuDiService.createLetterSample(param).subscribe((data: any) => {
+          if (data) {
+            this.showMessage(mType.success, 'Thông báo', 'Thêm mẫu thư đi thành công');
+            setTimeout(() => {
+              this.onShowLetterSample = false;
+            }, 500)
+            this.getCode();
+            this.getItemCode();
+            this.getLetterSample();
+          }
+        }, (error: ErrorModel) => {
+          this.showMessage(mType.error, 'Thông báo', 'Lỗi thêm mẫu thư đi, vui lòng kiếm tra lại ' + error.error.result.errors);
+        })
+      }
+      if (typeAction == 'edit') {
+        this.onShowLetterSample = true;
+        this.thuDi = this.selectedRowData;
+        this.thuDi.inputDate = new Date(this.selectedRowData.inputDate).getTime()
+        this.thuDi.sendDate = new Date(this.selectedRowData.sendDate).getTime()
+        this.mauThuDiService.updateLetterSample(this.selectedRowData.id, this.thuDi).subscribe((data: any) => {
+          if (data) {
+            this.showMessage(mType.success, 'Thông báo', 'Cập nhật thành công');
+          }
+        })
+      }
+    } catch (e) {
+    }
   }
 
 }
