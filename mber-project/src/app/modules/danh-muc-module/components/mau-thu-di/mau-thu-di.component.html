@@ -12,6 +12,7 @@
         <div class="col-4 text-center"><label>Cơ quan</label></div>
         <div class="col-8">
           <p-dropdown [options]="listUnit" [(ngModel)]="selectedUnit"
+                      (onChange)="getByUnitOnSearch()"
                       optionLabel="name" [filter]="true" filterBy="name"
                       [showClear]="true" placeholder="--Vui lòng chọn--">
             <ng-template pTemplate="selectedItem">
@@ -46,15 +47,17 @@
         <div class="col-4 text-center"><label>Đơn vị</label></div>
         <div class="col-8">
           <p-dropdown
+            [options]="listSearchUnit"
+            [(ngModel)]="selectedSearchUnit"
             optionLabel="name" [filter]="true" filterBy="name"
             [showClear]="true" placeholder="--Vui lòng chọn--">
             <ng-template pTemplate="selectedItem">
-              <div>
-                <div></div>
+              <div *ngIf="selectedSearchUnit">
+                <div>{{selectedSearchUnit.name}}</div>
               </div>
             </ng-template>
             <ng-template let-data pTemplate="item">
-              <div></div>
+              <div>{{data.name}}</div>
             </ng-template>
           </p-dropdown>
         </div>
@@ -63,6 +66,13 @@
         <div class="col-4 text-center"><label>Người yêu cầu</label></div>
         <div class="col-8">
           <input pInputText type="text">
+        </div>
+      </div>
+      <div class="col-6 grid"></div>
+      <div class="col-6 grid">
+        <div class="col-4 text-center"><label></label></div>
+        <div class="col-8">
+          <button class="tool" pButton icon="pi pi-search" (click)="onSearch()" type="button" label="Tìm kiếm"></button>
         </div>
       </div>
     </div>

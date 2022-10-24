@@ -36,6 +36,8 @@ export class MauThuDiComponent extends iComponentBase implements OnInit {
   listAffiliatedReceiveUnit: DonViModel[]
   listRecipient: NhanVienModel[];
   listDeliveryUnit: DonViChuyenPhatModel[];
+  listSearchUnit: DonViModel[]
+  selectedSearchUnit: DonViModel;
 
   selectedData: any
   onShowLetterSample = false;
@@ -306,4 +308,17 @@ export class MauThuDiComponent extends iComponentBase implements OnInit {
     }
   }
 
+  getByUnitOnSearch(){
+    if(!this.selectedUnit){
+        this.listSearchUnit = [];
+    }else{
+      this.sharedApi.getParentOrganizations(this.selectedUnit.sysOrganizationId).subscribe((data: any)=> {
+        this.listSearchUnit = data.result.items;
+      })
+    }
+  }
+
+  onSearch(){
+
+  }
 }
