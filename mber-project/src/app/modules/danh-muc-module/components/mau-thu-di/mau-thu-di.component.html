@@ -392,6 +392,25 @@
       <div class="col-4 grid" *ngIf="checkboxTypeLetter.key =='2'">
         <div class="col-4"><label>Nơi nhận bên ngoài</label></div>
         <div class="col-8 flex flex-row">
+          <div class="ng-autocomplete">
+            <ng-autocomplete
+              [data]="noiNhanBenNgoai"
+              [searchKeyword]="keyword"
+              placeholder="--Vui lòng chọn--"
+              (selected)='selectEvent($event)'
+              (inputChanged)='onChangeSearch($event)'
+              (inputFocused)='onFocused($event)'
+              historyIdentifier="countries"
+              [itemTemplate]="itemTemplate"
+              [notFoundTemplate]="notFoundTemplate">
+            </ng-autocomplete>
+            <ng-template #itemTemplate let-item>
+              <a [innerHTML]="item.contactName"></a>
+            </ng-template>
+            <ng-template #notFoundTemplate let-notFound>
+              <div [innerHTML]="notFound"></div>
+            </ng-template>
+          </div>
         </div>
       </div>
       <div *ngIf="checkboxTypeLetter.key=='1'" class="col-4 grid">

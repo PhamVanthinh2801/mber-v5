@@ -1,9 +1,9 @@
 <p-toast></p-toast>
-<p-fieldset legend="Độ khẩn" [style]="{overflow: 'auto', height:'87vh'}">
+<p-fieldset legend="Độ mật" [style]="{overflow: 'auto', height:'87vh'}">
   <p-panel header="Thông tin">
     <app-base-danh-muc
       [isFunction]="true"
-      [listData]="listUrgency"
+      [listData]="listSecurity"
       [cols]="cols"
       (idData)="dataEmit($event)"
       (isClickAdd)="popUpAdd($event)"
@@ -13,17 +13,17 @@
   </p-panel>
 </p-fieldset>
 
-<p-dialog [draggable]="false" header="Thêm mới độ khẩn" [(visible)]="showAdd"
+<p-dialog [draggable]="false" header="Thêm mới độ mật" [(visible)]="showAdd"
           [style]="{width: '50vw', height:'45vh'}">
   <p-fieldset legend="Thông tin">
-      <div class="grid">
-        <div class="col-2">
-          <label>Tên độ khẩn</label>
-        </div>
-        <div class="col-10">
-          <input [(ngModel)]="selectedUrgency.name" pInputText="">
-        </div>
+    <div class="grid">
+      <div class="col-2">
+        <label>Tên độ khẩn</label>
       </div>
+      <div class="col-10">
+        <input [(ngModel)]="selectedSecurity.name" pInputText="">
+      </div>
+    </div>
   </p-fieldset>
   <div class="grid">
     <div class="col-12 flex justify-content-center">
@@ -33,17 +33,17 @@
   </div>
 </p-dialog>
 
-<p-dialog [draggable]="false" header="Chỉnh sửa độ khẩn" [(visible)]="showUpdate"
+<p-dialog [draggable]="false" header="Chỉnh sửa độ mật" [(visible)]="showUpdate"
           [style]="{width: '50vw', height:'45vh'}">
   <p-fieldset legend="Thông tin">
-      <div class="grid">
-        <div class="col-2">
-          <label>Tên độ khẩn</label>
-        </div>
-        <div class="col-10">
-          <input [(ngModel)]="selectedUrgency.name" pInputText="">
-        </div>
+    <div class="grid">
+      <div class="col-2">
+        <label>Tên độ khẩn</label>
       </div>
+      <div class="col-10">
+        <input [(ngModel)]="selectedSecurity.name" pInputText="">
+      </div>
+    </div>
   </p-fieldset>
   <div class="grid">
     <div class="col-12 flex justify-content-center">

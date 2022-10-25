@@ -48,6 +48,8 @@ export class MauThuDiComponent extends iComponentBase implements OnInit {
   checkTypeAction: string;
   titlePopUp = '';
   isCheckDisabled = false;
+  noiNhanBenNgoai: any;
+  keyword = 'contactName';
 
   constructor(private sharedApi: SharedApi,
               private mauThuDiService: MauThuDiService,
@@ -114,6 +116,19 @@ export class MauThuDiComponent extends iComponentBase implements OnInit {
     this.sharedApi.getAutoGenCode().subscribe((data) => {
       this.thuDi.code = data.result;
     })
+  }
+
+  selectEvent(item) {
+    this.thuDi.receiveAddress = item.address;
+  }
+
+  onChangeSearch(search: string) {
+    // fetch remote data from here
+    // And reassign the 'data' which is binded to 'data' property.
+  }
+
+  onFocused(e) {
+    // do something
   }
 
   getItemCode() {

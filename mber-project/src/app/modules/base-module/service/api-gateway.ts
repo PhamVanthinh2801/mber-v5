@@ -30,6 +30,9 @@ export class API_DON_VI_CHUYEN_PHAT {
 
 export class API_DO_MAT {
   public static GET_ALL_DO_MAT = 'get-all'
+  public static CREATE = 'create'
+  public static DELETED = 'delete/'
+  public static UPDATE = 'update/'
 }
 
 export class API_DO_KHAN {

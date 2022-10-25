@@ -90,10 +90,6 @@ export class TopMenuComponent implements OnInit {
 
   listMenuDanhMuc = [
     {
-      link: this.submenu.danhMuc + '/test-module',
-      name: 'Test module'
-    },
-    {
       link: this.submenu.danhMuc + '/noi-nhan-ben-ngoai',
       name: 'Nơi nhận bên ngoài'
     },

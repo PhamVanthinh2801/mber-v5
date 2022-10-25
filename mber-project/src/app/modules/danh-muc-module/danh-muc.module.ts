@@ -13,11 +13,12 @@ import { DoKhanComponent } from './components/do-khan/do-khan.component';
 import { LoaiSoDenComponent } from './components/loai-so-den/loai-so-den.component';
 import { LoaiSoDiComponent } from './components/loai-so-di/loai-so-di.component';
 import { MauThuDiComponent } from './components/mau-thu-di/mau-thu-di.component';
+import { DoMatComponent } from './components/do-mat/do-mat.component';
 
 const routes: Routes = [
-  {path: 'test-module', component: BaseDanhMucComponent},
   {path: 'noi-nhan-ben-ngoai', component: NoiNhanBenNgoaiComponent},
   {path: 'do-khan', component: DoKhanComponent},
+  {path: 'do-mat', component: DoMatComponent},
   {path: 'loai-so-den', component: LoaiSoDenComponent},
   {path: 'loai-so-di', component: LoaiSoDiComponent},
   {path: 'mau-thu-di', component: MauThuDiComponent},
@@ -30,7 +31,8 @@ const routes: Routes = [
     DoKhanComponent,
     LoaiSoDenComponent,
     LoaiSoDiComponent,
-    MauThuDiComponent
+    MauThuDiComponent,
+    DoMatComponent
   ],
   imports: [
     FormsModule,
