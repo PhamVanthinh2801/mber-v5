@@ -14,7 +14,8 @@ export class TopMenuComponent implements OnInit {
     thuDen: '/thu-den',
     thuDi: '/thu-di',
     baoCao: '/bao-cao',
-    danhMuc: '/danh-muc'
+    danhMuc: '/danh-muc',
+    conDau: '/con-dau'
   }
   childMenuThuDen = [
     {
@@ -121,8 +122,41 @@ export class TopMenuComponent implements OnInit {
       link: this.submenu.danhMuc + '/import-thu-di',
       name: 'Import thư đi'
     }
+  ]
 
-
+  listMenuConDau = [
+    {
+      link: this.submenu.conDau + '/quan-ly-danh-sach-con-dau',
+      name: 'Quản lý danh sách con dấu'
+    },
+    {
+      link: this.submenu.conDau + '/quan-ly-yeu-cau',
+      name: 'Quản lý yêu cầu'
+    },
+    {
+      link: this.submenu.conDau + '/danh-sach-con-dau',
+      name: 'Danh sách con dấu'
+    },
+    {
+      link: this.submenu.conDau + '/thong-bao-nhan-dau',
+      name: 'Thông báo nhận dấu'
+    },
+    {
+      link: this.submenu.conDau + '/danh-sach-dang-ky-nhan-dau',
+      name: 'Danh sách đăng ký nhận dấu'
+    },
+    {
+      link: this.submenu.conDau + '/ban-giao-nhiem-vu-giam-sat-dau',
+      name: 'Bàn giao nhiệm vụ giám sát dấu'
+    },
+    {
+      link: this.submenu.conDau + '/giam-sat-giu-dong-dau',
+      name: 'Bàn giao nhiệm vụ giám sát dấu, giữ và đóng dấu'
+    },
+    {
+      link: this.submenu.conDau + '/tieu-huy-con-dau',
+      name: 'Tiêu hủy con dấu'
+    }
   ]
   isLogin = false;
   user: any;

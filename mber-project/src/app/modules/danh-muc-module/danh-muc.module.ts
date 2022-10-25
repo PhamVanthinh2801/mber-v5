@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 import {RouterModule, Routes} from "@angular/router";
-import {NhapMoiComponent} from "../thu-di-module/components/nhap-moi/nhap-moi.component";
 import {FormsModule} from "@angular/forms";
 import {AutocompleteLibModule} from "angular-ng-autocomplete";
 import {PrimeNgModule} from "../primeng-module/primeng.module";

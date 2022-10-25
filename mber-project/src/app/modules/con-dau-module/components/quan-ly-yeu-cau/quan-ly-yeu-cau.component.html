@@ -1,0 +1,199 @@
+<p-toast></p-toast>
+<p-fieldset legend="Quản lý yêu cầu" [style]="{overflow: 'auto', height:'87vh'}">
+  <p-fieldset legend="Thông tin tìm kiếm">
+    <div class="form-body">
+      <div class="grid">
+        <div class="col-4 grid">
+          <div class="col-4"><label>Tên con dấu</label></div>
+          <div class="col-8"><input class="w-full" pInputText type="text"></div>
+        </div>
+        <div class="col-4 grid">
+          <div class="col-4"><label>Người yêu cầu</label></div>
+          <div class="col-8">
+            <p-dropdown
+              optionLabel="name" [filter]="true" filterBy="name"
+              [showClear]="true" placeholder="--Vui lòng chọn--">
+              <ng-template pTemplate="selectedItem">
+                <div>
+                  <div></div>
+                </div>
+              </ng-template>
+              <ng-template let-data pTemplate="item">
+                <div>{{data.name}}</div>
+              </ng-template>
+            </p-dropdown>
+          </div>
+        </div>
+        <div class="col-4 grid">
+          <div class="col-4"><label>Đơn vị quản lý</label></div>
+          <div class="col-8">
+            <p-dropdown
+              optionLabel="name" [filter]="true" filterBy="name"
+              [showClear]="true" placeholder="--Vui lòng chọn--">
+              <ng-template pTemplate="selectedItem">
+                <div>
+                  <div></div>
+                </div>
+              </ng-template>
+              <ng-template let-data pTemplate="item">
+                <div>{{data.name}}</div>
+              </ng-template>
+            </p-dropdown>
+          </div>
+        </div>
+        <div class="col-4 grid">
+          <div class="col-4"><label>Thời gian hiệu lực từ</label></div>
+          <div class="col-8">
+            <p-calendar
+              styleClass="w-full"
+              [monthNavigator]="true"
+              [yearNavigator]="true"
+              yearRange="2000:2030"
+              appendTo="body"
+              [showTime]="true" inputId="time"
+              [showIcon]="true"
+              dateFormat="dd/mm/yy"></p-calendar>
+          </div>
+        </div>
+        <div class="col-4 grid">
+          <div class="col-4"><label>Đến</label></div>
+          <div class="col-8">
+            <p-calendar
+              styleClass="w-full"
+              [monthNavigator]="true"
+              [yearNavigator]="true"
+              yearRange="2000:2030"
+              appendTo="body"
+              [showTime]="true" inputId="time"
+              [showIcon]="true"
+              dateFormat="dd/mm/yy"></p-calendar>
+          </div>
+        </div>
+        <div class="col-4 grid">
+          <div class="col-4"><label>Trạng thái</label></div>
+          <div class="col-8">
+            <p-dropdown
+              optionLabel="name" [filter]="true" filterBy="name"
+              [showClear]="true" placeholder="--Vui lòng chọn--">
+              <ng-template pTemplate="selectedItem">
+                <div>
+                  <div></div>
+                </div>
+              </ng-template>
+              <ng-template let-data pTemplate="item">
+                <div>{{data.name}}</div>
+              </ng-template>
+            </p-dropdown>
+          </div>
+        </div>
+        <div class="flex flex-row  justify-content-end" style="padding-top:20px; padding-bottom:20px ;width:97%">
+          <button class="tool-auto-width" icon="pi pi-download" pButton type="button" label="Xuất báo cáo">
+          </button>
+          <button class="tool-auto-width" (click)="onOpenPopupLetter0()" icon="pi pi-search" pButton
+                  type="button" label="Tìm kiếm">
+          </button>
+          <button class="tool-auto-width" icon="pi pi-chevron-down" pButton type="button"
+                  label="Tìm kiếm nâng cao"></button>
+        </div>
+
+      </div>
+    </div>
+  </p-fieldset>
+  <p-fieldset legend="Danh sách yêu cầu">
+    <div class="grid">
+      <div class="col-12">
+        <p-table
+          selectionMode="single"
+          [paginator]="true"
+          [rows]="10"
+          [resizableColumns]="true"
+          columnResizeMode="expand"
+          styleClass="p-datatable-gridlines"
+          [style]="{'width':'92vw'}"
+          responsiveLayout="scroll">
+          <ng-template pTemplate="caption">
+            <div class="grid">
+              <div class="col-6"><label>Tổng số dữ liệu: 0</label></div>
+              <div class="col-6 flex justify-content-end">
+<!--                <label>Ps <span class="red-text">*</span>: Nhấn 2 lần trên bảng để lấy dữ liệu</label>-->
+              </div>
+            </div>
+          </ng-template>
+          <ng-template pTemplate="header">
+            <tr>
+            <tr>
+              <th>STT</th>
+              <th>Loại yêu cầu</th>
+              <th>Tên Con Dấu</th>
+              <th>Người yêu cầu</th>
+              <th>Đơn vị yêu cầu</th>
+              <th>Thông tin</th>
+              <th>Thời gian bàn giao</th>
+              <th>Người bàn giao</th>
+              <th>Người duyệt</th>
+              <th>Trạng thái</th>
+              <th>Lý do</th>
+              <th>File đính kèm</th>
+              <th>Thao tác</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr [pSelectableRow]="row">
+              <td> {{rowIndex + 1}}</td>
+              <td>{{row.name}}</td>
+              <td>{{row.name}}</td>
+              <td>{{row.name}}</td>
+              <td>{{row.name}}</td>
+              <td>{{row.name}}</td>
+              <td>{{row.name}}</td>
+              <td>{{row.name}}</td>
+              <td>{{row.name}}</td>
+              <td>{{row.name}}</td>
+              <td>{{row.name}}</td>
+              <td>{{row.name}}</td>
+              <td>
+                <button class="tool" (click)="onOpenPopupLetter0()" icon="pi pi-check-circle" pButton
+                        type="text"></button>
+                <button class="tool" (click)="onOpenPopupLetter()" icon="pi pi-times-circle" pButton
+                        type="text"></button>
+              </td>
+
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </p-fieldset>
+</p-fieldset>
+<p-dialog header="Từ chối thông tin đăng ký" [(visible)]="isPopupUpdate0" [draggable]="false"
+          [style]="{width:'40vw', height:'80vh'}">
+  <p-fieldset legend="Phản hồi">
+    <div class="grid">
+      <div class="col-12 grid"><label>Nội dung ý kiến phản hồi [2000]<span class="red-text">*</span></label></div>
+      <label>
+        <textarea class="w-full" [rows]="20" [cols]="80" pInputTextarea></textarea>
+      </label>
+      <button class="tool" icon="pi pi-ban" pButton type="button"
+              label="Từ chối">
+      </button>
+      <button class="tool" icon="pi pi-times" pButton type="button"
+              label="Đóng">
+      </button>
+    </div>
+  </p-fieldset>
+</p-dialog>
+<p-dialog header="Xác nhận" [(visible)]="isPopupUpdate" [draggable]="false"
+          [style]="{width:'24vw', height:'32vh'}">
+  <p-fieldset legend="Đồng chí có chắc chắn phê duyệt yêu cầu ?">
+    <div class="grid">
+      <button class="tool" icon="pi pi-telegram" pButton type="button"
+              label="Đồng ý">
+      </button>
+      <button class="tool" icon="pi pi-times" pButton type="button"
+              label="Hủy bỏ">
+      </button>
+    </div>
+  </p-fieldset>
+</p-dialog>
+
+

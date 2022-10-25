@@ -16,6 +16,7 @@ import {authInterceptorProviders} from "./modules/base-module/service/MyHttpInte
 import {PrimeNgModule} from "./modules/primeng-module/primeng.module";
 import {BaseModule} from "./modules/base-module/base.module";
 import {BaoCaoModule} from "./modules/bao-cao-module/bao-cao-module";
+import {ConDauModule} from "./modules/con-dau-module/con-dau.module";
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import {BaoCaoModule} from "./modules/bao-cao-module/bao-cao-module";
     ThuDenModule,
     ThuDiModule,
     DanhMucModule,
-    BaoCaoModule
+    BaoCaoModule,
+    ConDauModule
   ],
   declarations: [
     AppComponent,
@@ -48,7 +50,8 @@ import {BaoCaoModule} from "./modules/bao-cao-module/bao-cao-module";
     ThuDiModule,
     DanhMucModule,
     BaseModule,
-    BaoCaoModule
+    BaoCaoModule,
+    ConDauModule
   ],
   providers: [
     authInterceptorProviders,

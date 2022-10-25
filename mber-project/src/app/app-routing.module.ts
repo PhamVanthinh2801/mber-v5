@@ -25,6 +25,10 @@ const routes: Routes = [
   {
     path: 'bao-cao',
     loadChildren: () => import('./modules/bao-cao-module/bao-cao-module').then(m => m.BaoCaoModule),
+  },
+  {
+    path: 'con-dau',
+    loadChildren: () => import('./modules/con-dau-module/con-dau.module').then(m => m.ConDauModule),
   }
 ];
 
